@@ -1,0 +1,7 @@
+pandas
+numpy
+pyvi # Hỗ trợ thêm dấu
+underthesea  # Hỗ trợ chuẩn hoá dấu câu, tách từ và POS tagging tốt với tiếng việt có dấu 
+regex
+unicodedata
+iocextract # Bắt url (hỗ trợ link bth lẫn bắt đefanged link)
