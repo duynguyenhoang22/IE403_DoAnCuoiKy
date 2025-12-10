@@ -1,2 +1,0 @@
-Model,Architecture,Activation,Solver,Learning_Rate,Alpha,Train_Accuracy,Test_Accuracy,Precision,Recall,F1-Score,AUC-ROC,Iterations,Paper_Gap
-MLP Backpropagation (Optimized),"(20, 10)",relu,adam,0.001,0.1,94.76464937560038,93.28214971209214,86.66666666666667,45.614035087719294,59.77011494252874,0.8711622807017544,35,-4.647850287907872

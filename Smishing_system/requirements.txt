@@ -1,0 +1,36 @@
+# Core dependencies
+pandas
+numpy
+regex
+unicodedata
+
+# Vietnamese NLP
+# peterhung/vietnamese-accent-marker-xlm-roberta  # Hỗ trợ thêm dấu
+underthesea  # Tách từ và POS tagging cho tiếng Việt
+
+# URL & IOC extraction
+iocextract  # Bắt URL (hỗ trợ cả defanged links)
+
+# Machine Learning
+scikit-learn
+matplotlib
+seaborn
+joblib
+
+# Deep Learning (for accent restoration)
+torch
+transformers
+
+# Domain Checking Phase
+whois  # WHOIS lookup
+dnspython  # DNS queries
+requests  # HTTP requests
+python-whois  # Python WHOIS wrapper
+tldextract  # TLD extraction
+validators  # URL validation
+
+# Optional (for advanced features)
+# imblearn  # SMOTE for imbalanced data
+# xgboost  # Gradient boosting
+# lightgbm  # LightGBM
+

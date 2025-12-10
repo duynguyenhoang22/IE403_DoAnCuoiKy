@@ -1,0 +1,16 @@
+# Legitimate Vietnamese Bank Domains
+
+# Major Banks
+vietcombank.com.vn
+techcombank.com.vn
+bidv.com.vn
+agribank.com.vn
+acb.com.vn
+vpbank.com.vn
+mbbank.com.vn
+vietinbank.vn
+sacombank.com
+
+# Mobile Banking
+vcbdigibank.vietcombank.com.vn
+ebanking.techcombank.com.vn

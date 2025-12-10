@@ -1,0 +1,12 @@
+# Custom Blacklist - Malicious Domains
+# Format: one domain per line
+
+# Example phishing domains (from dataset)
+acb-online-center.6app
+vniatinbanks.cc
+b0dv.xyz
+vcbielbiok.com
+i-vietcombank.com
+vietcombank.vn-ms.top
+v-acb.com
+vietinbank-ipay.com
