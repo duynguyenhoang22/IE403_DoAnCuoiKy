@@ -62,8 +62,8 @@ class AggressiveMasker:
         # - Thêm nhóm shortener: ly, me, gl, to, co, cc, biz, info, mobi
         # - Thêm nhóm spam/bet: vip, pro, fun, club, win, life, xyz, top, icu
         tlds = r'com|vn|net|org|edu|gov|int|mil|biz|info|mobi|name|aero|asia|jobs|museum' \
-               r'|ly|me|gl|to|co|cc|ws|tk|ga|cf|ml' \
-               r'|xyz|top|icu|vip|pro|club|win|life|fun|tech|site|online|store|shop'
+            r'|ly|me|gl|to|co|cc|ws|tk|ga|cf|ml|at|su|bid|cfd' \
+            r'|xyz|top|icu|vip|pro|club|win|life|fun|tech|site|online|store|shop'
         
         # 2. Cấu trúc Regex mới:
         # [Domain] + [Space/Dot] + [TLD] + (Optional: [Space/Slash] + [Path])
@@ -88,13 +88,18 @@ class AggressiveMasker:
             text = text[:start] + token_tag + text[end:]
             extracted.append(match_str)
 
-        # HẬU XỬ LÝ: Dọn dẹp prefix còn sót trước <URL>
-        # Pattern: [chữ cái/số] + [space] + . + [space] + <URL>
-        cleanup_pattern = r'(?i)\b[a-z0-9-]+\s*\.\s*(?=' + re.escape(token_tag) + r')'
+        # --- BƯỚC 3: HẬU XỬ LÝ - Dọn prefix trước <URL> ---
+        # Pattern: [chữ cái/số/gạch] + [space?] + . + [space?] + <URL>
+        cleanup_pattern = r'(?i)[a-z0-9-]+[\s\u00A0]*\.[\s\u00A0]*(<URL>)'
         
-        # Lặp cho đến khi không còn prefix nào
-        while re.search(cleanup_pattern, text):
-            text = re.sub(cleanup_pattern, '', text)
+        # Lặp để xử lý nhiều level subdomain (cdn.static.<URL>)
+        prev_text = None
+        while prev_text != text:
+            prev_text = text
+            text = re.sub(cleanup_pattern, r'\1', text)
+        
+        # Normalize multiple spaces
+        text = re.sub(r'[\s\u00A0]+', ' ', text)
             
         return text, extracted
 
@@ -225,6 +230,8 @@ class AggressiveMasker:
         masked_text, metadata = self.mask(text)
         counts = self.get_entity_counts(metadata)
         return masked_text, counts
+
+
 # --- CHẠY THỬ NGHIỆM ---
 if __name__ == "__main__":
     masker = AggressiveMasker()
