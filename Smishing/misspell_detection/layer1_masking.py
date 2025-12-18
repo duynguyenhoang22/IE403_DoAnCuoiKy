@@ -13,11 +13,11 @@ class AggressiveMasker:
             ('zalo', ('<APP_LINK>', r'(?:https?:\/\/)?(?:www\.)?(?:zalo\.me|zalo\.vn)\/[\w\.-]+')),
             ('telegram', ('<APP_LINK>', r'(?:https?:\/\/)?(?:www\.)?(?:t\.me|telegram\.me)\/[\w_]+')),
             
-            # 2. URL (Kết hợp iocextract và Aggressive Regex)
+            # 2. Email (Thường đi kèm trong URL, nên xử lý sau hoặc cùng lúc)
+            ('email', ('<EMAIL>', r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b')),
+
+            # 3. URL (Kết hợp iocextract và Aggressive Regex)
             ('url', ('<URL>', self._custom_url_masker)), 
-            
-            # 3. Email (Thường đi kèm trong URL, nên xử lý sau hoặc cùng lúc)
-            ('email', ('<EMAIL>', r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')),
 
             # 4A. HOTLINE (1800/1900) - Ưu tiên bắt trước Mobile
             # Bắt: 19001009, 1900 1009, 1900.55.55.88, 1800-1090
@@ -29,7 +29,7 @@ class AggressiveMasker:
 
             # 4C. DI ĐỘNG (MOBILE - Đầu 03/05/07/08/09 hoặc +84)
             # Loại trừ trường hợp 1900 đã bắt ở trên
-            ('mobile', ('<PHONE>', r'(?<!\d)(?:\+84|84|0[3|5|7|8|9])(?:[\s\.-]?\d){8}(?!\d)')),
+            ('mobile', ('<PHONE>', r'(?<!\d)(?:(?:[+]84|84)[\s\.-]?\d(?:[\s\.-]?\d){8}|0[35789](?:[\s\.-]?\d){8})(?!\d)')),
             
             # 4D. SHORTCODE (Đầu số dịch vụ ngắn 3-6 số)
             ('shortcode', ('<PHONE>', self._custom_shortcode_masker)),
@@ -87,6 +87,14 @@ class AggressiveMasker:
             start, end = m.span()
             text = text[:start] + token_tag + text[end:]
             extracted.append(match_str)
+
+        # HẬU XỬ LÝ: Dọn dẹp prefix còn sót trước <URL>
+        # Pattern: [chữ cái/số] + [space] + . + [space] + <URL>
+        cleanup_pattern = r'(?i)\b[a-z0-9-]+\s*\.\s*(?=' + re.escape(token_tag) + r')'
+        
+        # Lặp cho đến khi không còn prefix nào
+        while re.search(cleanup_pattern, text):
+            text = re.sub(cleanup_pattern, '', text)
             
         return text, extracted
 
