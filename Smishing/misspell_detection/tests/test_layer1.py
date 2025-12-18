@@ -19,7 +19,7 @@ from datetime import datetime
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent.parent  # IE403_DoAnCuoiKy/
 sys.path.insert(0, str(ROOT_DIR))
 
-from Smishing.misspell_detection.layer1_masking import AggressiveMasker
+from Smishing.preprocessing.layer1_masking import AggressiveMasker
 from Smishing.data_loader import load_dataset, DataLoader
 
 

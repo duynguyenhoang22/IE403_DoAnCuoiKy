@@ -150,29 +150,63 @@ class AggressiveMasker:
     def _custom_code_masker(self, text, token_tag):
         extracted = []
         
+        # --- DANH SÁCH TIỀN TỐ GÓI CƯỚC HỢP LỆ ---
+        # Bộ lọc quan trọng nhất để phân biệt Code vs Leet Speak
+        # Code nhà mạng luôn bắt đầu bằng các cụm từ này
+        VALID_PREFIXES = {
+            'V', 'ST', 'D', 'C', 'M', 'MI', 'SD', 'HD', 'VD', 'MAX', 'BIG', 'KC', # Viettel/Vina/Mobi prefixes
+            'DK', 'HUY', 'Y', 'KT', 'T', # Cú pháp tin nhắn
+            'NAP', 'TK', 'MK', # Viết tắt chức năng
+            'UMAX', 'TRE', 'SV', 'ECO' # Các gói đặc thù
+        }
+
         # 1. Bắt Code dịch vụ (Chữ hoa + Số)
-        # Dùng re.sub callback để thay thế an toàn
         def code_replacer(match):
             val = match.group(0)
-            extracted.append(val)
-            return token_tag
             
+            # --- LOGIC PHÂN LOẠI ---
+            
+            # Rule 1: Độ dài. Code gói cước thường ngắn (3-8 ký tự).
+            # Leet speak spam thường dài (ví dụ: KHUYENMA1 -> 9 ký tự)
+            if len(val) > 8: 
+                return val # Trả về nguyên gốc để xử lý như Leet word
+
+            # Rule 2: Kiểm tra Prefix
+            match_prefix = re.match(r'^[A-Z]+', val)
+            if match_prefix:
+                prefix = match_prefix.group(0)
+                
+                # === THÊM RULE MỚI: Phân biệt Leetspeak ===
+                # Leetspeak: Chỉ có 1 số (0 hoặc 1) xen giữa các chữ
+                # Code: Thường có nhiều số liên tiếp hoặc số > 1
+                
+                digits = re.findall(r'\d', val)
+                
+                # Nếu chỉ có 1 số VÀ số đó là 0 hoặc 1 → Có thể là Leetspeak
+                if len(digits) == 1 and digits[0] in '01':
+                    # Kiểm tra thêm: Có chữ SAU số không? (pattern Leet: C0NG, T1EN)
+                    if re.match(r'^[A-Z]+[01][A-Z]+$', val):
+                        return val  # Leetspeak → Không mask
+                
+                # Nếu prefix hợp lệ VÀ không phải Leetspeak → Mask
+                if prefix in VALID_PREFIXES:
+                    extracted.append(val)
+                    return token_tag
+            
+            return val
+
+        # Regex bắt chuỗi: Bắt đầu bằng Chữ, chứa Số
         text = re.sub(r'\b[A-Z]+[0-9]+[A-Z0-9]*\b', code_replacer, text)
 
-        # 2. Bắt OTP (Số thuần túy 4-6 ký tự)
-        # Regex update: Sử dụng Lookaround để đảm bảo không ăn vào Code đã mask (<CODE>)
-        # hoặc các token khác.
-        # Logic: Số đứng độc lập, không dính ký tự lạ
+        # 2. Bắt OTP (Số thuần túy 4-6 ký tự) - GIỮ NGUYÊN
         otp_pattern = r'(?<![\w<])\d{4,6}(?![\w>])'
         
         def otp_replacer(match):
             val = match.group(0)
-            # Loại trừ năm sinh (19xx, 20xx)
             if val.startswith(('19', '20')) and len(val) == 4:
-                return val # Giữ nguyên năm
-            
+                return val 
             extracted.append(val)
-            return token_tag
+            return "<CODE>"
 
         text = re.sub(otp_pattern, otp_replacer, text)
             
