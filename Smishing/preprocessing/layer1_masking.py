@@ -40,7 +40,7 @@ class AggressiveMasker:
             
             # 6. Tiền tệ (Money)
             # Bắt: 100k, 500.000d, 1 triệu, 50 USD
-            ('money', ('<MONEY>', r'(?i)\b\d+(?:[.,]\d+)*\s*(?:k|tr|triệu|trieu|tỷ|ty|nghìn|nghin|ngàn|ngan|đồng|dong|đ|d|vnd|vnđ|usd)\b')),
+            ('money', ('<MONEY>', r'(?i)\b(?:\d+(?:[.,]\d+)*\s*(?:k|tr|triệu|trieu|tỷ|ty|nghìn|nghin|ngàn|ngan|đồng|dong|đ|d|vnd|vnđ|usd)|[1-9]\d{0,2}(?:[.,]\d{3}){2,})(?!\d)')),
             
             # 7. Code & OTP (Xử lý cuối cùng để tránh ăn vào số trong URL/Date)
             ('code', ('<CODE>', self._custom_code_masker))
