@@ -16,28 +16,56 @@ class NormalizationResult:
 
 class TextNormalizer:
     def __init__(self):
-        # 1. Leet Map
+        # 1. Leet Map: CHỈ GIỮ KÝ TỰ ĐẶC BIỆT (Tuyệt đối không map số ở đây)
         self.leet_map_chars = str.maketrans({
-            '0': 'o', '1': 'i', '3': 'e', '4': 'a', 
-            '5': 's', '6': 'g', '7': 't', '8': 'b', '9': 'g',
-            '!': 'i', '@': 'a', '$': 's', '+': 't', 
-            '(': 'c', '[': 'c', '{': 'c',
+            # Đã xóa 0-9 và ( [ { để bảo vệ số liệu và cấu trúc
+            '@': 'a', '$': 's', '+': 't', 
             'j': 'i', 'w': 'u', 'z': 'd' 
         })
-        
-        # 2. Leet word patterns (regex)
+
+        # 2. Leet word patterns (Regex Contextual)
         self.leet_word_patterns = [
             (r'\bko\b', 'không'),
             (r'\bf([aeiouàáảãạ])', r'ph\1'),
+            (r'\bck\b', 'ch'),
+
+
+            # --- NHÓM 1: XỬ LÝ 0 vs o (NÂNG CAO) ---
+            
+            # Case 1: "0k" đứng riêng lẻ -> "ok"
+            # (An toàn vì tiền 0 đồng hiếm khi viết là 0k, mà là 'free'/'miễn phí')
+            (r'\b0k\b', 'ok'), 
+
+            # Case 2: 0 ở ĐẦU từ (vd: 0ng -> ong, 0la -> ola)
+            # Logic: 0 + ít nhất 2 chữ cái (Tránh 0m, 0g, 0s)
+            (r'\b0([a-zA-Z]{2,})\b', r'o\1'),
+
+            # Case 3: 0 ở CUỐI từ (vd: c0 -> co, ck0 -> cho, k0 -> ko)
+            # Logic: Chuỗi chữ cái + 0.
+            # AN TOÀN TUYỆT ĐỐI VỚI Q10, V20, Note10:
+            # Vì Q10 cấu trúc là Chữ+Số+0 -> Regex [a-zA-Z]+ sẽ dừng khi gặp số 1 -> Không khớp.
+            (r'\b([a-zA-Z]+)0\b', r'\1o'),
+
+            # --- NHÓM 2: XỬ LÝ SỐ KẸP GIỮA (Như cũ) ---
+            (r'(?<=[a-zA-Z])0(?=[a-zA-Z])', 'o'), # h0tro -> hotro
+            (r'(?<=[a-zA-Z])1(?=[a-zA-Z])', 'i'), 
+            (r'(?<=[a-zA-Z])3(?=[a-zA-Z])', 'e'), 
+            (r'(?<=[a-zA-Z])4(?=[a-zA-Z])', 'a'), 
+            (r'(?<=[a-zA-Z])5(?=[a-zA-Z])', 's'), 
+            (r'(?<=[a-zA-Z])8(?=[a-zA-Z])', 'b'), 
+
+            # --- NHÓM 3: XỬ LÝ ! KẸP GIỮA CHỮ ---
+            (r'(?<=[a-zA-Zàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ])!(?=[a-zA-Zàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ])', 'i'),
         ]
 
         # 3. Separator Pattern (không có underscore)
-        self.separator_pattern = re.compile(r"['\-~:;,\.\"\*\^\{\}\[\]\(\)\/\|\\]")
+        self.separator_pattern = re.compile(r"['\-~:;,\.\"\*\^\{\}\[\]\(\)\/\|\\!]")
 
         # 4. Token Pattern
         self.token_pattern = re.compile(
             r'(<[A-Z_]+>)|'
-            r'([a-zA-Zàáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]+)',
+            # Thêm 0-9 vào regex bên dưới
+            r'([a-zA-Z0-9àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]+)', 
             re.IGNORECASE | re.UNICODE
         )
         

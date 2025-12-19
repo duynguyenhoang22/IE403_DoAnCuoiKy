@@ -324,14 +324,6 @@ class TestEdgeCases:
         result = normalizer.normalize(text)
         assert result.tokens == []
     
-    def test_only_numbers(self, normalizer):
-        """Text chỉ có số - partial decode do 2 không có mapping"""
-        text = "123456"
-        result = normalizer.normalize(text)
-        # 1→i, 2→(no map), 3→e, 4→a, 5→s, 6→g
-        # Result: "i2easg" → tokenize splits at 2 → ['i', 'easg']
-        assert len(result.tokens) >= 1  # Có output do partial decode
-    
     def test_unicode_normalization(self, normalizer):
         """Unicode characters được normalize"""
         # Combining character vs precomposed
