@@ -19,90 +19,148 @@ class AggressiveMasker:
             # 3. URL (Kết hợp iocextract và Aggressive Regex)
             ('url', ('<URL>', self._custom_url_masker)), 
 
-            # 4A. HOTLINE (1800/1900) - Ưu tiên bắt trước Mobile
+            # 4. BANK ACCOUNT (bắt stk)
+            ('bank_acc', ('<BANK_ACC>', self._custom_bank_masker)),
+
+            # 5A. HOTLINE (1800/1900) - Ưu tiên bắt trước Mobile
             # Bắt: 19001009, 1900 1009, 1900.55.55.88, 1800-1090
             ('hotline', ('<PHONE>', r'(?<!\d)(?:1800|1900)(?:[\s\.-]?\d){4,6}(?!\d)')),
 
-            # 4B. MÁY BÀN (LANDLINE - Đầu 02x)
+            # 5B. MÁY BÀN (LANDLINE - Đầu 02x)
             # Bắt: 024.3838.3838, 028 3939 3939 (Tổng 11 số)
             ('landline', ('<PHONE>', r'(?<!\d)02\d(?:[\s\.-]?\d){8}(?!\d)')),
 
-            # 4C. DI ĐỘNG (MOBILE - Đầu 03/05/07/08/09 hoặc +84)
+            # 5C. DI ĐỘNG (MOBILE - Đầu 03/05/07/08/09 hoặc +84)
             # Loại trừ trường hợp 1900 đã bắt ở trên
             ('mobile', ('<PHONE>', r'(?<!\d)(?:(?:[+]84|84)[\s\.-]?\d(?:[\s\.-]?\d){8}|0[35789](?:[\s\.-]?\d){8})(?!\d)')),
             
-            # 4D. SHORTCODE (Đầu số dịch vụ ngắn 3-6 số)
+            # 5D. SHORTCODE (Đầu số dịch vụ ngắn 3-6 số)
             ('shortcode', ('<PHONE>', self._custom_shortcode_masker)),
 
-            # 5. Ngày giờ (Datetime)
+            # 6. Ngày giờ (Datetime)
             # Bắt: 15/05, 10:30, 10h30, 15p, 30 ngay
             ('datetime', ('<TIME>', r'\b\d{1,2}[/-]\d{1,2}(?:[/-]\d{2,4})?\b|\b\d{1,2}[:h]\d{2}\b|\b\d+\s?(?:phút|p|giờ|h|ngày|tháng|năm)\b')),
             
-            # 6. Tiền tệ (Money)
+            # 7. Tiền tệ (Money)
             # Bắt: 100k, 500.000d, 1 triệu, 50 USD
-            ('money', ('<MONEY>', r'(?i)\b(?:\d+(?:[.,]\d+)*\s*(?:k|tr|triệu|trieu|tỷ|ty|nghìn|nghin|ngàn|ngan|đồng|dong|đ|d|vnd|vnđ|usd)|[1-9]\d{0,2}(?:[.,]\d{3}){2,})(?!\d)')),
+            ('money', ('<MONEY>', r'(?i)\b(?:\d+(?:[.,]\d+)*\s*(?:triệu|trieu|tr|tỷ|ty|nghìn|nghin|ngàn|ngan|đồng|dong|vnd|vnđ|usd|k|đ|d)\b|[1-9]\d{0,2}(?:[.,]\d{3})+)(?!\d)')),
             
-            # 7. Code & OTP (Xử lý cuối cùng để tránh ăn vào số trong URL/Date)
+            # 8. Code & OTP (Xử lý cuối cùng để tránh ăn vào số trong URL/Date)
             ('code', ('<CODE>', self._custom_code_masker))
         ])
 
     def _custom_url_masker(self, text, token_tag):
         extracted = []
         
-        # --- BƯỚC 1: Iocextract (Giữ nguyên) ---
-        # Thư viện này bắt tốt các link chuẩn có http/https
-        for url in iocextract.extract_urls(text, refang=True):
-            if url in text:
-                text = text.replace(url, token_tag)
-                extracted.append(url)
-                
-        # --- BƯỚC 2: Aggressive Regex (NÂNG CẤP) ---
+        # 1. NHÓM TLD AN TOÀN (Safe TLDs)
+        # Cho phép bắt lỏng lẻo (có khoảng trắng xung quanh dấu chấm)
+        # Vì xác suất câu văn kết thúc bằng "." rồi bắt đầu bằng "vn" hay "com" là cực thấp.
+        safe_tlds = r'vn|com|net|org|edu|gov|int|mil|biz|info|mobi|aero|asia|jobs|museum'
         
-        # 1. Mở rộng danh sách TLD:
-        # - Thêm nhóm shortener: ly, me, gl, to, co, cc, biz, info, mobi
-        # - Thêm nhóm spam/bet: vip, pro, fun, club, win, life, xyz, top, icu
-        tlds = r'com|vn|net|org|edu|gov|int|mil|biz|info|mobi|name|aero|asia|jobs|museum' \
-            r'|ly|me|gl|to|co|cc|ws|tk|ga|cf|ml|at|su|bid|cfd' \
-            r'|xyz|top|icu|vip|pro|club|win|life|fun|tech|site|online|store|shop'
-        
-        # 2. Cấu trúc Regex mới:
-        # [Domain] + [Space/Dot] + [TLD] + (Optional: [Space/Slash] + [Path])
-        # (?:\s*\/[\w-]+)? -> Đoạn này giúp "ăn" thêm phần /Q5YuG phía sau
-        aggressive_pattern = r'(?i)\b[a-z0-9-]{1,20}\s*\.\s*(?:' + tlds + r')\b(?:\s*\/[\w-]+)?'
-        
-        # Dùng re.finditer để xử lý thay thế tốt hơn (tránh replace nhầm substring)
-        # Lưu ý: Sắp xếp matches theo độ dài giảm dần để replace chuỗi dài trước (nếu cần)
-        # Nhưng ở đây ta dùng thay thế trực tiếp
-        
-        matches = list(re.finditer(aggressive_pattern, text))
-        
-        # Lặp ngược từ cuối lên đầu để việc thay thế không làm lệch index của các match phía trước
-        for m in reversed(matches):
-            match_str = m.group(0)
-            
-            # Logic loại trừ: Tránh bắt nhầm chữ cái viết tắt (VD: "P.HCM" dính .HCM nếu có trong list)
-            # Với danh sách TLD trên thì khá an toàn.
-            
-            # Thực hiện mask
-            start, end = m.span()
-            text = text[:start] + token_tag + text[end:]
-            extracted.append(match_str)
+        # 2. NHÓM TLD RỦI RO (Risky TLDs) - Dễ trùng với từ thông thường
+        # Bắt buộc phải dính liền dấu chấm (Strict), KHÔNG cho phép khoảng trắng
+        # VD: shop, top, vip, pro, club...
+        risky_tlds = (
+            r'name|ly|me|gl|to|co|cc|ws|tk|ga|cf|ml|at|su|bid|cfd|'
+            r'xyz|top|icu|vip|pro|club|win|life|fun|tech|site|online|store|shop'
+        )
 
-        # --- BƯỚC 3: HẬU XỬ LÝ - Dọn prefix trước <URL> ---
-        # Pattern: [chữ cái/số/gạch] + [space?] + . + [space?] + <URL>
-        cleanup_pattern = r'(?i)[a-z0-9-]+[\s\u00A0]*\.[\s\u00A0]*(<URL>)'
+        # --- CHIẾN LƯỢC 1: PROTOCOL-BASED (Giữ nguyên) ---
+        # Có http/www thì luôn tin tưởng, chấp nhận mọi TLD
+        all_tlds = safe_tlds + '|' + risky_tlds
+        protocol_fuzzy_pattern = (
+            r'(?i)\b(?:https?:\/\/|www\.)'
+            r'(?:[\w\-\.]+(?:\s+[\w\-\.]+)*)'
+            r'\.(?:' + all_tlds + r')\b' # Thêm \b để tránh bắt nhầm (vd: .shop match .shopee)
+            r'(?:[\/][\w\-\.\?\=\&\%]*)?'
+        )
+
+        # --- CHIẾN LƯỢC 2: SCHEMELESS - SAFE TLDs (Fuzzy) ---
+        # Dành cho .com, .vn -> Cho phép khoảng trắng: "banca . com"
+        schemeless_safe_pattern = (
+            r'(?i)\b'
+            r'(?:[\w\-]+)'
+            r'(?:\s*\.\s*[\w\-]+)*'
+            r'\s*\.\s*'                       # <--- Cho phép khoảng trắng
+            r'(?:' + safe_tlds + r')'
+            r'\b'                             # <--- QUAN TRỌNG: Word Boundary (Ngăn .com bắt .computer)
+            r'(?:[\/][\w\-\.\?\=\&\%]*)?'
+        )
+
+        # --- CHIẾN LƯỢC 3: SCHEMELESS - RISKY TLDs (Strict) ---
+        # Dành cho .shop, .vip -> Bắt buộc dính liền: "my.shop" (OK), "my . shop" (IGNORE)
+        # Để tránh bắt nhầm: "Tai khoan. Shop se..."
+        schemeless_risky_pattern = (
+            r'(?i)\b'
+            r'(?:[\w\-]+)'
+            r'(?:\.[\w\-]+)*'                 # Subdomain dính liền
+            r'\.'                             # <--- Bắt buộc dính liền (Không \s*)
+            r'(?:' + risky_tlds + r')'
+            r'\b'                             # <--- QUAN TRỌNG: Word Boundary (Ngăn .shop bắt .shopee)
+            r'(?:[\/][\w\-\.\?\=\&\%]*)?'
+        )
+
+        # --- THỰC THI REPLACEMENT ---
         
-        # Lặp để xử lý nhiều level subdomain (cdn.static.<URL>)
-        prev_text = None
-        while prev_text != text:
-            prev_text = text
-            text = re.sub(cleanup_pattern, r'\1', text)
+        def fuzzy_replace(match):
+            url = match.group(0)
+            extracted.append(url)
+            return token_tag
+
+        # 1. Chạy Protocol trước
+        text = re.sub(protocol_fuzzy_pattern, fuzzy_replace, text)
+
+        # 2. Chạy Safe TLDs (Fuzzy)
+        text = re.sub(schemeless_safe_pattern, fuzzy_replace, text)
         
-        # Normalize multiple spaces
-        text = re.sub(r'[\s\u00A0]+', ' ', text)
-            
+        # 3. Chạy Risky TLDs (Strict)
+        text = re.sub(schemeless_risky_pattern, fuzzy_replace, text)
+
+        # Cleanup & Normalize spaces
+        cleanup_pattern = rf'{token_tag}[\w\.\-\/]+'
+        text = re.sub(cleanup_pattern, token_tag, text)
+        text = re.sub(r'\s+', ' ', text).strip()
+
         return text, extracted
 
+    def _custom_bank_masker(self, text, token_tag):
+        extracted = []
+        
+        # Danh sách từ khóa nhận diện STK (Ngân hàng & Từ chỉ định)
+        keywords = (
+            r'stk|số tk|so tk|số tài khoản|so tai khoan|tài khoản|tai khoan|tk|account|acc|'
+            r'ngân hàng|ngan hang|bank|banking|'
+            r'vietcombank|vcb|techcombank|tcb|mbbank|mb|bidv|vietinbank|vtb|'
+            r'agribank|vpbank|acb|sacombank|tpbank|hdbank|vib|ocb|shb|eximbank|msb'
+        )
+        
+        # Regex giải thích:
+        # 1. (?i)\b(?:...): Bắt đầu bằng một trong các từ khóa trên (case-insensitive)
+        # 2. (?:[\s:\.\-]*?): Cho phép các ký tự ngăn cách (dấu hai chấm, khoảng trắng, dấu chấm...)
+        # 3. (\d{8,19}): Bắt dãy số chính (STK thường từ 8 đến 19 số)
+        # 4. (?!\d): Đảm bảo kết thúc dãy số (không cắt giữa chừng)
+        # 5. Lookbehind/Context check: Đảm bảo số này gắn liền với keyword
+        
+        pattern = rf'(?i)\b({keywords})(?:[\s:\.\-\|]*?)(\d{8,19})(?!\d)'
+        
+        def replacer(match):
+            keyword = match.group(1) # Giữ lại từ khóa (vd: "Vietcombank")
+            number = match.group(2)  # Số tài khoản
+            
+            # Logic loại trừ xung đột:
+            # Nếu số bắt được chính xác là 10 số và bắt đầu bằng 0 -> Có thể là SĐT?
+            # NHƯNG vì nó đứng sau từ khóa "STK" hoặc "Bank", ta ưu tiên nó là BANK_ACC.
+            # Trừ trường hợp keyword là "LH" hay "Liên hệ" (đã xử lý ở logic khác hoặc không nằm trong list keywords trên)
+            
+            extracted.append(number)
+            # Trả về: "Vietcombank <BANK_ACC>" thay vì chỉ "<BANK_ACC>" 
+            # để giữ ngữ cảnh cho model hiểu đây là thông tin thanh toán.
+            return f"{keyword} {token_tag}"
+
+        # Thực hiện replace
+        text = re.sub(pattern, replacer, text)
+        
+        return text, extracted
 
     def _custom_shortcode_masker(self, text, token_tag):
         extracted = []

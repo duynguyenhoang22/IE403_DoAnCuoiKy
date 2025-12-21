@@ -88,7 +88,11 @@ class WhitelistFilter:
             'tiktok', 'facebook', 'fb', 'zalo', 'telegram',
             
             # === THƯƠNG HIỆU KHÁC ===
-            'apple', 'iphone', 'samsung', 'vingroup', 'vinfast',
+            'apple', 'iphone', 'samsung', 'vingroup', 'vinfast', 'viettel', 'money',
+            'vnpt', 'vina', 'vinaphone' 'mobi', 'mobiphone','fpt', 'post', 'myvt', 
+            'myvnpt', 'myviettel', 'vietteltt', 'tv360', 'fptplay', 'steam', 'riot',
+            'vneid', 'evnhcmc',
+            'google', 'netflix', 'instagram'
         }
 
     
@@ -110,18 +114,23 @@ class WhitelistFilter:
             # === IT / APP ===
             'app', 'web', 'link', 'url', 'online', 'offline',
             'download', 'update', 'login', 'logout',
+
+            'sms', 'voucher', 'data', 
+            'gb', 'mb', 'otp', 'link', 
+            'app', 'web', 'page', 'https'
         }
 
     def _build_slang_abbr_list(self):
         """
-        Suy luận: Viết tắt phổ biến trong SMS tiếng Việt
+        Suy luận: Viết tắt phổ biến trong SMS tiếng Việt + một số từ tiếng Anh khác
         Nguồn: Quan sát từ dữ liệu thực tế
         """
         return {
             # === VIẾT TẮT PHỔ BIẾN (Xuất hiện nhiều trong data) ===
-            'tb',    # Thông báo - xuất hiện ở row 1, 2...
+            'tb', 'qc', 'tkc'  # Thông báo, quảng cáo, tài khoản chính - xuất hiện nhiều trong các tin nhắn từ nhà mạng
             'lh',    # Liên hệ
-            'sdt', 'đt',  # Số điện thoại
+            'tc', 'tc1', 'tc2', 'tc3', # Cú pháp từ chối 
+            'sdt', 'đt', 'dt', 'sđt', # Số điện thoại
             'tk', 'stk',  # Tài khoản
             'tt',    # Thanh toán / Thông tin
             'cskh',  # Chăm sóc khách hàng
@@ -135,14 +144,25 @@ class WhitelistFilter:
             'bhxh', 'bhyt', 'bhtn', # bảo hiểm xã hội, bảo hiểm y tế, bảo hiểm thất nghiệp
             'cmnd', 'cccd', # chứng minh nhân dân, căn cước công dân
             'gplx', # giấy phép lái xe
+            'cntt', 'dh'
 
             # === TEENCODE PHỔ BIẾN ===
             'ko', 'k',    # Không
             'dc', 'đc',   # Được  
             'r',          # Rồi
             'bn',         # Bạn
-            'ok', 'okie', 'oke', 'okay'
-        }
+            'ok', 'okie', 'oke', 'okay', 'dk', 'hsd', 
+            'qk', 'gd', 'dv', 'dh', 'kh', 'nv', 'lh',
+            'hs', 'thpt', 'thcs'
+
+            # === TIẾNG ANH ===
+            'ref', 'sms', 'verify', 'code', 'bank', 'transfer', 'verification', 'send', 'transaction',
+            'mobile', 'phone', 'number', 'tel', 'call', 'contact', 'covid', 'website', 
+            
+            
+            'big', 'airtime' # Quan sát từ bộ dữ liệu thì bigXX thường là cú pháp của 1 gói dịch vụ, airtime là một dịch vụ ứng tiền thường xuyên gửi tn cho ng dùng. 
+            
+            }
 
     def _build_entity_tokens(self):
         """
