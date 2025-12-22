@@ -1,10 +1,18 @@
 import re
-import unicodedata
+import os
+import sys
 from dataclasses import dataclass, field
 from typing import Set, List, Optional
 import logging
 
-# Import từ dict module 
+# Import từ dict module
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if parent_dir not in sys.path:
+    sys.path.append(parent_dir)
+
+# Import tuyệt đối
+from dicts.dict import load_both_dicts, remove_vietnamese_diacritics
 try:
     from ..dicts.dict import load_both_dicts, remove_vietnamese_diacritics
 except ImportError:

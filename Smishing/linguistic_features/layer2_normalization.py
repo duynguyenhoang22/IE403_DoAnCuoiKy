@@ -2,15 +2,21 @@ import re
 import unicodedata
 import random
 import string
-import json
 import os
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Tuple, Dict, Set
 
-# Import từ shadow_dict module
-from ..dicts.dict import load_both_dicts, remove_vietnamese_diacritics
+# Import từ dict module
 
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if parent_dir not in sys.path:
+    sys.path.append(parent_dir)
+
+# Import tuyệt đối
+from dicts.dict import load_both_dicts, remove_vietnamese_diacritics
 
 @dataclass
 class NormalizationResult:
