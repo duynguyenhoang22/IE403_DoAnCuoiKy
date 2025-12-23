@@ -14,7 +14,7 @@ import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 warnings.simplefilter('ignore', urllib3.exceptions.InsecureRequestWarning)
 
-# --- IMPORT FRIEND'S SUPERIOR MASKER ---
+# --- IMPORT MASKER ---
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 try:
     from preprocessing.layer1_masking import AggressiveMasker
