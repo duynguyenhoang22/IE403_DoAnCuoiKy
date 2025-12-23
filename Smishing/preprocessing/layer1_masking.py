@@ -52,73 +52,73 @@ class AggressiveMasker:
     def _custom_url_masker(self, text, token_tag):
         extracted = []
         
-        # 1. NHÓM TLD AN TOÀN (Safe TLDs)
-        # Cho phép bắt lỏng lẻo (có khoảng trắng xung quanh dấu chấm)
-        # Vì xác suất câu văn kết thúc bằng "." rồi bắt đầu bằng "vn" hay "com" là cực thấp.
-        safe_tlds = r'vn|com|net|org|edu|gov|int|mil|biz|info|mobi|aero|asia|jobs|museum'
+        # 1. CẬP NHẬT TLDs
+        # Thêm app, io, dev, cloud... (các TLD hiện đại hacker hay dùng)
+        safe_tlds = r'vn|com|net|org|edu|gov|int|mil|biz|info|mobi|aero|asia|jobs|museum|app|io|dev|cloud'
         
-        # 2. NHÓM TLD RỦI RO (Risky TLDs) - Dễ trùng với từ thông thường
-        # Bắt buộc phải dính liền dấu chấm (Strict), KHÔNG cho phép khoảng trắng
-        # VD: shop, top, vip, pro, club...
         risky_tlds = (
             r'name|ly|me|gl|to|co|cc|ws|tk|ga|cf|ml|at|su|bid|cfd|'
-            r'xyz|top|icu|vip|pro|club|win|life|fun|tech|site|online|store|shop'
+            r'xyz|top|icu|vip|pro|club|win|life|fun|tech|site|online|store|shop|live|website'
         )
 
-        # --- CHIẾN LƯỢC 1: PROTOCOL-BASED (Giữ nguyên) ---
-        # Có http/www thì luôn tin tưởng, chấp nhận mọi TLD
-        all_tlds = safe_tlds + '|' + risky_tlds
-        protocol_fuzzy_pattern = (
-            r'(?i)\b(?:https?:\/\/|www\.)'
-            r'(?:[\w\-\.]+(?:\s+[\w\-\.]+)*)'
-            r'\.(?:' + all_tlds + r')\b' # Thêm \b để tránh bắt nhầm (vd: .shop match .shopee)
-            r'(?:[\/][\w\-\.\?\=\&\%]*)?'
+        # 2. XỬ LÝ ĐẶC BIỆT: BROKEN SHORTENERS
+        # Bắt riêng bit.ly, t.ly, tinyurl bị chèn khoảng trắng: "bi t . ly", "bit .ly"
+        # Logic: (b i t) + (khoảng trắng/dấu chấm lộn xộn) + (l y)
+        broken_shortener_pattern = (
+            r'(?i)\b(?:b\s*i\s*t|t|tinyurl)\s*[\.\,]\s*l\s*y\b'  # Bắt phần domain
+            r'(?:[\/\s]+[\w\-\.\?\=\&\%]+)?'                     # Bắt phần path phía sau
         )
 
-        # --- CHIẾN LƯỢC 2: SCHEMELESS - SAFE TLDs (Fuzzy) ---
-        # Dành cho .com, .vn -> Cho phép khoảng trắng: "banca . com"
+        # 3. CHIẾN LƯỢC: PROTOCOL-BASED
+        # Nếu đã có http/https, ta chấp nhận TẤT CẢ các đuôi từ 2 ký tự trở lên.
+        # Không cần check whitelist TLD ở đây vì http là tín hiệu quá mạnh.
+        protocol_agnostic_pattern = (
+            r'(?i)\b(?:https?:\/\/|www\.)'        # Protocol
+            r'(?:[\w\-\.]+(?:\s+[\w\-\.]+)*)'     # Subdomains (cho phép space nhẹ)
+            r'\.[a-z]{2,10}\b'                    # TLD bất kỳ (2-10 ký tự) -> Bắt được .app, .ngrok
+            r'(?:[\/][\w\-\.\?\=\&\%]*)?'         # Path
+        )
+
+        # 4. SCHEMELESS (Giữ nguyên logic cũ để an toàn)
+        # Safe TLDs (Fuzzy - cho phép khoảng trắng)
         schemeless_safe_pattern = (
-            r'(?i)\b'
-            r'(?:[\w\-]+)'
-            r'(?:\s*\.\s*[\w\-]+)*'
-            r'\s*\.\s*'                       # <--- Cho phép khoảng trắng
-            r'(?:' + safe_tlds + r')'
-            r'\b'                             # <--- QUAN TRỌNG: Word Boundary (Ngăn .com bắt .computer)
-            r'(?:[\/][\w\-\.\?\=\&\%]*)?'
+            r'(?i)\b(?:[\w\-]+)(?:\s*\.\s*[\w\-]+)*\s*\.\s*(?:' + safe_tlds + r')\b(?:[\/][\w\-\.\?\=\&\%]*)?'
         )
-
-        # --- CHIẾN LƯỢC 3: SCHEMELESS - RISKY TLDs (Strict) ---
-        # Dành cho .shop, .vip -> Bắt buộc dính liền: "my.shop" (OK), "my . shop" (IGNORE)
-        # Để tránh bắt nhầm: "Tai khoan. Shop se..."
+        # Risky TLDs (Strict - bắt buộc dính liền)
         schemeless_risky_pattern = (
-            r'(?i)\b'
-            r'(?:[\w\-]+)'
-            r'(?:\.[\w\-]+)*'                 # Subdomain dính liền
-            r'\.'                             # <--- Bắt buộc dính liền (Không \s*)
-            r'(?:' + risky_tlds + r')'
-            r'\b'                             # <--- QUAN TRỌNG: Word Boundary (Ngăn .shop bắt .shopee)
-            r'(?:[\/][\w\-\.\?\=\&\%]*)?'
+            r'(?i)\b(?:[\w\-]+)(?:\.[\w\-]+)*\.(?:' + risky_tlds + r')\b(?:[\/][\w\-\.\?\=\&\%]*)?'
         )
 
         # --- THỰC THI REPLACEMENT ---
-        
-        def fuzzy_replace(match):
+        def replace_and_extract(match):
             url = match.group(0)
-            extracted.append(url)
+            # Clean URL: Xóa hết khoảng trắng thừa để Domain Check hoạt động được
+            # VD: "bi t . ly" -> "bit.ly"
+            clean_url = re.sub(r'\s+', '', url)
+            
+            # Xử lý riêng cho trường hợp dấu chấm bị tách: "bit . ly" -> "bit.ly"
+            # Nhưng cẩn thận không nối "com . vn" thành "com.vn" nếu logic trên chưa xử lý
+            # Ở đây đơn giản là xóa space là đủ cho hầu hết case.
+            
+            extracted.append(clean_url) 
             return token_tag
 
-        # 1. Chạy Protocol trước
-        text = re.sub(protocol_fuzzy_pattern, fuzzy_replace, text)
-
-        # 2. Chạy Safe TLDs (Fuzzy)
-        text = re.sub(schemeless_safe_pattern, fuzzy_replace, text)
+        # Thứ tự ưu tiên (Pattern cụ thể chạy trước)
         
-        # 3. Chạy Risky TLDs (Strict)
-        text = re.sub(schemeless_risky_pattern, fuzzy_replace, text)
+        # B1: Bắt Broken Shorteners (Case 3)
+        text = re.sub(broken_shortener_pattern, replace_and_extract, text)
 
-        # Cleanup & Normalize spaces
-        cleanup_pattern = rf'{token_tag}[\w\.\-\/]+'
-        text = re.sub(cleanup_pattern, token_tag, text)
+        # B2: Bắt Protocol mạnh (Case 1)
+        text = re.sub(protocol_agnostic_pattern, replace_and_extract, text)
+
+        # B3: Bắt Schemeless Safe
+        text = re.sub(schemeless_safe_pattern, replace_and_extract, text)
+        
+        # B4: Bắt Schemeless Risky
+        text = re.sub(schemeless_risky_pattern, replace_and_extract, text)
+
+        # Cleanup
+        text = re.sub(rf'{token_tag}[\w\.\-\/]+', token_tag, text)
         text = re.sub(r'\s+', ' ', text).strip()
 
         return text, extracted
@@ -329,6 +329,9 @@ if __name__ == "__main__":
     masker = AggressiveMasker()
     
     samples = [
+        "Vietcombank thong bao: So du bien dong -2.000.000. Chi tiet: https://vietcombank.com.vn.ngrok-free.app/login",
+        "Quy khach V.C.B vui long xac thuc kyc tai vcb-digibank-secure.xyz de tranh bi khoa tai khoan.",
+        "Nhan qua tri an khach hang tai bi t . ly / qua-tang-bi-mat",
         "Truy cap ngay banca . com hoac bit.ly/test de nhan thuong",
         "Lien he zalo.me/0912345678 de duoc ho tro",
         "Ma xac thuc cua ban la 5993. Khong chia se cho ai",
