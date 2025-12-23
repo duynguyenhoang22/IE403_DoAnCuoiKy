@@ -329,6 +329,7 @@ if __name__ == "__main__":
     masker = AggressiveMasker()
     
     samples = [
+        "Shopee tang ban voucher 500k. Nhan tai: s h o p e e . v n / k h u y e n - m a i",
         "Vietcombank thong bao: So du bien dong -2.000.000. Chi tiet: https://vietcombank.com.vn.ngrok-free.app/login",
         "Quy khach V.C.B vui long xac thuc kyc tai vcb-digibank-secure.xyz de tranh bi khoa tai khoan.",
         "Nhan qua tri an khach hang tai bi t . ly / qua-tang-bi-mat",
