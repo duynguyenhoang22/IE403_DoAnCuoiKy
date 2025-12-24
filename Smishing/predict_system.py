@@ -150,8 +150,11 @@ if __name__ == "__main__":
         # Case 4: Không URL, nhưng có số lạ + nội dung lừa -> Nhánh 2 -> AI bắt
         ("Cuc thue thong bao ban no phi. Lien he 0912345678 de giai quyet gap.", "unknown"),
         
-        # Case 5: Shortlink (Bit.ly) -> Phase 1 (Expand) -> Phase 1 (Check final)
-        ("Nhan qua ngay tai bit.ly/test (gia su link nay tro ve trang tin tuc)", "shortcode")
+        # Case 5: Shortlink (Bit.ly) -> Phase 1 (Expand) -> Phase 1 
+        ("Nhan qua ngay tai bit.ly/test (gia su link nay tro ve trang tin tuc)", "shortcode"),
+
+        # Case 6: Nội dung có dấu + URL 
+        ("CSGT Việt Nam: Hồ sơ vi phạm giao thông được lưu trữ dưới tên của bạn. Để biết thêm thông tin, vui lòng truy cập https://dichvucongs.top/vn", "brandname")
     ]
 
     print(f"{'='*60}")
