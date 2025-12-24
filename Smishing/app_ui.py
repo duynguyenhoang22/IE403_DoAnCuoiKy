@@ -23,20 +23,37 @@ st.markdown("""
 try:
     from predict_system import SmishingDetectionSystem
 except ImportError:
-    st.error("❌ Không tìm thấy file 'predict_system.py'. Hãy chắc chắn bạn đã đổi tên file 'predict_system(25_test_cases).py' thành 'predict_system.py' và để cùng thư mục.")
+    st.error("❌ Không tìm thấy file 'predict_system.py'.")
     st.stop()
 
-# --- LOAD MODEL (CACHE) ---
+# --- LOAD MODELS (CACHE) ---
 @st.cache_resource
-def load_system():
-    # Khởi tạo hệ thống (Threshold 0.46)
-    return SmishingDetectionSystem(threshold=0.46)
+def load_system(model_choice, threshold):
+    model_paths = {
+        "XGBoost (Tuned)": "../smishing_xgb.pkl",
+        "Best Model (RF)": "../best_model.pkl"
+    }
+    
+    model_path = model_paths.get(model_choice, "../best_model.pkl")
+    return SmishingDetectionSystem(
+        model_path=model_path, 
+        encoder_path="../sender_encoder.pkl",
+        threshold=threshold,
+        model_name=model_choice
+    )
 
-try:
-    system = load_system()
-except Exception as e:
-    st.error(f"Lỗi khởi động hệ thống: {e}")
-    st.stop()
+# Cache cả hai models để tránh load lại
+@st.cache_resource
+def load_comparison_systems(threshold):
+    systems = {}
+    for model_name, model_path in [("XGBoost (Tuned)", "../smishing_xgb.pkl"), ("Best Model (RF)", "../best_model.pkl")]:
+        systems[model_name] = SmishingDetectionSystem(
+            model_path=model_path, 
+            encoder_path="../sender_encoder.pkl",
+            threshold=threshold,
+            model_name=model_name
+        )
+    return systems
 
 # --- SIDEBAR ---
 with st.sidebar:
@@ -45,29 +62,39 @@ with st.sidebar:
     
     menu = st.radio(
         "🔍 Chọn Chế Độ:",
-        ["Kiểm Tra Thủ Công", "Chạy Test Cases Tự Động"]
+        ["Kiểm Tra Thủ Công", "Chạy Test Cases Tự Động", "So Sánh Models"]
     )
     
     st.markdown("---")
     st.subheader("⚙️ Cấu Hình")
     
+    # Model selection cho tất cả chế độ
+    model_choice = st.selectbox(
+        "🤖 Chọn Model AI:",
+        ["XGBoost (Tuned)", "Best Model (RF)"],
+        help="XGBoost: Model được tinh chỉnh thủ công\nBest Model: Model tốt nhất từ quá trình so sánh tự động"
+    )
+    
     new_threshold = st.slider("Ngưỡng chặn (Threshold)", 0.0, 1.0, 0.46, 0.01)
+    
+    # Load system dựa trên lựa chọn
+    try:
+        if menu == "So Sánh Models":
+            systems = load_comparison_systems(new_threshold)
+            system = systems[model_choice]  # Dùng system được chọn cho preview
+        else:
+            system = load_system(model_choice, new_threshold)
+    except Exception as e:
+        st.error(f"Lỗi khởi động hệ thống: {e}")
+        st.stop()
+
     if new_threshold != system.threshold:
         system.threshold = new_threshold
         st.toast(f"Đã cập nhật Threshold: {new_threshold}", icon="✅")
 
-    st.info(
-        """
-        **Các loại người gửi:**
-        * **Unknown:** Số lạ / Không xác định
-        * **Personal:** Số cá nhân (09xx, +84...)
-        * **Brandname:** Tên thương hiệu
-        """
-    )
-
 # --- TRANG 1: KIỂM TRA THỦ CÔNG ---
 if menu == "Kiểm Tra Thủ Công":
-    st.header("📝 Kiểm Tra Tin Nhắn Đáng Ngờ")
+    st.header(f"📝 Kiểm Tra Tin Nhắn Đáng Ngờ - {model_choice}")
     
     col1, col2 = st.columns([2, 1])
     
@@ -197,3 +224,121 @@ elif menu == "Chạy Test Cases Tự Động":
             use_container_width=True,
             height=600
         )
+
+# --- TRANG 3: SO SÁNH MODELS ---
+elif menu == "So Sánh Models":
+    st.header("🔄 So Sánh Hai Model AI")
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        sms_text = st.text_area(
+            "Nhập nội dung tin nhắn:", 
+            height=150,
+            placeholder="Ví dụ: Vietcombank thong bao tai khoan cua ban bi khoa..."
+        )
+        
+    with col2:
+        sender_label = st.selectbox(
+            "Loại người gửi:", 
+            ["Số lạ (Unknown)", "Số cá nhân (Personal)", "Thương hiệu (Brandname)"]
+        )
+        
+        sender_map = {
+            "Số lạ (Unknown)": "unknown",
+            "Số cá nhân (Personal)": "personal_number",
+            "Thương hiệu (Brandname)": "brandname"
+        }
+        sender_code = sender_map[sender_label]
+        
+        compare_btn = st.button("🔍 SO SÁNH NGAY", use_container_width=True, type="primary")
+
+    if compare_btn and sms_text:
+        st.markdown("---")
+        
+        # Tạo 2 cột để hiển thị kết quả song song
+        col_xgb, col_best = st.columns(2)
+        
+        results = {}
+        
+        with st.spinner("Đang phân tích bằng cả hai model..."):
+            time.sleep(0.5) 
+            
+            for model_name, sys in systems.items():
+                results[model_name] = sys.predict(sms_text, sender_code)
+        
+        # Hiển thị kết quả XGBoost
+        with col_xgb:
+            st.subheader("🤖 XGBoost (Tuned)")
+            result = results["XGBoost (Tuned)"]
+            
+            if result['is_smishing']:
+                st.error("🚫 LỪA ĐẢO / RỦI RO")
+            else:
+                st.success("✅ AN TOÀN")
+            
+            st.metric("Mức độ tin cậy", f"{result['confidence']*100:.1f}%")
+            st.progress(result['confidence'], text="Chỉ số rủi ro")
+            
+            with st.expander("Chi tiết phân tích"):
+                st.write(f"**Giai đoạn:** {result['phase']}")
+                st.write(f"**Lý do:** {result['reason']}")
+                st.json({
+                    "AI Raw Score": result['raw_ai_score'],
+                    "Domain Risk": result.get('domain_risk', 'N/A'),
+                    "Sender Type": result['sender']
+                })
+
+        # Hiển thị kết quả Best Model
+        with col_best:
+            st.subheader("🎯 Best Model (RF)")
+            result = results["Best Model (RF)"]
+            
+            if result['is_smishing']:
+                st.error("🚫 LỪA ĐẢO / RỦI RO")
+            else:
+                st.success("✅ AN TOÀN")
+            
+            st.metric("Mức độ tin cậy", f"{result['confidence']*100:.1f}%")
+            st.progress(result['confidence'], text="Chỉ số rủi ro")
+            
+            with st.expander("Chi tiết phân tích"):
+                st.write(f"**Giai đoạn:** {result['phase']}")
+                st.write(f"**Lý do:** {result['reason']}")
+                st.json({
+                    "AI Raw Score": result['raw_ai_score'],
+                    "Domain Risk": result.get('domain_risk', 'N/A'),
+                    "Sender Type": result['sender']
+                })
+        
+        # Phân tích sự khác biệt
+        st.markdown("---")
+        st.subheader("📊 Phân Tích So Sánh")
+        
+        xgb_result = results["XGBoost (Tuned)"]
+        best_result = results["Best Model (RF)"]
+        
+        # Tạo bảng so sánh
+        comparison_data = {
+            "Model": ["XGBoost (Tuned)", "Best Model (RF)"],
+            "Kết quả": [
+                "🚫 Lừa đảo" if xgb_result['is_smishing'] else "✅ An toàn",
+                "🚫 Lừa đảo" if best_result['is_smishing'] else "✅ An toàn"
+            ],
+            "Độ tin cậy": [f"{xgb_result['confidence']*100:.1f}%", f"{best_result['confidence']*100:.1f}%"],
+            "AI Raw Score": [f"{xgb_result['raw_ai_score']:.4f}", f"{best_result['raw_ai_score']:.4f}"],
+            "Giai đoạn": [xgb_result['phase'], best_result['phase']]
+        }
+        
+        df_comparison = pd.DataFrame(comparison_data)
+        st.dataframe(df_comparison, use_container_width=True)
+        
+        # Nhận xét về sự khác biệt
+        if xgb_result['is_smishing'] == best_result['is_smishing']:
+            st.success("✅ **Hai model đồng thuận:** Cả hai model đều đưa ra kết quả giống nhau.")
+        else:
+            st.warning("⚠️ **Sự khác biệt:** Hai model đưa ra kết quả khác nhau. Nên kiểm tra kỹ nội dung!")
+            
+            # Giải thích sự khác biệt
+            diff_confidence = abs(xgb_result['confidence'] - best_result['confidence'])
+            st.info(f"**Chênh lệch độ tin cậy:** {diff_confidence*100:.1f}%")

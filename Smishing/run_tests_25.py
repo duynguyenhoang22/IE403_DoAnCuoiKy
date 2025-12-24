@@ -29,7 +29,7 @@ if __name__ == "__main__":
         ("Nhan qua tri an tu Google tai: https://google.com.vn.ngrok.io/claim-reward", "personal_number"),
 
         # 4. URL Obfuscation (Làm nhiễu URL bằng khoảng trắng)
-        # Kỳ vọng: LỪA ĐẢO (Regex phải ghép được 'shopee . vn' lại để check).
+        # Kỳ vọng: SAFE (Masker phải ghép được 'shopee . vn' lại để check, và check ra domain legit).
         ("Shopee tang ban voucher 500k. Nhan tai: s h o p e e . v n / k h u y e n - m a i", "brandname"),
 
         # 5. URL "Sạch" nhưng nội dung lừa đảo (Ngưỡng xám)

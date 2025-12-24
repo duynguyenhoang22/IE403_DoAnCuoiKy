@@ -69,6 +69,23 @@ class AggressiveMasker:
             r'(?:[\/\s]+[\w\-\.\?\=\&\%]+)?'                     # Bắt phần path phía sau
         )
 
+        # 2.5. XỬ LÝ HEAVILY OBFUSCATED DOMAINS 
+        # Bắt domain bị obfuscate nặng như "s h o p e e . v n" hoặc "b  i t (.) ly"
+        heavily_obfuscated_pattern = (
+            r'(?i)'                           # Case insensitive
+            r'\b'                             # Bắt đầu từ ranh giới từ
+            r'(?:[a-z0-9]\s+)+'               # Domain body: Ký tự + khoảng trắng (lặp lại): "s h o p e e "
+            r'[a-z0-9]'                       # Ký tự cuối của domain body (trước dấu chấm)
+            r'\s*'                            # Khoảng trắng tùy chọn
+            r'(?:\.|dot|\(\.\)|\[\.\])'       # Dấu chấm (bắt cả các biến thể như " dot ", "(.)")
+            r'\s*'                            # Khoảng trắng tùy chọn
+            r'(?:[a-z]{1,2}\s*)+'             # TLD: Các ký tự TLD rải rác: "v n" hoặc "c o m"
+            r'(?:'                            # Bắt đầu nhóm Path (tùy chọn)
+                r'\s*/\s*'                    # Dấu gạch chéo có khoảng trắng bao quanh
+                r'[\w\-\s]+'                  # Nội dung path: Chữ, số, gạch ngang và khoảng trắng
+            r')?'                             # Kết thúc nhóm Path
+        )
+
         # 3. CHIẾN LƯỢC: PROTOCOL-BASED
         # Nếu đã có http/https, ta chấp nhận TẤT CẢ các đuôi từ 2 ký tự trở lên.
         # Không cần check whitelist TLD ở đây vì http là tín hiệu quá mạnh.
@@ -102,19 +119,51 @@ class AggressiveMasker:
             
             extracted.append(clean_url) 
             return token_tag
+        
+        def heavily_obfuscated_replacer(match):
+            url = match.group(0)
+            
+            # RULE 1: Space density (giảm xuống 5% để bắt được "shopee . vn")
+            space_density = url.count(' ') / len(url) if url else 0
+            if space_density < 0.05:  # Chỉ 5% space threshold
+                return url  # Không mask
+            
+            # RULE 2: Context filtering (giữ nguyên)
+            context_words = ['microsoft', 'apple', 'google', 'facebook', 'truy cập', 'website', 'trang web']
+            if any(word in url.lower() for word in context_words):
+                return url  # Không mask
+            
+            # RULE 3: Length validation (tăng lên để tránh false positive)
+            if len(url) < 8:  # Domain quá ngắn
+                return url
+            
+            # RULE 4: Kiểm tra có đủ obfuscated features
+            has_space_in_domain = ' ' in url.split('.')[0] if '.' in url else ' ' in url
+            has_dot_obfuscation = ('(.)' in url or ' . ' in url or '( . )' in url)
+            
+            if not (has_space_in_domain or has_dot_obfuscation):
+                return url  # Không đủ dấu hiệu obfuscated
+            
+            # Nếu pass tất cả rules → mask
+            clean_url = re.sub(r'\s+', '', url)  # Clean trước khi lưu
+            extracted.append(clean_url)
+            return token_tag
 
         # Thứ tự ưu tiên (Pattern cụ thể chạy trước)
         
-        # B1: Bắt Broken Shorteners (Case 3)
+        # B1: Bắt Broken Shorteners (Case 2)
         text = re.sub(broken_shortener_pattern, replace_and_extract, text)
 
-        # B2: Bắt Protocol mạnh (Case 1)
+        # # B2: Bắt Heavily OBFUSCATED DOMAINS (Case 2.5)
+        text = re.sub(heavily_obfuscated_pattern, heavily_obfuscated_replacer, text)
+
+        # B3: Bắt Protocol mạnh (Case 3)
         text = re.sub(protocol_agnostic_pattern, replace_and_extract, text)
 
-        # B3: Bắt Schemeless Safe
+        # B4: Bắt Schemeless Safe
         text = re.sub(schemeless_safe_pattern, replace_and_extract, text)
         
-        # B4: Bắt Schemeless Risky
+        # B5: Bắt Schemeless Risky
         text = re.sub(schemeless_risky_pattern, replace_and_extract, text)
 
         # Cleanup
@@ -329,6 +378,7 @@ if __name__ == "__main__":
     masker = AggressiveMasker()
     
     samples = [
+        "Vui long truy cap http://192.168.1.50/update-firmware de tranh bi ngat mang.",
         "Shopee tang ban voucher 500k. Nhan tai: s h o p e e . v n / k h u y e n - m a i",
         "Vietcombank thong bao: So du bien dong -2.000.000. Chi tiet: https://vietcombank.com.vn.ngrok-free.app/login",
         "Quy khach V.C.B vui long xac thuc kyc tai vcb-digibank-secure.xyz de tranh bi khoa tai khoan.",

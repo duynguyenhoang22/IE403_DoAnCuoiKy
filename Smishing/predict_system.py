@@ -15,8 +15,9 @@ except ImportError as e:
     exit()
 
 class SmishingDetectionSystem:
-    def __init__(self, model_path='smishing_xgb.pkl', encoder_path='sender_encoder.pkl', threshold=0.46):
+    def __init__(self, model_path='smishing_xgb.pkl', encoder_path='sender_encoder.pkl', threshold=0.46, model_name='Default'):
         self.threshold = threshold
+        self.model_name = model_name
         print(f"🔄 Starting System (Threshold={self.threshold})...")
         try:
             self.model = joblib.load(model_path)
