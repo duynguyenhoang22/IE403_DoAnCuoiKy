@@ -5,7 +5,7 @@ import unicodedata
 import requests
 import tldextract
 from bs4 import BeautifulSoup
-from ddgs import DDGS # pip install duckduckgo-search
+from ddgs import DDGS # pip install ddgs
 from collections import Counter
 import warnings
 import urllib3
