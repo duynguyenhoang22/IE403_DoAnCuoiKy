@@ -1,172 +1,177 @@
 import joblib
-import numpy as np
 import logging
-from features import SmishingFeatureExtractor
+import warnings
+import unicodedata
+import re  # Cần import thêm re để xử lý Regex boundary
 
-# Cấu hình logging để tắt bớt cảnh báo của XGBoost nếu cần
+warnings.filterwarnings("ignore")
 logging.getLogger('xgboost').setLevel(logging.WARNING)
 
-print("Dang khoi tao he thong...")
-
 try:
-    from domain_check import URLInspector, SpamTextCleaner
-    from preprocessing.layer1_masking import AggressiveMasker # Dùng masker để detect entity
     from features import SmishingFeatureExtractor
+    from domain_check import DomainVerifier
 except ImportError as e:
-    print(f"LỖI IMPORT: {e}")
-    print("Vui lòng đảm bảo các file: domain_check.py, layer1_masking.py, features.py nằm cùng thư mục.")
+    print(f"❌ LỖI IMPORT SYSTEM: {e}")
     exit()
 
-# --- 2. LOAD AI MODELS (Từ predict_test.py) ---
-print(">>> Đang khởi tạo hệ thống Smishing Detection...")
-try:
-    ai_model = joblib.load('smishing_xgb.pkl')
-    sender_encoder = joblib.load('sender_encoder.pkl')
-    print(" [OK] Đã load AI Model & Encoder.")
-except FileNotFoundError:
-    print(" [LỖI] Không tìm thấy file model (.pkl). Hãy train model trước.")
-    exit()
+class SmishingDetectionSystem:
+    def __init__(self, model_path='smishing_xgb.pkl', encoder_path='sender_encoder.pkl', threshold=0.46, model_name='Default'):
+        self.threshold = threshold
+        self.model_name = model_name
+        print(f"🔄 Starting System (Threshold={self.threshold})...")
+        try:
+            self.model = joblib.load(model_path)
+            self.le = joblib.load(encoder_path)
+            self.extractor = SmishingFeatureExtractor()
+            self.verifier = DomainVerifier()
+            print("✅ SYSTEM READY!")
+        except Exception as e:
+            print(f"FAIL: {e}")
+            exit()
 
-# Khởi tạo các công cụ
-masker = AggressiveMasker()
-cleaner = SpamTextCleaner()
-inspector = URLInspector()
-extractor = SmishingFeatureExtractor()
+    def _simple_normalize(self, text: str) -> str:
+        """Chuẩn hóa nhẹ để so khớp từ khóa."""
+        text = unicodedata.normalize("NFKD", text)
+        text = "".join(ch for ch in text if not unicodedata.combining(ch))
+        return text.lower()
 
-# --- 3. HÀM DỰ ĐOÁN CỦA AI (Core Logic cũ) ---
-def run_ai_prediction(text, sender_type):
-    """Chạy Feature Extraction và XGBoost Model"""
-    # Trích xuất 27 đặc trưng
-    text_features = extractor.extract_features(text)
-    
-    # Mã hóa sender
-    try:
-        sender_code = sender_encoder.transform([sender_type])[0]
-    except ValueError:
-        sender_code = 0 # Fallback nếu sender lạ
+    def predict(self, text, sender_type='unknown'):
+        # ---------------------------------------------------------
+        # BƯỚC 1: AI SCORING (BASELINE)
+        # ---------------------------------------------------------
+        text_features = self.extractor.extract_features(text)
+        try:
+            sender_code = self.le.transform([sender_type])[0]
+        except:
+            sender_code = 0 
+            
+        full_vector = [sender_code] + text_features
+        ai_prob = float(self.model.predict_proba([full_vector])[:, 1][0])
+
+        # ---------------------------------------------------------
+        # BƯỚC 2: DOMAIN VERIFICATION
+        # ---------------------------------------------------------
+        domain_status, domain_reason, risk_score = self.verifier.verify(text)
+
+        # ---------------------------------------------------------
+        # BƯỚC 3: CONTEXT ANALYSIS (PHÂN TÍCH NGỮ CẢNH)
+        # ---------------------------------------------------------
+        norm_text = self._simple_normalize(text)
+
+        # 3.1. Conversation Guard (Bộ lọc hội thoại)
+        # Dùng Regex \b để bắt chính xác từ đơn, tránh bắt nhầm (VD: 'bo' trong 'bo cong an')
+        conversational_regex = [
+            r'\btao\b', r'\bmay\b', r'\bba\b', r'\bme\b', r'\bbo\b', 
+            r'\banh\b', r'\bem\b', r'\bchi\b', r'\bminh\b', r'\bvo\b', r'\bchong\b'
+        ]
         
-    # Ghép vector: [sender_code, ...text_features]
-    full_vector = [sender_code] + text_features
-    
-    # Dự đoán
-    prob = ai_model.predict_proba([full_vector])[:, 1][0]
-    return prob
+        # Các cụm từ dài thì dùng string matching bình thường cho nhanh
+        conversational_phrases = [
+            'sinh nhat', 'an com', 'di choi', 'di nhau', 'cafe', 
+            'hop lop', 'lam viec', 'gui xe', 've chua', 
+            'nha mang', 'qc', 'quang cao' # Chấp nhận tin quảng cáo nhà mạng là an toàn
+        ]
 
-# --- 4. PIPELINE CHÍNH (THEO FLOWCHART) ---
-def hybrid_smishing_check(raw_text, sender_type='unknown'):
-    print(f"\nProcessing SMS: '{raw_text[:50]}...'")
-    logs = []
-    
-    # BƯỚC 1: PRE-PROCESSING (Tìm URL, Phone, Email)
-    # Masker của bạn trả về metadata chứa danh sách url/phone/email
-    masked_text, metadata = masker.mask(raw_text)
-    urls = metadata.get('url', [])
-    phones = metadata.get('phone', [])
-    emails = metadata.get('email', [])
-    
-    # === NHÁNH 1: CÓ URL TRONG SMS? ===
-    if urls:
-        logs.append(f"-> Detected URLs: {urls}")
-        clean_text = cleaner.clean(raw_text)
-        all_urls_trusted = True
+        is_conversational = False
+        # Check Regex trước
+        for pattern in conversational_regex:
+            if re.search(pattern, norm_text):
+                is_conversational = True
+                break
         
-        for raw_url in urls:
-            url = inspector.refang_url(raw_url)
+        # Nếu chưa thấy thì check tiếp phrases
+        if not is_conversational:
+            is_conversational = any(kw in norm_text for kw in conversational_phrases)
+
+        # 3.2. Danger Guard (Bộ lọc rủi ro)
+        # Các từ khóa này sẽ VÔ HIỆU HÓA tính năng hội thoại ở trên
+        danger_kw = [
+            # Nhóm tài chính (Dễ bị giả danh người thân)
+            'vay', 'no xau', 'lai suat', 'giai ngan', 
+            'chuyen khoan', 'stk', 'ngan hang', 'bank', 'so du',
             
-            # Domain Check 1: Search Engine
-            is_trust_1, reason_1 = inspector.check_domain_reputation(url, clean_text)
+            # Nhóm việc làm/Lừa đảo
+            'viec nhe', 'ctv', 'hoa hong', 'chot don', 'tuyen dung',
+            'trung thuong', 'qua tang', 
             
-            if is_trust_1:
-                logs.append(f"   + URL '{raw_url}': TRUSTED (Search: {reason_1})")
-                continue # URL này ổn, check URL tiếp theo
-            
-            # Domain Check 2: Content Analysis (Nếu Check 1 fail)
-            logs.append(f"   ! URL '{raw_url}': Check 1 failed. Running Check 2...")
-            is_trust_2, reason_2 = inspector.check_page_content(url)
-            
-            if is_trust_2:
-                logs.append(f"   + URL '{raw_url}': TRUSTED (Content: {reason_2})")
+            # Nhóm giả danh cơ quan (Quan trọng)
+            'cong an', 'toa an', 'lenh bat', 'dieu tra', 'trieu tap'
+        ]
+        has_danger = any(kw in norm_text for kw in danger_kw)
+
+        # ---------------------------------------------------------
+        # BƯỚC 4: HYBRID DECISION (QUYẾT ĐỊNH CUỐI CÙNG)
+        # ---------------------------------------------------------
+        
+        final_score = ai_prob
+        final_reason = ""
+        is_smishing = False
+        decision_phase = "AI Model"
+
+        # --- LOGIC 1: DOMAIN ĐỘC HẠI (RISK = 1.0) ---
+        if risk_score >= 0.8:
+            final_score = 1.0
+            is_smishing = True
+            decision_phase = "Domain Risk"
+            final_reason = f"CẢNH BÁO CAO: Phát hiện liên kết độc hại hoặc bị làm nhiễu ({domain_reason})."
+
+        # --- LOGIC 2: WHITELIST (RISK = -1.0) ---
+        elif risk_score == -1.0:
+            ugc_keywords = ['google', 'drive', 'docs', 'sheet', 'form', 'dropbox', 'bit.ly', 'tinyurl', 'zalopay']
+            is_ugc_platform = any(kw in domain_reason.lower() for kw in ugc_keywords)
+
+            if is_ugc_platform:
+                # Hybrid check cho Google Form/Drive
+                if ai_prob > 0.65:
+                    final_score = ai_prob
+                    is_smishing = True
+                    decision_phase = "Hybrid Warning"
+                    final_reason = f"Cảnh báo: Tên miền sạch ({domain_reason}) nhưng nội dung có dấu hiệu lừa đảo."
+                else:
+                    final_score = 0.2
+                    is_smishing = False
+                    decision_phase = "Hybrid Safe"
+                    final_reason = "An toàn: Tên miền dịch vụ lưu trữ/rút gọn uy tín."
             else:
-                logs.append(f"   x URL '{raw_url}': SUSPICIOUS (Reason: {reason_2})")
-                all_urls_trusted = False
-                break # Chỉ cần 1 URL nguy hiểm là coi như nguy hiểm
-        
-        # RA QUYẾT ĐỊNH SAU KHI CHECK URL
-        if all_urls_trusted:
-            return {
-                "decision": "LEGIT",
-                "reason": "All URLs are verified Trusted/Whitelisted",
-                "score": 0.0,
-                "logs": logs
-            }
+                final_score = 0.0
+                is_smishing = False
+                decision_phase = "Authority Whitelist"
+                final_reason = f"An toàn: Tên miền chính chủ đã được xác thực ({domain_reason})."
+
+        # --- LOGIC 3: AI + SAFETY NET ---
         else:
-            logs.append("-> URL Check Failed. Switching to AI Model...")
-            # Nếu URL check fail -> Đẩy sang AI (Theo mũi tên 'No' của sơ đồ)
-            prob = run_ai_prediction(raw_text, sender_type)
-            label = "SMISHING" if prob >= 0.46 else "LEGIT"
-            return {
-                "decision": label,
-                "reason": f"URL Suspicious + AI Score {prob:.2f}",
-                "score": prob,
-                "logs": logs
-            }
+            if ai_prob >= self.threshold:
+                # AI nghi ngờ -> Kiểm tra Safety Net
+                if is_conversational and not has_danger:
+                    # AI cao + Hội thoại + KHÔNG nguy hiểm -> Safe
+                    final_score = 0.25
+                    is_smishing = False
+                    decision_phase = "Conversation Guard"
+                    final_reason = "Cảnh báo mức thấp: AI nghi ngờ nhưng văn phong mang tính hội thoại cá nhân."
+                else:
+                    # AI cao + (Không phải hội thoại HOẶC Có nguy hiểm) -> Scam
+                    is_smishing = True
+                    decision_phase = "AI Detection"
+                    final_reason = "Cảnh báo: AI phát hiện cấu trúc văn bản thường thấy trong tin nhắn rác/lừa đảo."
+            else:
+                # AI thấy an toàn -> Kiểm tra sót lọt
+                if has_danger and sender_type != 'brandname':
+                    # AI thấp + Có từ khóa nguy hiểm -> Scam
+                    final_score = 0.6
+                    is_smishing = True
+                    decision_phase = "Keyword Trigger"
+                    final_reason = "Cảnh báo: Nội dung chứa các từ khóa rủi ro cao (Tài chính/Giả danh) cần xác minh."
+                else:
+                    is_smishing = False
+                    final_reason = "An toàn: Không tìm thấy yếu tố rủi ro trong nội dung."
 
-    # === NHÁNH 2: KHÔNG CÓ URL, NHƯNG CÓ PHONE/EMAIL? ===
-    elif phones or emails:
-        logs.append(f"-> No URL, but detected Phone/Email: {phones or emails}")
-        logs.append("-> Switching to AI Model (Feature Extraction)...")
-        
-        prob = run_ai_prediction(raw_text, sender_type)
-        label = "SMISHING" if prob >= 0.46 else "LEGIT"
-        
         return {
-            "decision": label,
-            "reason": f"Sensitive Info detected + AI Score {prob:.2f}",
-            "score": prob,
-            "logs": logs
+            "text": text,
+            "sender": sender_type,
+            "is_smishing": is_smishing,
+            "confidence": float(final_score),
+            "raw_ai_score": float(ai_prob),   # Điểm gốc AI để debug
+            "domain_risk": risk_score,        # Điểm gốc Domain để debug
+            "reason": final_reason,
+            "phase": decision_phase
         }
-
-    # === NHÁNH 3: KHÔNG CÓ GÌ (CLEAN) ===
-    else:
-        return {
-            "decision": "LEGIT",
-            "reason": "No URL, Phone, or Email detected. Safe content.",
-            "score": 0.0,
-            "logs": logs
-        }
-
-# --- 5. CHẠY THỬ NGHIỆM ---
-if __name__ == "__main__":
-    test_cases = [
-        # Case 1: URL sạch (Vietcombank) -> Nên dừng ở Phase 1
-        ("Vietcombank thong bao thay doi lai suat. Chi tiet tai vietcombank.com.vn", "brandname"),
-        
-        # Case 2: URL bậy (Giả mạo) -> Phase 1 fail -> Phase 2 AI bắt
-        ("Tai khoan bi khoa. Vui long dang nhap tai vcb-i.com de xac thuc ngay", "personal_number"),
-        
-        # Case 3: Không URL, chỉ chat -> Nhánh 3 (Legit ngay)
-        ("Em oi ve an com khong?", "personal_number"),
-        
-        # Case 4: Không URL, nhưng có số lạ + nội dung lừa -> Nhánh 2 -> AI bắt
-        ("Cuc thue thong bao ban no phi. Lien he 0912345678 de giai quyet gap.", "unknown"),
-        
-        # Case 5: Shortlink (Bit.ly) -> Phase 1 (Expand) -> Phase 1 
-        ("Nhan qua ngay tai bit.ly/test (gia su link nay tro ve trang tin tuc)", "shortcode"),
-
-        # Case 6: Nội dung có dấu + URL 
-        ("CSGT Việt Nam: Hồ sơ vi phạm giao thông được lưu trữ dưới tên của bạn. Để biết thêm thông tin, vui lòng truy cập https://dichvucongs.top/vn", "brandname")
-    ]
-
-    print(f"{'='*60}")
-    print(f"{'TESTING INTEGRATED PIPELINE':^60}")
-    print(f"{'='*60}")
-
-    for text, sender in test_cases:
-        result = hybrid_smishing_check(text, sender)
-        
-        print(f"\n[INPUT]: {text}")
-        print(f"[SENDER]: {sender}")
-        for log in result['logs']:
-            print(f"  {log}")
-        print(f"STATUS: {result['decision']} ({result['reason']})")
-        print("-" * 60)
