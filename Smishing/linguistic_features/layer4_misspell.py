@@ -12,9 +12,9 @@ if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
 # Import tuyệt đối
-from dicts.dict import load_both_dicts, remove_vietnamese_diacritics
+from dicts.dict import remove_vietnamese_diacritics
 try:
-    from ..dicts.dict import load_both_dicts, remove_vietnamese_diacritics
+    from ..dicts.dict import remove_vietnamese_diacritics
 except ImportError:
     # Fallback cho môi trường test đơn lẻ
     pass
@@ -36,10 +36,7 @@ class MisspellResult:
 
 class MisspellExtractor:
     def __init__(self, full_dict: Optional[Set[str]] = None, shadow_dict: Optional[Set[str]] = None, dict_path: Optional[str] = None):
-        # ... (Phần Init giữ nguyên như code của bạn) ...
-        # (Để gọn code tôi xin phép lược bớt phần Init này vì bạn đã làm tốt)
         if full_dict is None or shadow_dict is None:
-             # ... (Logic load dict giữ nguyên) ...
              self.full_dict = set() # Placeholder
              self.shadow_dict = set() # Placeholder
         else:
@@ -74,7 +71,6 @@ class MisspellExtractor:
         )
 
     def _remove_accents(self, text: str) -> str:
-        # (Giữ nguyên)
         if not isinstance(text, str): return text
         # Fallback nếu không import được
         try:
@@ -92,8 +88,7 @@ class MisspellExtractor:
             left = token[:i]
             right = token[i:]
             
-            # Check xem cả 2 phần có nghĩa không (dùng shadow dict cho nhanh)
-            # Lưu ý: Logic này đơn giản hóa, có thể check full_dict nếu muốn chính xác hơn
+            # Check xem cả 2 phần có nghĩa không (dùng shadow dict)
             if left in self.shadow_dict and right in self.shadow_dict:
                 return True
         return False
@@ -101,7 +96,6 @@ class MisspellExtractor:
     def _is_gibberish(self, token: str) -> bool:
         """Kiểm tra xem token có phải là rác vô nghĩa không"""
         # Rule 1: Không có nguyên âm (vd: 'xkqv')
-        # (Cần danh sách nguyên âm đầy đủ, ở đây dùng simple check a,e,i,o,u,y)
         if not re.search(r'[aeiouy]', token, re.IGNORECASE):
             return True
             
@@ -120,7 +114,7 @@ class MisspellExtractor:
         max_len = 0
         checked_token_count = 0
         
-        # New counters
+        # Bộ đếm lỗi
         gibberish_count = 0
         repeated_char_count = 0
         run_on_word_count = 0
