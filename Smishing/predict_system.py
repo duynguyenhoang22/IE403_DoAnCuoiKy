@@ -15,7 +15,7 @@ except ImportError as e:
     exit()
 
 class SmishingDetectionSystem:
-    def __init__(self, model_path='phishing_xgb.pkl', encoder_path='sender_encoder.pkl', threshold=0.46, model_name='Default'):
+    def __init__(self, model_path='smsishing_xgb.pkl', encoder_path='sender_encoder.pkl', threshold=0.46, model_name='Default'):
         self.threshold = threshold
         self.model_name = model_name
         print(f"🔄 Starting System (Threshold={self.threshold})...")
