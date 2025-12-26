@@ -7,7 +7,7 @@ Xử lý các trường hợp CSV phức tạp có dấu nháy kép, dấu phẩ
 
 import pandas as pd
 import io
-from typing import Union, Optional, List
+from typing import Union, List
 from pathlib import Path
 
 
@@ -23,7 +23,7 @@ class DataLoader:
         >>> df = DataLoader.load_csv('data/dataset.csv')
     """
     
-    # Các cột cố định ở cuối file CSV (có thể config)
+    # Các cột cố định ở cuối file CSV
     DEFAULT_TAIL_COLS = ['label', 'has_url', 'has_phone_number', 'sender_type']
     
     def __init__(self, encoding: str = 'utf-8'):
@@ -146,7 +146,7 @@ class DataLoader:
         return merged
 
 
-# === CONVENIENCE FUNCTIONS ===
+# === LOAD DATASET FUNCTIONS ===
 
 def load_dataset(file_path: Union[str, Path], **kwargs) -> pd.DataFrame:
     """Shortcut function để load dataset"""
