@@ -1,0 +1,71 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+
+% --- ĐỊNH NGHĨA LẠI CÁC TỪ KHÓA ĐỂ TRÁNH LỖI ---
+\algnewcommand\algorithmicinput{\textbf{Input:}}
+\algnewcommand\Input{\item[\algorithmicinput]}
+\algnewcommand\algorithmicoutput{\textbf{Output:}}
+\algnewcommand\Output{\item[\algorithmicoutput]}
+
+\begin{document}
+
+\begin{algorithm*}
+\caption{Hybrid Smishing Detection Algorithm}
+\label{alg:smishing_detection}
+\begin{algorithmic}[1]
+    % PHẦN INPUT/OUTPUT ĐÃ ĐƯỢC ĐỊNH NGHĨA LẠI AN TOÀN
+    \Input Incoming SMS Text ($T$), Sender Type ($S$)
+    \Input System Constants: Model ($M_{AI}$), Thresholds ($T_{AI}, T_{Risk}$), Patterns
+    \Output Label (Smishing / Legitimate)
+
+    \Statex % Tạo khoảng trắng
+    \State \textbf{Start}
+    \While{$M$.hasNext()}
+        \State $T \gets M$.next()
+        
+        % Feature Extraction
+        \State $F_{vec} \gets$ \Call{ExtractFeatures}{$T$} \Comment{Layers 1--4}
+        \State $V \gets$ \Call{Combine}{$F_{vec}, S$}
+        
+        % AI Prediction
+        \State $P_{AI} \gets M_{AI}$.predict($V$)
+        
+        % Domain Check
+        \State $Risk \gets 0$
+        \If{$T$ contains URL}
+            \State $Risk \gets$ \Call{VerifyDomain}{$T$}
+        \EndIf
+        
+        % Hybrid Decision Logic
+    \State \textbf{Hybrid Decision Logic:}
+    \If{$Risk \ge T_{Risk}$}
+        \Return \textbf{Smishing} \Comment{Case 1: High Risk Domain}
+    \ElsIf{$Risk < 0$} 
+        \If{$P_{AI} > 0.65$} 
+            \Return \textbf{Smishing} \Comment{Case 2: Suspicious Whitelist}
+        \Else 
+            \Return \textbf{Legitimate} 
+        \EndIf
+    \Else \Comment{Case 3: Risk unknown / No URL}
+        \If{$P_{AI} \ge T_{AI}$} \Comment{AI predicts Smishing}
+            \If{\Call{IsSafeContext}{$T$}}
+                \Return \textbf{Legitimate} \Comment{Safety Net Override}
+            \Else
+                \Return \textbf{Smishing}
+            \EndIf
+        \Else \Comment{AI predicts Legitimate}
+             \If{\Call{HasDangerKw}{$T$}}
+                \Return \textbf{Smishing} \Comment{Keyword Trigger Override}
+             \Else
+                \Return \textbf{Legitimate}
+             \EndIf
+        \EndIf
+    \EndIf
+    \EndWhile
+    \State \textbf{End}
+\end{algorithmic}
+\end{algorithm*}
+
+\end{document}

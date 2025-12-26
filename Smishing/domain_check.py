@@ -35,14 +35,14 @@ class DomainVerifier:
         # --- FIX 1: STATIC WHITELIST (Giải quyết vấn đề đa tên miền) ---
         # Nếu gặp các domain này -> Bỏ qua thuật toán bài báo -> Auto Legit
         self.whitelist_domains = {
-            # Ngân hàng & Nhà mạng VN (Giữ nguyên của bạn)
+            # Ngân hàng & Nhà mạng VN
             'vietcombank.com.vn', 'vcb.com.vn',
             'viettel.vn', 'vietteltelecom.vn', 'viettelpay.vn',
             'tiki.vn', 'tiki.com', 'shopee.vn', 'shopee.com',
             'momo.vn', 'zalopay.vn', 'zalo.me',
             'vnpt.com.vn', 'vinaphone.com.vn', 'mobifone.vn',
             
-            # THÊM: Các ông lớn quốc tế (Để hệ thống chạy nhanh hơn)
+            # THÊM: Các domain quốc tế
             'google.com', 'google.com.vn', 'facebook.com', 'youtube.com',
             'gmail.com', 'apple.com', 'microsoft.com', 'instagram.com'
         }
@@ -54,7 +54,7 @@ class DomainVerifier:
         FIX 2: Dùng tldextract để lấy gốc chính xác (Chống Ngrok)
         """
         try:
-            # Loại bỏ dấu chấm thừa cuối câu (Lỗi Case 8)
+            # Loại bỏ dấu chấm thừa cuối câu
             url = url.rstrip('.,;:')
             
             if not url.startswith(('http://', 'https://')): 
@@ -102,7 +102,7 @@ class DomainVerifier:
     def _level2_source_code_check(self, url, domain_d):
         logger.info(f"--- [Level 2] Checking Source Code of '{url}' ---")
         try:
-            # FIX 3: Clean URL trước khi request
+            # Clean URL trước khi request
             url = url.rstrip('.,;:')
             
             response = requests.get(url, timeout=self.REQUEST_TIMEOUT, verify=False)
@@ -113,7 +113,6 @@ class DomainVerifier:
             links = soup.find_all('a', href=True)
             
             internal_count = 0
-            # FIX 4: Kiểm tra lỏng hơn
             # Chỉ cần có ÍT NHẤT 1 link trỏ về domain gốc hoặc domain whitelist
             for link in links:
                 href = link['href']
@@ -157,9 +156,6 @@ class DomainVerifier:
                 has_whitelist = True
                 whitelist_reason = f"Whitelisted Domain ({domain_d})"
                 continue 
-
-            # --- SỬA LỖI: KHÔNG ĐƯỢC CONTINUE KHI KHÔNG THẤY BRAND ---
-            # Logic cũ: if not brand_n: continue (SAI - Khiến URL độc bị bỏ qua)
             
             # CHECK 2: ALGORITHM 2 (SEARCH)
             # Chỉ chạy được nếu có Brand Name
@@ -171,13 +167,12 @@ class DomainVerifier:
                     whitelist_reason = reason
                     search_passed = True # Đánh dấu đã qua ải này
             
-            # Nếu đã qua Search Check thì không cần check Source Code cho tốn thời gian
+            # Nếu đã qua Search Check thì không cần check Source Code
             if search_passed:
                 continue
 
             # CHECK 3: ALGORITHM 3 (SOURCE CODE)
             # Chạy cho mọi URL lạ (kể cả khi không tìm thấy Brand)
-            # Đây là chốt chặn cuối cùng để bắt vcb-digibank-secure.xyz
             is_legit_l2, reason_l2 = self._level2_source_code_check(clean_url, domain_d)
             
             if is_legit_l2:
@@ -198,5 +193,5 @@ class DomainVerifier:
             return "LEGIT", whitelist_reason, -1.0
 
         # Trường hợp URL lạ nhưng check Source code không kết luận được (vd site chết)
-        # Thì vẫn nên cảnh báo nhẹ hoặc để AI quyết định
+        # Thì vẫn cảnh báo nhẹ hoặc để AI quyết định
         return "SKIP", "Inconclusive", 0.0
