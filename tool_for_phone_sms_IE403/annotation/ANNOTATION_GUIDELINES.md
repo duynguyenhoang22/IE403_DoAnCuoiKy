@@ -98,20 +98,6 @@ Xác nhận ngay tại: http://bidv-xacthuc.com hoặc gọi 0987654321"
 Lãi suất 0% tháng đầu. Liên hệ: 0909123456"
 ```
 
-#### F. Tin nhắn làm quen đáng ngờ (Social Engineering)
-
-- Gửi từ số lạ nhưng giả vờ quen biết
-- Xung hô thân mật: "Anh/Chị/Em" nhưng không nói rõ là ai
-- "Xin số qua người quen"
-- Hỏi han cá nhân: công việc, gia đình, tình hình hiện tại nhưng không có ngữ cảnh
-
-**Ví dụ**
-
-```
-"[NAME] ơi anh [NAME] nè, hôm nay vô tình gặp chị [NAME] 
-nên xin được số em. Dạo này công việc thế nào rồi?"
-```
-
 ### ✅ **Label = 0 (NOT SMISHING)** - Đánh dấu KHI:
 
 #### A. Tin nhắn từ tổ chức hợp pháp
@@ -144,7 +130,7 @@ So du: 250.000d"
 
 #### C. Tin nhắn cá nhân
 
-- Tin nhắn từ bạn bè, người thân
+- Tin nhắn từ bạn bè, người thân, xã giao
 - Nhắc lịch hẹn, sự kiện
 
 ### ⚠️ TRƯỜNG HỢP KHÓ PHÂN BIỆT
@@ -152,7 +138,6 @@ So du: 250.000d"
 | Tình huống                                   | Cách xử lý                                                  |
 | ---------------------------------------------- | -------------------------------------------------------------- |
 | **Quảng cáo hợp pháp nhưng spam**   | →**Label = 0** (không phải lừa đảo, chỉ là spam) |
-| **Không chắc chắn 100%**              | → Đánh dấu**SKIP**, xem lại sau hoặc hỏi ý kiến |
 | **Tin nhắn mơ hồ, thiếu ngữ cảnh** | → Căn cứ vào dấu hiệu có sẵn (URL, SĐT, ngôn ngữ)   |
 
 ---
@@ -528,6 +513,6 @@ Guidelines này giúp đảm bảo:
 
 ---
 
-**Phiên bản:** 1.0
-**Ngày cập nhật:** 01/12/2025
+**Phiên bản:** 1.1
+**Ngày cập nhật:** 3/3/2026
 **Dự án:** IE403 - Phát hiện tin nhắn SMS độc hại
