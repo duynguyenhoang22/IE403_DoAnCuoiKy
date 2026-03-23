@@ -1,0 +1,981 @@
+﻿content,label,has_url,has_phone_number,sender_type
+Dưới đây là 40 tin nhắn SMS giả lập từ người dùng di động tại Việt Nam, thuộc nhãn 0 (tin sạch), định dạng CSV theo yêu cầu của bạn.
+
+
+content,0,0,0,personal_number
+"Tối nay rảnh không, làm ly cafe ông ơi?",0,0,0,personal_number
+"Mai 8h họp phòng mình nhớ đi đúng giờ nha mọi người.",0,0,0,personal_number
+"Mẹ ơi tí con về muộn, đừng đợi cơm con nhé.",0,0,0,personal_number
+"Sáng mai 7h thi môn Triết nha, đừng có ngủ quên đấy.",0,0,0,personal_number
+"Ok lát tớ qua đón, đợi 5 phút nha.",0,0,0,personal_number
+"Cuối tuần này cả nhà mình đi ăn đồ nướng không ạ?",0,0,0,personal_number
+"Mọi người ơi nhớ gửi báo cáo trước 5h chiều nay nhé.",0,0,0,personal_number
+"Học nhóm ở quán cũ hay chỗ nào mới đây bà ơi?",0,0,0,personal_number
+"Lâu rồi không gặp, cuối tuần làm chầu nhậu đi.",0,0,0,personal_number
+"Con mua hoa quả về rồi ạ, mẹ có cần mua gì thêm không?",0,0,0,personal_number
+"Anh ơi, chiều nay đón con giúp em với nhé, em bận họp.",0,0,0,personal_number
+"Nhớ mang theo tài liệu buổi họp sáng nay nha Linh.",0,0,0,personal_number
+"Chúc mừng sinh nhật nhé, tối có đi đâu chơi không?",0,0,0,personal_number
+"Mai đi đá bóng lúc 5h chiều nhé anh em.",0,0,0,personal_number
+"Tớ đang qua rồi, đợi tớ xíu nha.",0,0,0,personal_number
+"Chị ơi, gửi cho em xin file danh sách khách hàng với ạ.",0,0,0,personal_number
+"Tối nay có phim hay lắm, đi xem không mấy đứa?",0,0,0,personal_number
+"Nhớ ôn bài kỹ nhé, mai thầy kiểm tra đấy.",0,0,0,personal_number
+"Bố ơi, cuối tuần này con về quê chơi nhé.",0,0,0,personal_number
+"Ok chốt lịch 9h sáng mai tại văn phòng nha.",0,0,0,personal_number
+"Đi ăn trưa không đồng nghiệp ơi? Đói quá rồi.",0,0,0,personal_number
+"Mai mang cho tớ mượn quyển sách hôm nọ nhé.",0,0,0,personal_number
+"Cố gắng làm xong việc sớm rồi về ăn cơm nha chồng.",0,0,0,personal_number
+"Bạn ơi, mai đi học nhớ mang theo laptop nhé.",0,0,0,personal_number
+"Chú ơi, nhà con có ít quà quê gửi chú ạ.",0,0,0,personal_number
+"Sếp bảo chiều nay họp đột xuất lúc 2h nhé mọi người.",0,0,0,personal_number
+"Đi uống trà sữa không, tớ bao nè?",0,0,0,personal_number
+"Nhớ uống thuốc đúng giờ nha, chúc mau khỏe.",0,0,0,personal_number
+"Tối nay 8h online làm ván game nhé anh em.",0,0,0,personal_number
+"Em nộp bài rồi ạ, thầy kiểm tra giúp em với.",0,0,0,personal_number
+"Cuối tuần này đi dã ngoại không, tớ chuẩn bị đồ ăn cho?",0,0,0,personal_number
+"Mẹ bảo chiều nay nhớ đi chợ mua cá nhé.",0,0,0,personal_number
+"Lịch thi đổi sang thứ Hai tuần sau rồi nha mọi người.",0,0,0,personal_number
+"Anh đang đứng trước cửa nhà rồi, xuống đi nha.",0,0,0,personal_number
+"Mai có buổi training lúc 10h, đừng đi muộn nhé.",0,0,0,personal_number
+"Bạn đã làm xong bài tập về nhà chưa, cho tớ tham khảo với?",0,0,0,personal_number
+"Hôm nay trời lạnh, nhớ mặc ấm khi ra ngoài nha.",0,0,0,personal_number
+"Ok tí mình gửi link zoom cho nhé.",0,0,0,personal_number
+"Tối nay cả phòng đi karaoke không sếp ơi?",0,0,0,personal_number
+"Chúc cả nhà buổi tối vui vẻ nhé!",0,0,0,personal_number
+
+Dưới đây là 40 tin nhắn (nhãn 0 - tin nhắn cá nhân) được biên soạn theo phong cách chat thực tế của người Việt, sử dụng teencode nhẹ và kết hợp linh hoạt có dấu/không dấu theo định dạng CSV bạn yêu cầu:
+
+
+content,0,0,0,personal_number
+Ok b nha,0,0,0,personal_number
+Mai di som nhe,0,0,0,personal_number
+Toi nay qua nha t choi ko?,0,0,0,personal_number
+Co j bao t sau,0,0,0,personal_number
+Oke m, ti gap nhe,0,0,0,personal_number
+M bit cho do ko?,0,0,0,personal_number
+Dc rui, de t xem sao,0,0,0,personal_number
+Thui t ko di dau,0,0,0,personal_number
+J ma cang vay m?,0,0,0,personal_number
+M dang o dau day?,0,0,0,personal_number
+Co tin j moi chua b?,0,0,0,personal_number
+T toi noi rui nhe,0,0,0,personal_number
+Mai di an ko t bao?,0,0,0,personal_number
+Ukie b, chốt vậy nha,0,0,0,personal_number
+De t check lai roi bao m,0,0,0,personal_number
+Lau qua ko gap m rui,0,0,0,personal_number
+M bit may gio vao lop ko?,0,0,0,personal_number
+Co j nhan t sau nha,0,0,0,personal_number
+Ghe vay thui ak?,0,0,0,personal_number
+T dang ban ty, ti t goi lai,0,0,0,personal_number
+Mua t cai banh mi nhe,0,0,0,personal_number
+Sap toi noi chua m oi?,0,0,0,personal_number
+Thui dung buon nua m,0,0,0,personal_number
+Oke nha b, ti gap o quan,0,0,0,personal_number
+M co mang theo do ko?,0,0,0,personal_number
+Huhu t quen mat rui,0,0,0,personal_number
+Vay thui khoi di cung dc,0,0,0,personal_number
+Dc cua lo day m nhe,0,0,0,personal_number
+De t hoi lai xem sao,0,0,0,personal_number
+M dang lam j day?,0,0,0,personal_number
+Chieu nay di cf ko b?,0,0,0,personal_number
+T bít rùi, khổ quá nói mãi,0,0,0,personal_number
+Ko dc dau m oi,0,0,0,personal_number
+Mai qua t lay do nhe,0,0,0,personal_number
+Oke rui nhe, tks m,0,0,0,personal_number
+Co j mai gap roi noi,0,0,0,personal_number
+M thay sao? On ko?,0,0,0,personal_number
+Khi nao m ve thi bao t,0,0,0,personal_number
+Thui t di ngu day,0,0,0,personal_number
+Ok b, cu vay ma lam,0,0,0,personal_number
+
+Dưới đây là 40 tin nhắn mô phỏng phong cách chat cá nhân của người Việt (nhãn 0), sử dụng teencode nhẹ, có dấu và không dấu xen kẽ theo định dạng CSV bạn yêu cầu:
+
+
+content,0,0,0,personal_number
+Dậy chưa m ơi?,0,0,0,personal_number
+Ok b nha, t chuẩn bị đi đây,0,0,0,personal_number
+Mai di som nhe m,0,0,0,personal_number
+Toi nay qua nha t choi ko?,0,0,0,personal_number
+Co j bao t sau nhe,0,0,0,personal_number
+Tới đâu rùi?,0,0,0,personal_number
+Hết tiền rùi m ơi, cho t vay ít,0,0,0,personal_number
+Ăn cơm chưa b?,0,0,0,personal_number
+Nay dc nghỉ ko?,0,0,0,personal_number
+Gửi t link đấy với,0,0,0,personal_number
+Oke, tí t qua,0,0,0,personal_number
+Khổ lắm, bít rùi,0,0,0,personal_number
+Thui ko đi đâu, lười lắm,0,0,0,personal_number
+Mai di an ko b?,0,0,0,personal_number
+Chúc mừng sinh nhật m nha,0,0,0,personal_number
+Đang ở đâu đấy?,0,0,0,personal_number
+Về chưa m ơi?,0,0,0,personal_number
+T đang chờ ở cổng nè,0,0,0,personal_number
+Có chuyện j thế?,0,0,0,personal_number
+Mua hộ t cái bánh mì nha,0,0,0,personal_number
+May gio di dc?,0,0,0,personal_number
+Tối đi xem phim ko m?,0,0,0,personal_number
+Ko sao đâu, đừng lo,0,0,0,personal_number
+Nay m làm ca mấy?,0,0,0,personal_number
+Đợi t 5p nữa thui,0,0,0,personal_number
+Có j mới ko b?,0,0,0,personal_number
+Moi di ve, met qua,0,0,0,personal_number
+Oke b nhé, chốt vậy đi,0,0,0,personal_number
+Cho m mượn cái sạc với,0,0,0,personal_number
+Tí t call lại sau nha,0,0,0,personal_number
+Toi nay an j nhi?,0,0,0,personal_number
+Sang nha t lay do nhe,0,0,0,personal_number
+Bít rùi, nói mãi,0,0,0,personal_number
+Cv hom nay the nao r b?,0,0,0,personal_number
+Đang bận tí, lát t nhắn lại,0,0,0,personal_number
+Có đi chơi vs t ko?,0,0,0,personal_number
+M có bít chỗ nào bán áo đẹp ko?,0,0,0,personal_number
+Thui m ngủ đi, muộn rùi,0,0,0,personal_number
+Mai qua đón t nhé,0,0,0,personal_number
+Gửi t stk để t ck nha,0,0,0,personal_number
+
+Dưới đây là 40 tin nhắn SMS nhãn 0 (tin sạch) được biên soạn theo yêu cầu nghiêm ngặt của bạn. Nội dung bao gồm các biến động số dư, mã OTP và thông báo đơn hàng từ các đơn vị uy tín.
+
+
+content,label,has_url,has_phone_number,sender_type
+"VCB: 20/10/23 09:15; +2,000,000VND; SD: 15,450,000VND. ND: Luong thang 10. Truy cap https://portal.vietcombank.com.vn de kiem tra.",0,1,0,brandname
+"Ma OTP xac nhan giao dich ngan hang Techcombank cua quy khach la 456123. Ma co hieu luc trong 2 phut.",0,0,0,brandname
+"Shopee: Don hang 2405SP12 da duoc xac nhan. Theo doi lich trinh giao hang tai https://shopee.vn/track",0,1,0,brandname
+"Giao dich thanh cong tai ngan hang ACB: -500,000VND luc 14:20. So du hien tai: 5,200,000VND.",0,0,0,brandname
+"Google: 123789 la ma xac nhan (OTP) de dang nhap vao tai khoan cua ban.",0,0,0,shortcode
+"Lazada: Kien hang cua ban dang tren duong giao. Vui long xac nhan khi nhan hang tai https://lazada.vn/order",0,1,0,brandname
+"MB Bank: Quy khach dang thuc hien giao dich chuyen khoan. Ma OTP la 998877. Tuyet doi khong cung cap ma nay cho bat ky ai.",0,0,0,brandname
+"Apple ID: Ma xac nhan cua ban la 654321. Nhap ma nay de hoan tat thiet lap.",0,0,0,brandname
+"GHN: Don hang tu Shop ABC da den kho phân loai. Xem chi tiet tai link https://ghn.vn/status",0,1,0,brandname
+"TPBank: Tai khoan 0123xxx vua thuc hien giao dich thanh toan hoa don. So tien: 250,000VND.",0,0,0,brandname
+"Facebook: 882104 la ma OTP de khoi phuc mat khau cua ban.",0,0,0,shortcode
+"Tiki: Cam on ban da mua hang. Don hang #987654321 da duoc xac nhan thanh cong.",0,0,0,brandname
+"VietinBank: Quy khach dang dang ky dich vu iPay. Ma OTP xac nhan la 112233.",0,0,0,brandname
+"ViettelPost: Buu ta dang di giao don hang 554433. Link theo doi: https://viettelpost.com.vn/tracking",0,1,0,brandname
+"Agribank: Bien dong so du tai khoan 1500xxx: -1,200,000VND. Giao dich tai ATM luc 18:30.",0,0,0,brandname
+"Microsoft: Dung ma 009911 de xac nhan danh tinh cho tai khoan Outlook cua ban.",0,0,0,shortcode
+"BIDV: Ma OTP cua quy khach la 741852. Ma nay dung de xac nhan thanh toan truc tuyen.",0,0,0,brandname
+"Grab: Ma xac nhan dang ky ung dung Grab cua ban la 556677.",0,0,0,brandname
+"Sacombank: Giao dich +10,000,000VND tai ngan hang Sacombank luc 08:00. So du: 25,000,000VND.",0,0,0,brandname
+"J&T Express: Don hang cua ban dang duoc giao boi shipper. Chi tiet tai https://jtexpress.vn/track",0,1,0,brandname
+"Zalo: 443322 la ma OTP xac minh tai khoan Zalo cua ban.",0,0,0,brandname
+"VPBank: Chuc mung ban da mo thanh cong the tin dung. Quan ly the tai https://neo.vpbank.com.vn",0,1,0,brandname
+"MoMo: Ma xac nhan (OTP) de rut tien ve ngan hang la 665544.",0,0,0,brandname
+"ShopeePay: Ban vua thuc hien giao dich thanh toan 150,000VND cho hoa don dien.",0,0,0,brandname
+"HDBank: Ma OTP xac nhan giao dich tren HDBank App la 321654. Khong chia se ma nay.",0,0,0,brandname
+"TikTok: 778899 la ma xac nhan de dang nhap vao tai khoan TikTok cua ban.",0,0,0,shortcode
+"VIB: Tai khoan 601xxx vua nhan +300,000VND. ND: chuyen tien cafe.",0,0,0,brandname
+"GHTK: Don hang 102030405 dang duoc giao. Click vao link de xem vi tri shipper: https://ghtk.vn/s/123",0,1,0,brandname
+"Eximbank: Ma OTP de xac nhan doi mat khau Internet Banking la 000111.",0,0,0,brandname
+"LinkedIn: Ma xac nhan bao mat tai khoan cua ban la 223344.",0,0,0,brandname
+"Maritime Bank (MSB): Giao dich thanh cong -450,000VND. So du cuoi: 1,050,000VND.",0,0,0,brandname
+"Netflix: 852963 la ma OTP de xac nhan dang ky thanh vien moi.",0,0,0,brandname
+"OCB: Ma OTP xac nhan thanh toan ngan hang so OCB OMNI la 159357.",0,0,0,brandname
+"Steam: Ma xac nhan giao dich mua game tren Steam cua ban la 951753.",0,0,0,shortcode
+"Shinhan Bank: Tai khoan cua ban da duoc xac nhan kich hoat thanh cong.",0,0,0,brandname
+"Standard Chartered: Ma OTP cua ban la 445566. Vui long khong cung cap cho bat ky ai.",0,0,0,brandname
+"Airbnb: Ma xac nhan dat phong cua ban la 123456. Chuc ban co chuyen di vui ve.",0,0,0,brandname
+"VinaPhone: Ma OTP de xac nhan doi sim 4G cua ban la 774411.",0,0,0,brandname
+"MobiFone: Quy khach da xac nhan dang ky goi cuoc data. Truy cap https://mobifone.vn de quan ly.",0,1,0,brandname
+"VietjetAir: Chuyen bay VJ123 da duoc xac nhan. Xem lich trinh tai https://vietjetair.com",0,1,0,brandname
+
+Dưới đây là 40 tin nhắn SMS nhãn 0 (tin sạch), chứa các từ khóa nhạy cảm, được cấu trúc theo đúng yêu cầu Guidelines của bạn.
+
+
+content,label,has_url,has_phone_number,sender_type
+"VCB: So du TK 0123456789 thay doi +5.000.000 VND. Noi dung: Luong thang 10. Giao dich luc 08:30.",0,0,0,brandname
+"987654 la ma OTP de xac nhan giao dich thanh toan qua ngan hang MBBank cua Quy khach. Ma co hieu luc trong 2 phut.",0,0,0,brandname
+"G-112233 la ma xac nhan Google cua ban. Vui long khong chia se ma nay voi bat ky ai.",0,0,0,shortcode
+"Shopee: Don hang 554321 dang duoc giao den ban. Theo doi hanh trinh tai link: https://shopee.vn/track/554321",0,1,0,brandname
+"Apple ID Code: 889900. Dung de xac nhan dang nhap tren thiet bi moi cua ban.",0,0,0,brandname
+"TCB: Quy khach vua thuc hien giao dich rut tien tai ATM. So du hien tai: 15.200.000 VND.",0,0,0,brandname
+"Lazada: Kien hang cua ban da den tram phan loai. Truy cap https://lazada.vn de kiem tra chi tiet.",0,1,0,brandname
+"Ma OTP dang nhap vao ung dung ngan hang ACB cua ban la 445566. Vui long xac nhan de tiep tuc.",0,0,0,brandname
+"ViettelPost: Ma van don VTP998877 dang tren duong giao. Link tra cuu: https://viettelpost.com.vn",0,1,0,brandname
+"Facebook: 334455 la ma xac nhan khoi phuc mat khau cua ban.",0,0,0,shortcode
+"BIDV: Quy khach da thanh toan thanh cong hoa don dien thang 10. So giao dich: 778899.",0,0,0,brandname
+"VNPAY: Ban da thanh toan 50.000 VND cho dich vu nap the dien thoai. Ma xac nhan: 221144.",0,0,0,brandname
+"Tiki: Don hang cua ban da duoc xac nhan. Du kien giao vao ngay mai. Xem tai: https://tiki.vn/my-orders",0,1,0,brandname
+"Zalo: 654321 la ma OTP de kich hoat tai khoan cua ban. Khong cung cap ma nay cho nguoi khac.",0,0,0,brandname
+"Grab: Tai xe dang den diem hen. Vui long kiem tra lo trinh tren ung dung Grab.",0,0,0,brandname
+"VIB: Thong bao bien dong so du TK ...456: -200.000 VND. Giao dich thanh toan sieu thi.",0,0,0,brandname
+"Ma xac nhan OTP cho giao dich chuyen khoan tai ngan hang Sacombank la 001122.",0,0,0,brandname
+"EVNHANOI: Thong bao da nhan thanh toan tien dien ky 10/2023. Cam on Quy khach.",0,0,0,brandname
+"Ma OTP xac nhan dang ky dich vu Internet Banking cua ban la 776655.",0,0,0,shortcode
+"GHN: Don hang tu Shop ABC dang duoc giao. Bam vao link de xem vi tri: https://ghn.vn/status",0,1,0,brandname
+"VietjetAir: Chuyen bay VJ123 cua ban da duoc xac nhan. Vui long check-in tai https://vietjetair.com",0,1,0,brandname
+"Microsoft: Use 556677 as Microsoft account security code for verification.",0,0,0,brandname
+"Agribank: So du TK ...789 thay doi +10.000.000 VND. Giao dich tu ngan hang khac chuyen den.",0,0,0,brandname
+"ShopeePay: Ma OTP de xac nhan lien ket ngan hang la 123000. Ma co hieu luc trong 5 phut.",0,0,0,brandname
+"VinaPhone: Quy khach da nap thanh cong 100.000 VND vao tai khoan. Cam on Quy khach.",0,0,0,brandname
+"Ma xac nhan giao dich thanh toan truc tuyen tai ngan hang VPBank cua ban la 990011.",0,0,0,brandname
+"BambooAirways: Ma dat cho ABC123 da thanh toan. Chi tiet lich bay tai https://bambooairways.com",0,1,0,brandname
+"VNPOST: Kien hang EB123456VN dang cho phat. Quy khach vui long chu y dien thoai.",0,0,0,brandname
+"Netflix: Ma xac nhan de cap nhat phuong thuc thanh toan cua ban la 443322.",0,0,0,brandname
+"HDBank: Quy khach vua thuc hien giao dich thanh toan qua QR Pay. So tien: 350.000 VND.",0,0,0,brandname
+"Ma OTP de thay doi mat khau ngan hang TPBank cua ban la 887766.",0,0,0,brandname
+"TikTok: 223344 la ma xac nhan dang nhap TikTok cua ban.",0,0,0,shortcode
+"FPTShop: Don hang laptop cua ban da xac nhan thanh cong. Link hoa don: https://fptshop.com.vn/hd",0,1,0,brandname
+"Ma xac nhan dang ky tai khoan VssID cua ban la 554433. Vui long khong chia se.",0,0,0,brandname
+"SHB: So du tai khoan ...112 thay doi +2.000.000 VND. Noi dung: Tra no vay ngan hang.",0,0,0,brandname
+"VietnamAirlines: Xac nhan thay doi lich bay chuyen VN213. Xem chi tiet tai https://vietnamairlines.com",0,1,0,brandname
+"Ma OTP de xac nhan rut tien tu vi MoMo ve ngan hang la 667788.",0,0,0,brandname
+"J&T Express: Don hang 88991122 dang duoc van chuyen. Tra cuu tai https://jtexpress.vn",0,1,0,brandname
+"Ma xac nhan danh tinh Apple cua ban la 121212. Vui long nhap vao o xac nhan.",0,0,0,shortcode
+"Eximbank: Thong bao giao dich thanh cong so tien 1.500.000 VND tai POS.",0,0,0,brandname
+
+Dưới đây là danh sách 40 tin nhắn SMS nhãn 0 (Tin sạch) chứa các từ khóa nhạy cảm, tuân thủ nghiêm ngặt các yêu cầu về định dạng và Guidelines của bạn.
+
+
+content,label,has_url,has_phone_number,sender_type
+"VCB: TK 1023456789 giao dich +500,000 VND. So du: 12,450,000 VND. Noi dung: chuyen tien an sang.",0,0,0,brandname
+"Ma OTP xac nhan dang nhap Google cua ban la 123456. Vui long khong chia se ma nay cho bat ky ai.",0,0,0,brandname
+"Shopee: Don hang 220123ABC da duoc giao thanh cong. Kiem tra hanh trinh tai https://shopee.vn/track",0,1,0,brandname
+"ACB: Quy khach da thuc hien giao dich thanh toan hoa don dien tai ngan hang. So tien: 450,000 VND.",0,0,0,brandname
+"Apple ID: Ma xac nhan cua ban la 998877. Nhap ma nay de hoan tat thiet lap.",0,0,0,brandname
+"Lazada: Kien hang dang duoc giao den ban. Click link de xem vi tri tai xe: https://lazada.vn/status",0,1,0,brandname
+"Ma OTP de xac nhan giao dich chuyen khoan tai ngan hàng MB cua ban la 445566. Hieu luc trong 3 phut.",0,0,0,brandname
+"VietinBank: TK 103987654 giao dich -1,200,000 VND vao luc 14:30. So du hien tai: 5,600,000 VND.",0,0,0,brandname
+"Facebook: 882211 la ma xac nhan doi mat khau cua ban.",0,0,0,shortcode
+"Tiki: Cam on ban da mua hang. Xac nhan don hang 99887766 tai https://tiki.vn/orders",0,1,0,brandname
+"TPBank: Giao dich qua the Visa tai ngan hang duoc phe duyet. So tien: 200,000 VND.",0,0,0,brandname
+"Ma OTP xac nhan thanh toan hoa don nuoc cua ban tai ngan hàng Techcombank la 009911.",0,0,0,brandname
+"Giao hang nhanh: Don hang tu Shop ABC da den kho. Tra cuu tai link: https://ghn.vn/tracuu",0,1,0,brandname
+"Microsoft: Use 554433 as security code for your account verification.",0,0,0,brandname
+"Agribank: TK 3100205123 giao dich +10,000,000 VND. So du: 25,000,000 VND.",0,0,0,brandname
+"ZaloPay: Ma OTP xac nhan lien ket ngan hàng cua ban la 776655.",0,0,0,brandname
+"Grab: Ma xac nhan dang nhap cua ban la 112233. Vui long khong cung cap cho nguoi la.",0,0,0,brandname
+"EVNHCMC: Thong bao xac nhan da thanh toan tien dien thang 10. Tra cuu tai https://cskh.evnhcmc.vn",0,1,0,brandname
+"VNPAY: Ban da thuc hien giao dich thanh toan tai nha hang. So tien: 350,000 VND.",0,0,0,brandname
+"Ma OTP xac nhan dang ky dich vu Mobile Banking tai ngan hàng BIDV la 887766.",0,0,0,brandname
+"Giao hang tiet kiem: Don hang sap den noi. Theo doi lich trinh tai https://ghtk.vn/status",0,1,0,brandname
+"Sacombank: Giao dich rut tien tai ATM hoan tat. So tien: 2,000,000 VND. So du: 8,500,000 VND.",0,0,0,brandname
+"Steam: Your account verification code is 44556. Enter it to confirm login.",0,0,0,shortcode
+"Ngan hang VPBank thong bao: Quy khach da xac nhan thay doi han muc the tin dung thanh cong.",0,0,0,brandname
+"Ma OTP de xac nhan thanh toan Netflix qua ngan hàng la 223344.",0,0,0,brandname
+"Viettel: Ban da xac nhan dang ky goi cuoc 4G thanh cong. Chi tiet tai https://viettel.vn",0,1,0,brandname
+"MoMo: Giao dich chuyen tien den Nguyen Van A thanh cong. So tien: 100,000 VND.",0,0,0,brandname
+"Ma xac nhan dang ky tai khoan VneID cua ban la 119988. OTP co hieu luc 5 phut.",0,0,0,brandname
+"HSBC: Giao dich thanh toan truc tuyen tai Shopee duoc xac nhan. So tien: 1,500,000 VND.",0,0,0,brandname
+"VinID: Ma OTP xac nhan doi diem qua tang cua ban la 665544.",0,0,0,brandname
+"Ngan hang SCB: TK 12345 giao dich -500,000 VND. So du con lai: 2,100,000 VND.",0,0,0,brandname
+"Ma xac nhan OTP de kich hoat lai mat khau tai ngan hàng MSB la 334455.",0,0,0,brandname
+"FPT Shop: Don hang cua ban da san sang. Click link de xem chi tiet: https://fptshop.com.vn",0,1,0,brandname
+"HDBank: Giao dich nhan tien tu 098xxx thanh cong. So tien: 3,000,000 VND.",0,0,0,brandname
+"Netflix: Ma xac nhan dang nhap cua ban la 009988. Vui long nhap tren TV.",0,0,0,brandname
+"Ngan hang Eximbank: Thong bao giao dich thanh toan phi duy tri tai khoan -11,000 VND.",0,0,0,brandname
+"Ma OTP xac nhan thanh toan ve may bay qua ngan hàng la 556677.",0,0,0,brandname
+"VIB: Ban da xac nhan dang ky thanh cong dich vu SMS Banking.",0,0,0,brandname
+"The Gioi Di Dong: Xac nhan bao hanh san pham. Tra cuu tai https://thegioididong.com",0,1,0,brandname
+"TikTok: 221133 la ma xac nhan dang ky tai khoan cua ban.",0,0,0,shortcode
+
+Dưới đây là 40 tin nhắn (SMS) nhãn 0 với phong cách chat cá nhân, sử dụng teencode nhẹ và kết hợp không dấu/có dấu theo đúng định dạng bạn yêu cầu:
+
+
+content,0,0,0,personal_number
+Toi nay an j m oi?,0,0,0,personal_number
+May h m den dc?,0,0,0,personal_number
+Mua ho t goi xoi nhe,0,0,0,personal_number
+Oke rùi bít rùi khổ quá,0,0,0,personal_number
+Mai di cafe ko b?,0,0,0,personal_number
+Dang lam j day?,0,0,0,personal_number
+Chieu qua nha t lay do nhe,0,0,0,personal_number
+Toi nay t ban rui ko di dc dau,0,0,0,personal_number
+Co j thi alo t,0,0,0,personal_number
+Thui dung di nua troi sap mua r,0,0,0,personal_number
+Mai may gio m qua dc?,0,0,0,personal_number
+Gui t link do vs,0,0,0,personal_number
+Oke b de t check lai,0,0,0,personal_number
+Bit rui noi mai,0,0,0,personal_number
+Sap den chua m?,0,0,0,personal_number
+Ty nua t qua nhe,0,0,0,personal_number
+May h m ve?,0,0,0,personal_number
+Ko dc dau de hom khac di,0,0,0,personal_number
+T dang tren dg den rùi,0,0,0,personal_number
+Co j moi ko?,0,0,0,personal_number
+An com chua m?,0,0,0,personal_number
+Thoi t ko di dau met lam,0,0,0,personal_number
+Nho mua nuoc nhe,0,0,0,personal_number
+Oke ty gap nha,0,0,0,personal_number
+Gui t sdt cua no vs,0,0,0,personal_number
+M dang o dau day?,0,0,0,personal_number
+Co j bao t sau nhe,0,0,0,personal_number
+Mai t di som nen ngu trc day,0,0,0,personal_number
+Ko bit bao h moi xong nua,0,0,0,personal_number
+De t xem co j t nhan lai,0,0,0,personal_number
+Toi qua nha t choi ko m?,0,0,0,personal_number
+Bit rui nha kho lam co,0,0,0,personal_number
+Di dau ma voi the b?,0,0,0,personal_number
+J ma cang the,0,0,0,personal_number
+Oke chieu t qua,0,0,0,personal_number
+Sang mai nho goi t day,0,0,0,personal_number
+Ko thay m tra loi j ca,0,0,0,personal_number
+Thui di ngu thoi muon r,0,0,0,personal_number
+De t hoi m xem sao,0,0,0,personal_number
+Den noi thi bao t,0,0,0,personal_number
+
+Dưới đây là 40 tin nhắn SMS giả lập của người dùng di động tại Việt Nam, đảm bảo tính tự nhiên, gần gũi và đúng định dạng CSV bạn yêu cầu.
+
+
+content,0,0,0,personal_number
+"Tối nay rảnh không, ra Highland ngồi cafe chút nhé.",0,0,0,personal_number
+"Lâu rồi không gặp, cuối tuần này làm chầu nhậu đi ông.",0,0,0,personal_number
+"Ê tối nay đi ăn ốc không? Tui bao nè.",0,0,0,personal_number
+"Cà phê sáng không anh em? Quán cũ nhé.",0,0,0,personal_number
+"Bao giờ ông mới rảnh để đi trà đá đây?",0,0,0,personal_number
+"Nghỉ trưa xong đi làm cốc trà sữa nha bà.",0,0,0,personal_number
+"Chiều nay 5h đi đá bóng nha mọi người.",0,0,0,personal_number
+"Chúc mừng sinh nhật nhé! Tối nay có tiệc tùng gì không?",0,0,0,personal_number
+"Cuối tuần này đi xem phim không? Phim mới ra hay lắm.",0,0,0,personal_number
+"Rảnh thì qua nhà tui chơi, có món này ngon lắm nè.",0,0,0,personal_number
+"Nhắc cả team lịch họp sáng mai lúc 9h tại phòng 302 nhé.",0,0,0,personal_number
+"Anh ơi, gửi giúp em file báo cáo tuần này qua mail với ạ.",0,0,0,personal_number
+"Mọi người nhớ check mail công việc nhé, sếp mới gửi thông báo đó.",0,0,0,personal_number
+"Chiều nay họp xong mình đi liên hoan nhẹ cái nha cả nhà.",0,0,0,personal_number
+"Ok em, anh nhận được file rồi nhé. Cảm ơn em.",0,0,0,personal_number
+"Dự án mới có chút thay đổi, sáng mai họp gấp lúc 8h nha.",0,0,0,personal_number
+"Nhắc nhẹ deadline chiều nay 5h nha anh em.",0,0,0,personal_number
+"Chị ơi, chiều nay cho em xin nghỉ sớm 1 tiếng đi có việc gia đình ạ.",0,0,0,personal_number
+"Mọi người chuẩn bị slide xong chưa? 2h chiều nay thuyết trình rồi.",0,0,0,personal_number
+"Gửi tui số điện thoại của anh Nam bên đối tác với nha.",0,0,0,personal_number
+"Mẹ ơi, tối nay con về muộn, mẹ và ba cứ ăn cơm trước nhé.",0,0,0,personal_number
+"Cuối tuần này cả nhà mình đi ăn ngoài nha ba mẹ.",0,0,0,personal_number
+"Vợ ơi, chiều đi làm về mua giúp anh ít thuốc cảm nhé.",0,0,0,personal_number
+"Con học xong rồi, đang trên đường về đây ạ.",0,0,0,personal_number
+"Em ơi, nhớ đón con lúc 4h chiều nhé, anh bận họp rồi.",0,0,0,personal_number
+"Mẹ ơi con chuyển tiền tiêu vặt tháng này rồi, mẹ check nhé.",0,0,0,personal_number
+"Ba mẹ ở quê có khỏe không? Cuối tuần con về thăm ạ.",0,0,0,personal_number
+"Chị ơi, mai qua nhà em ăn tân gia nhé.",0,0,0,personal_number
+"Nhớ uống thuốc đúng giờ nha con, giữ gìn sức khỏe nhé.",0,0,0,personal_number
+"Anh về đến nhà chưa? Cả nhà đang chờ cơm nè.",0,0,0,personal_number
+"Mai thi rồi, tối nay đừng thức khuya quá nhé cả nhà.",0,0,0,personal_number
+"Nhóm mình chiều nay 2h tập trung ở thư viện làm bài tập nha.",0,0,0,personal_number
+"Bạn ơi, cho mình mượn vở ghi môn Toán buổi trước với.",0,0,0,personal_number
+"Lịch thi môn Tiếng Anh dời sang thứ 2 tuần sau rồi nhé.",0,0,0,personal_number
+"Nhớ mang bút chì với tẩy đi thi trắc nghiệm nha ông.",0,0,0,personal_number
+"Đăng ký học phần xong chưa? Web lại bị lag rồi nè.",0,0,0,personal_number
+"Ok nha, mai gặp ở cổng trường rồi cùng vào phòng thi.",0,0,0,personal_number
+"Có kết quả điểm thi rồi đó, bà check xem được mấy điểm?",0,0,0,personal_number
+"Tối nay ôn thi nhóm ở nhà tui nhé, có bánh kẹo ăn vặt luôn.",0,0,0,personal_number
+"Chúc cả nhóm mình mai thi tốt, đạt điểm cao hết nha!",0,0,0,personal_number
+
+Dưới đây là 40 mẫu tin nhắn (nhãn 0 - Ham) được biên soạn theo đúng yêu cầu của bạn, sử dụng teencode nhẹ và phong cách nhắn tin thực tế của người Việt:
+
+
+content,0,0,0,personal_number
+Ok b nha,0,0,0,personal_number
+Mai di som nhe,0,0,0,personal_number
+Toi nay qua nha t choi ko?,0,0,0,personal_number
+Co j bao t sau,0,0,0,personal_number
+M dang o dau day?,0,0,0,personal_number
+T dang ve rùi nha,0,0,0,personal_number
+Chút nữa qua đón t nhé,0,0,0,personal_number
+Okie m, để t xem lại rùi báo,0,0,0,personal_number
+Mai đi cf ko b?,0,0,0,personal_number
+Tối nay ăn j nhỉ?,0,0,0,personal_number
+Mai t qua lấy đồ dc ko?,0,0,0,personal_number
+Bít rùi khổ lắm nói mãi,0,0,0,personal_number
+Thui kệ nó đi m ạ,0,0,0,personal_number
+Có j nhắn t nhé,0,0,0,personal_number
+Nay t bận rùi, để mai nha,0,0,0,personal_number
+Chúc mừng sinh nhật b nhé!,0,0,0,personal_number
+Cho t mượn cái sạc với,0,0,0,personal_number
+Mấy giờ m về tới nơi?,0,0,0,personal_number
+Đang làm j đấy m ơi?,0,0,0,personal_number
+Ok chốt lịch thế đi,0,0,0,personal_number
+Tới nơi alo t ra đón,0,0,0,personal_number
+Mai m có đi học ko?,0,0,0,personal_number
+Sắp xong chưa m ơi,0,0,0,personal_number
+T đang ở quán rùi nè,0,0,0,personal_number
+Oke luôn b ơi,0,0,0,personal_number
+Mua giùm t chai nước dc ko?,0,0,0,personal_number
+Để t hỏi lại rùi bảo m,0,0,0,personal_number
+Nay có đi tập ko m?,0,0,0,personal_number
+Quên mất ko bảo m cái này,0,0,0,personal_number
+Tối qua mấy giờ m ngủ thế?,0,0,0,personal_number
+Hết tiền rùi m ạ, chán ghê,0,0,0,personal_number
+Đi ăn lẩu ko b?,0,0,0,personal_number
+T đang đợi m ở cổng nhé,0,0,0,personal_number
+Có chuyện j thế m?,0,0,0,personal_number
+Mai sang nhà t xem phim ko?,0,0,0,personal_number
+Okie rùi nha, tks b,0,0,0,personal_number
+Đừng có muộn đấy nhé,0,0,0,personal_number
+T bít rùi, m yên tâm,0,0,0,personal_number
+Có j mai nói tiếp nha,0,0,0,personal_number
+Ngủ ngon nha m,0,0,0,personal_number
+
+Dưới đây là 40 tin nhắn SMS giả lập người dùng di động tại Việt Nam với nội dung "sạch" (nhãn 0), tuân thủ đúng định dạng CSV bạn yêu cầu.
+
+
+content,0,0,0,personal_number
+"Chiều nay rảnh không ông ơi, ra làm ly cà phê quán cũ nhé.",0,0,0,personal_number
+"Tối nay 7h đi ăn lẩu không mấy bà? Đang thèm quá nè.",0,0,0,personal_number
+"Mọi người ơi, lịch họp chiều nay dời sang 3h tại phòng 302 nhé.",0,0,0,personal_number
+"Mẹ ơi con đang về rồi, tầm 15 phút nữa là tới nhà ạ.",0,0,0,personal_number
+"Nhớ mai mang theo tài liệu ôn tập môn Triết nha bà.",0,0,0,personal_number
+"Ok chốt kèo sáng mai 8h gặp nhau ở cổng trường nhé.",0,0,0,personal_number
+"Anh ơi, sếp bảo lát anh ghé phòng sếp trao đổi công việc tí ạ.",0,0,0,personal_number
+"Bố bảo tối nay cả nhà đi ăn ngoài, mọi người chuẩn bị nha.",0,0,0,personal_number
+"Mai mấy giờ thi môn Tiếng Anh ấy nhỉ, tớ quên mất rồi.",0,0,0,personal_number
+"Dạo này bận gì mà không thấy mặt mũi đâu vậy? Cafe đi!",0,0,0,personal_number
+"Chiều nay nhớ nộp báo cáo cho sếp trước 5h nha mọi người.",0,0,0,personal_number
+"Em ơi, chị gửi file qua mail rồi, check giúp chị với nhé.",0,0,0,personal_number
+"Tối nay rảnh qua nhà tớ học nhóm nha, sắp thi rồi lo quá.",0,0,0,personal_number
+"Chúc mừng sinh nhật nha! Tối có tổ chức gì không đấy?",0,0,0,personal_number
+"Nhớ uống thuốc đúng giờ nha, chúc mau khỏe nè.",0,0,0,personal_number
+"Hết giờ làm qua đón em đi ăn bún đậu mắm tôm nhé.",0,0,0,personal_number
+"Mọi người chuẩn bị slide cho buổi họp sáng thứ Hai nha.",0,0,0,personal_number
+"Con ăn cơm ở ngoài rồi mẹ ạ, mọi người cứ ăn trước đi nhé.",0,0,0,personal_number
+"Mai đi học nhớ mang cho mình mượn cuốn sách giáo khoa nhé.",0,0,0,personal_number
+"Alo, ra cà phê đi, tớ đang ngồi ở quán rồi nè.",0,0,0,personal_number
+"Tối nay có xem đá bóng không? Qua nhà tớ nhậu nhé.",0,0,0,personal_number
+"Nhắc cả team mai đi làm đúng giờ để họp đầu tuần ạ.",0,0,0,personal_number
+"Em về đến nhà an toàn rồi, mọi người yên tâm nhé.",0,0,0,personal_number
+"Sắp tới ngày thi rồi, cố gắng ôn bài kỹ nha mấy đứa.",0,0,0,personal_number
+"Có ai đi ăn trưa không? Đang đói mà chưa biết ăn gì nè.",0,0,0,personal_number
+"Ok, vậy thống nhất lịch chiều thứ 7 này gặp nhau nhé.",0,0,0,personal_number
+"Chị ơi, khách hàng vừa gọi bảo dời lịch hẹn sang tuần sau ạ.",0,0,0,personal_number
+"Cuối tuần này cả nhà mình về quê thăm ông bà nhé.",0,0,0,personal_number
+"Đừng quên mang theo thẻ dự thi sáng mai nha, quan trọng lắm.",0,0,0,personal_number
+"Lâu rồi không gặp, hôm nào rảnh làm bữa cơm tất niên nhé.",0,0,0,personal_number
+"Anh check tin nhắn em vừa gửi trên Zalo nhé, có việc gấp ạ.",0,0,0,personal_number
+"Nhớ ghé siêu thị mua cho mẹ ít hành với tỏi nha con.",0,0,0,personal_number
+"Chiều nay 4h họp nhanh 15 phút ở sảnh công ty nhé.",0,0,0,personal_number
+"Mai được nghỉ rồi, đi xem phim không bà ơi?",0,0,0,personal_number
+"Tối nay tớ qua lấy tài liệu nhé, tầm 8h nha cậu.",0,0,0,personal_number
+"Mọi người điền thông tin vào link em vừa gửi trong nhóm ạ.",0,0,0,personal_number
+"Sáng mai 7h tập trung ở cổng trường để đi tình nguyện nhé.",0,0,0,personal_number
+"Đồ ăn em để trong tủ lạnh, anh về hâm nóng lại rồi ăn nhé.",0,0,0,personal_number
+"Ok, hẹn gặp lại mọi người vào buổi tiệc tối mai nha.",0,0,0,personal_number
+"Cuối tuần rảnh thì qua nhà mình chơi, mình nấu cơm ăn nha.",0,0,0,personal_number
+
+Dưới đây là 40 tin nhắn (SMS) giả lập người dùng di động tại Việt Nam với các chủ đề bạn yêu cầu, định dạng đúng theo cấu trúc CSV: `content,0,0,0,personal_number`.
+
+
+content,0,0,0,personal_number
+"Tối nay rảnh không, đi làm ly cà phê ông ơi?",0,0,0,personal_number
+"Cuối tuần này tụ tập lẩu nhé, lâu quá chưa gặp cả nhóm.",0,0,0,personal_number
+"Ê đang ở đâu đấy? Ra quán cũ ngồi tí không?",0,0,0,personal_number
+"Trưa nay ăn gì nhỉ? Hay đi ăn bún chả nhé?",0,0,0,personal_number
+"Ok tối 7h chỗ cũ nha, tui qua đón.",0,0,0,personal_number
+"Chốt lịch chiều nay 3h đi uống trà sữa nha mấy bà.",0,0,0,personal_number
+"Dạo này khỏe không? Khi nào rảnh cafe tí nhé.",0,0,0,personal_number
+"Tối nay mấy giờ ông qua? Tui đặt bàn rồi nhé.",0,0,0,personal_number
+"Nóng quá, làm cốc bia hơi không anh em ơi?",0,0,0,personal_number
+"Mai đi ăn sáng nha, tui bao.",0,0,0,personal_number
+"Mọi người nhớ 9h sáng mai họp team ở phòng 302 nhé.",0,0,0,personal_number
+"Anh ơi, gửi hộ em cái file báo cáo hôm qua với ạ.",0,0,0,personal_number
+"Dạ vâng, em nhận được mail rồi ạ. Để em check lại.",0,0,0,personal_number
+"Chiều nay sếp bảo họp gấp lúc 2h nhé cả nhà.",0,0,0,personal_number
+"Ok em, anh đang xử lý, tí anh gửi lại nhé.",0,0,0,personal_number
+"Lịch họp dời sang sáng thứ 2 rồi nha mọi người.",0,0,0,personal_number
+"Chị ơi check hộ em cái hợp đồng này với ạ.",0,0,0,personal_number
+"Mọi người nhớ nộp báo cáo tuần trước 5h chiều nay nhé.",0,0,0,personal_number
+"Em đang đi gặp khách hàng, có gì gọi em sau nha.",0,0,0,personal_number
+"Sếp duyệt rồi nhé, triển khai luôn đi em.",0,0,0,personal_number
+"Mẹ ơi, tối nay con về muộn tí, mọi người cứ ăn cơm trước nhé.",0,0,0,personal_number
+"Bố ơi, tí đi làm về mua hộ con hộp sữa với ạ.",0,0,0,personal_number
+"Cuối tuần này cả nhà mình về quê thăm bà nội nha.",0,0,0,personal_number
+"Con ăn cơm rồi ạ, mẹ và bố ngủ sớm đi nhé.",0,0,0,personal_number
+"Anh về đến nhà chưa? Mua hộ em ít hoa quả nhé.",0,0,0,personal_number
+"Chúc mừng sinh nhật mẹ yêu, tí con mang quà về nha.",0,0,0,personal_number
+"Mẹ ơi con chuyển tiền rồi nhé, mẹ check xem nhận được chưa.",0,0,0,personal_number
+"Bố dặn con mang theo áo mưa chưa, trời sắp mưa rồi đấy.",0,0,0,personal_number
+"Vợ ơi, tối nay anh có tiệc công ty, không ăn cơm nhà nhé.",0,0,0,personal_number
+"Ông bà ở quê có khỏe không ạ? Con nhớ mọi người quá.",0,0,0,personal_number
+"Mai thi môn Triết rồi, đã ôn được gì chưa ông?",0,0,0,personal_number
+"Sáng mai 8h tập trung ở thư viện học nhóm nhé.",0,0,0,personal_number
+"Nhớ mang theo thẻ sinh viên đi thi nha, không là không được vào đâu.",0,0,0,personal_number
+"Hôm nay có đi học không? Điểm danh hộ tui với.",0,0,0,personal_number
+"Thầy bảo nộp bài tập qua mail trước 12h đêm nay đấy nhé.",0,0,0,personal_number
+"Điểm thi có rồi kìa, vào xem đi bà ơi.",0,0,0,personal_number
+"Ê, cho tui mượn vở ghi buổi trước với, hôm đó tui nghỉ.",0,0,0,personal_number
+"Chiều nay học ở phòng nào ấy nhỉ, quên mất rồi.",0,0,0,personal_number
+"Ok, mai gặp ở cổng trường nhé.",0,0,0,personal_number
+"Môn này khó quá, chắc phải đi học thêm thôi.",0,0,0,personal_number
+
+Dưới đây là danh sách 40 tin nhắn SMS nhãn 0 (TIN SẠCH) được biên soạn tỉ mỉ theo yêu cầu, chứa các từ khóa nhạy cảm nhưng phản ánh đúng thực tế giao dịch và tuân thủ nghiêm ngặt các Guidelines bạn đã đề ra.
+
+
+content,label,has_url,has_phone_number,sender_type
+"VCB: 20/05/24 10:30; +500,000VND; tai khoan 101xxxx; ND: Luong thang 5 ngan hang chuyen.",0,0,0,brandname
+"Ma OTP cua ban la 123456. Vui long khong chia se ma xac nhan nay cho bat ky ai để bao mat giao dich.",0,0,0,brandname
+"G-982103 la ma xac nhan Google cua ban. Ma nay dung de dang nhap vao tai khoan cua ban.",0,0,0,brandname
+"Don hang 2405SHP cua ban dang duoc giao. Theo doi hanh trinh tai link: https://shopee.vn/track",0,1,0,brandname
+"Techcombank: Tai khoan 190xxx bien dong -2,000,000VND. So du: 15,400,000VND. GD: Thanh toan hoa don.",0,0,0,brandname
+"Ma OTP xac nhan giao dich thanh toan qua ngan hang ACB cua ban la 654321. Hieu luc trong 2 phut.",0,0,0,brandname
+"Apple ID: Ma xac minh cua ban la 882104. Nhap ma nay de hoan tat thiet lap.",0,0,0,brandname
+"Lazada: Don hang cua ban da duoc xac nhan. Vui long kiem tra lich trinh tai https://lazada.vn",0,1,0,brandname
+"BIDV: GD tai khoan 215xxx +1,200,000VND. ND: Tra tien ngan hang cho ban.",0,0,0,brandname
+"Xac nhan dang ky dich vu Mobile Banking. Ma OTP cua ban la 456789. Khong cung cap ma nay cho nguoi la.",0,0,0,brandname
+"Facebook: 334102 la ma khoi phuc mat khau cua ban. Hoac truy cap link: https://facebook.com",0,1,0,brandname
+"MB: Tai khoan 098xxx +3,000,000VND. So du 5,500,000VND. ND: Chuyen khoan giao dich mua hang.",0,0,0,brandname
+"Ma OTP dang nhap ung dung MoMo cua ban la 112233. Vui long xac nhan de tiep tuc.",0,0,0,brandname
+"Tiki: Don hang #789 da duoc tiep nhan. Click vao link de xem chi tiet: https://tiki.vn/my-orders",0,1,0,brandname
+"TPBank: GD +100,000VND tai khoan 001xxx. ND: Ngan hang xac nhan hoan tien giao dich loi.",0,0,0,brandname
+"Ma xac nhan (OTP) cho giao dich rut tien tai cay ATM ngan hang la 908172.",0,0,0,brandname
+"Microsoft: Dung ma 554321 de xac minh tai khoan cua ban.",0,0,0,shortcode
+"Giao Hang Nhanh: Shipper dang giao don hang den ban. Theo doi tai: https://ghn.vn/order",0,1,0,brandname
+"Agribank: TK 310xxx bien dong -500,000VND. So du 2,100,000VND. ND: Rut tien tai ATM.",0,0,0,brandname
+"Ma OTP xac nhan doi mat khau email cua ban la 778899. Han su dung 5 phut.",0,0,0,brandname
+"Zalo: Ma xac minh cua ban la 654123. Vui long khong chia se ma nay de tranh mat tai khoan.",0,0,0,brandname
+"VNPAY: Ban vua thuc hien giao dich thanh toan 200,000VND. Ma OTP xac nhan la 445566.",0,0,0,brandname
+"Sacombank: TK 060xxx +450,000VND. ND: Ngan hang chuyen tien thuong thang 5.",0,0,0,brandname
+"Ma OTP de kich hoat lai ung dung ngan hang so Digibank la 102938.",0,0,0,brandname
+"TikTok: 521094 la ma xac minh cua ban. Ma co hieu luc trong 10 phut.",0,0,0,shortcode
+"J&T Express: Don hang cua ban dang tren duong giao. Tra cuu tai link: https://jtexpress.vn",0,1,0,brandname
+"VietinBank: Bien dong TK 102xxx -1,500,000VND. So du 8,200,000VND. GD: Thanh toan ngan hang.",0,0,0,brandname
+"Ma OTP xac nhan thanh toan hoa don dien nuoc qua ngan hang la 334455.",0,0,0,brandname
+"Grab: Ma xac minh dang nhap cua ban la 821345. Chuc ban mot ngay tot lanh.",0,0,0,brandname
+"Lazada: Giao dich dat hang thanh cong. Theo doi don tai link https://m.lazada.vn",0,1,0,brandname
+"VPBank: TK 154xxx +2,000,000VND. ND: Chuyen khoan xac nhan thanh toan hop dong.",0,0,0,brandname
+"Ma OTP de lien ket ngan hang voi vi dien tu cua ban la 009988.",0,0,0,brandname
+"ShopeePay: Ma xac minh OTP thanh toan don hang la 661122. Khong chia se cho bat ky ai.",0,0,0,brandname
+"Vietnam Airlines: Chuyen bay VN123 da duoc xac nhan. Chi tiet tai: https://vietnamairlines.com",0,1,0,brandname
+"HDBank: TK 088xxx -300,000VND. So du 4,700,000VND. GD: Chuyen tien ngan hang.",0,0,0,brandname
+"Ma OTP thiet lap han muc giao dich moi cho tai khoan ngan hang la 556677.",0,0,0,brandname
+"Telegram: Ma xac minh cua ban la 918273. Ma nay chi dung de dang nhap.",0,0,0,shortcode
+"Sendo: Don hang cua ban da san sang giao. Truy cap link de biet them: https://sendo.vn",0,1,0,brandname
+"Eximbank: GD +1,000,000VND tai khoan 140xxx. So du 12,000,000VND. ND: Tra no ngan hang.",0,0,0,brandname
+"Ma OTP xac nhan huy dich vu SMS Banking cua ban la 223344.",0,0,0,brandname
+
+
+**Giải thích các trường dữ liệu trong danh sách trên:**
+1.  **label=0**: Tất cả là tin nhắn sạch (thông báo thật từ hệ thống).
+2.  **has_url=1**: Chỉ áp dụng khi đường link thuộc domain chính thống như `.vn`, `.com`.
+3.  **has_phone_number=0**: Các mã OTP 6 số (ví dụ: 123456) theo Guidelines không được tính là số điện thoại.
+4.  **sender_type**: Sử dụng `brandname` (như VCB, Shopee) hoặc `shortcode` (các đầu số ngắn của Google, Microsoft).
+5.  **Nội dung**: Chứa đầy đủ các từ khóa dễ nhầm lẫn nhưng đặt trong ngữ cảnh giao dịch hợp lệ để máy học phân biệt được với tin nhắn rác/lừa đảo.
+Dưới đây là 40 tin nhắn (SMS) nhãn 0 với phong cách chat cá nhân của người Việt, sử dụng teencode nhẹ, kết hợp linh hoạt có dấu và không dấu theo định dạng CSV bạn yêu cầu:
+
+
+content,0,0,0,personal_number
+Ok b nha,0,0,0,personal_number
+Mai di som nhe,0,0,0,personal_number
+Toi nay qua nha t choi ko?,0,0,0,personal_number
+Co j bao t sau,0,0,0,personal_number
+Dang lam j day m?,0,0,0,personal_number
+Toi nay di an k b?,0,0,0,personal_number
+Oke b nhe de t qua,0,0,0,personal_number
+Sap den chua t dang cho,0,0,0,personal_number
+T dang tren duong den rùi,0,0,0,personal_number
+Chut nua goi lai cho m nhe,0,0,0,personal_number
+Đang làm j đấy có rảnh ko?,0,0,0,personal_number
+Có gì nhắn t sau nha b,0,0,0,personal_number
+Okie bít rùi nói mãi,0,0,0,personal_number
+Nay có đi học ko m ơi?,0,0,0,personal_number
+T dang ban chut ti t goi lai nha,0,0,0,personal_number
+Thui để mai đi b nay mệt quá,0,0,0,personal_number
+Chuc mung sinh nhat b nhe,0,0,0,personal_number
+An com chua m hay di an voi t,0,0,0,personal_number
+Làm dc bài tập chưa b?,0,0,0,personal_number
+Mai mấy giờ qua đón t dc?,0,0,0,personal_number
+Toi noi thi alo t nha,0,0,0,personal_number
+Oke rùi b ơi xong rùi nhé,0,0,0,personal_number
+Dung quen mang tai lieu cho t nhe,0,0,0,personal_number
+Mua cho t coc tra sua voi m,0,0,0,personal_number
+Gui m cai nay xem thu co dc ko,0,0,0,personal_number
+Ko biet bao gio moi xong viec nua,0,0,0,personal_number
+T vừa về đến nhà rùi m,0,0,0,personal_number
+Mai co ranh ko di cafe voi t,0,0,0,personal_number
+Doi t 5p nua nha dang tac duong,0,0,0,personal_number
+Ok chốt lịch thế nhé b,0,0,0,personal_number
+Co j moi ko b ke t nghe,0,0,0,personal_number
+Bit rui kho lam noi mai thui,0,0,0,personal_number
+T di ngu day g9 m nhe,0,0,0,personal_number
+Mai dung di muon nha t cho o cong,0,0,0,personal_number
+Cho t o cong truong nhe b,0,0,0,personal_number
+Nay met qua ko di dc dau sr m,0,0,0,personal_number
+Oke de t xem sao da rui bao m,0,0,0,personal_number
+Toi nay co da bong ko m nhi?,0,0,0,personal_number
+Cam on b nhieu nha b tot qua,0,0,0,personal_number
+Cuoi tuan nay ve que ko m?,0,0,0,personal_number
+
+Dưới đây là 40 tin nhắn (nhãn 0 - Ham) mô phỏng phong cách chat cá nhân của người Việt với định dạng CSV bạn yêu cầu:
+
+
+content,0,0,0,personal_number
+Ok b nha,0,0,0,personal_number
+Mai di som nhe m,0,0,0,personal_number
+Toi nay qua nha t choi ko?,0,0,0,personal_number
+Co j bao t sau nhe b,0,0,0,personal_number
+Oke rùi tí t qua,0,0,0,personal_number
+M bít chỗ đó ở đâu ko?,0,0,0,personal_number
+Thôi thui ko đi đâu mệt lắm,0,0,0,personal_number
+Dc rùi tks b nhìu nhe,0,0,0,personal_number
+An com chua m ơi?,0,0,0,personal_number
+Cho xiu t dang di rui nè,0,0,0,personal_number
+Mua j ko t mua luon cho,0,0,0,personal_number
+Oke b chot vay nhe,0,0,0,personal_number
+Ko biet bao h moi xong nua,0,0,0,personal_number
+Thui t ve day met qua b oi,0,0,0,personal_number
+Gap nhau o dau m nhi?,0,0,0,personal_number
+Co j hot ko ke t nghe di,0,0,0,personal_number
+Dc thi mai di luon nhe b,0,0,0,personal_number
+Ok b nha hen gap lai,0,0,0,personal_number
+Dang lam j day m?,0,0,0,personal_number
+T ve den nha rui nhe,0,0,0,personal_number
+M bít tin j chưa?,0,0,0,personal_number
+Toi nay t ban rui xl b nha,0,0,0,personal_number
+Oke m cu the nhe,0,0,0,personal_number
+Di kieu j bay gio nhi?,0,0,0,personal_number
+Thui ko sao dau m dung lo,0,0,0,personal_number
+Dc rùi t bít rùi kho lam,0,0,0,personal_number
+Mai may gio m qua t dc?,0,0,0,personal_number
+Ko di thi thui vay de dip khac,0,0,0,personal_number
+J ma cang the b oi,0,0,0,personal_number
+Ok b ty t call lai sau,0,0,0,personal_number
+Dang o dau day m ra cafe ko?,0,0,0,personal_number
+Mua gium t cai banh mi nhe,0,0,0,personal_number
+Oke thui ko van de j dau,0,0,0,personal_number
+M thay sao dc ko?,0,0,0,personal_number
+Co j mai t noi tiep nhe b,0,0,0,personal_number
+Thui t di ngu day bb m,0,0,0,personal_number
+Bít rùi khổ lắm nói mãi thui,0,0,0,personal_number
+Oke m nha nho mang tien theo nhe,0,0,0,personal_number
+Ko biet j dau nha dung co hoi,0,0,0,personal_number
+T dang den rui doi t ty,0,0,0,personal_number
+
+Dưới đây là danh sách 40 tin nhắn SMS nhãn 0 (Tin sạch) được biên soạn tỉ mỉ theo các tiêu chuẩn ngân hàng, thương mại điện tử và dịch vụ số tại Việt Nam, đảm bảo chứa các từ khóa nhạy cảm nhưng nội dung an toàn.
+
+
+content,label,has_url,has_phone_number,sender_type
+"VCB: So du TK 0011xxx -1.200.000VND luc 10:30. Noi dung: Thanh toan hoa don giao dich tai Sieu thi. Link tra cuu: https://portal.vietcombank.com.vn",0,1,0,brandname
+"Ma OTP xac nhan giao dich chuyen khoan tai ngan hang ACB cua Quy khach la 882103. Ma co hieu luc trong 3 phut. Khong cung cap OTP cho bat ky ai.",0,0,0,brandname
+"Shopee: Don hang 240512SHP cua ban da duoc xac nhan va dang tren duong giao. Theo doi hanh trinh tai link: https://shopee.vn/track",0,1,0,brandname
+"654321 la ma xac minh Google cua ban. Moi yeu cau nhap ma tai cac link khong phai google.com deu la gia mao.",0,0,0,brandname
+"TCB: Quy khach dang thuc hien giao dich tren Techcombank Mobile. Ma OTP xac nhan la 091223. Tuyet doi khong chia se ma nay.",0,0,0,brandname
+"Lazada: Kien hang LSP00234123 dang den kho phan loai. Quy khach vui long xac nhan dia chi nhan hang tai link https://lazada.vn",0,1,0,brandname
+"Apple ID: Ma xac minh cua ban la 112233. Nhap ma nay de hoan tat xac nhan thiet bi tin cay.",0,0,0,brandname
+"BIDV: Tai khoan 1241000xxx bien dong +500.000VND. Noi dung: Ngan hang BIDV hoan tien giao dich mua sam.",0,0,0,brandname
+"VNeID: Ma OTP de xac nhan dang nhap ung dung Dinh danh dien tu cua ban la 776655. Ma co hieu luc trong 5 phut.",0,0,0,shortcode
+"Tiki: Don hang #982310 da giao thanh cong. Quy khach co the viet danh gia san pham de nhan xu tai link https://tiki.vn",0,1,0,brandname
+"MB: Tai khoan 068011xxx giao dich -200.000VND luc 14:00. So du: 5.400.000VND. Truy cap link https://mbbank.com.vn de xem chi tiet.",0,1,0,brandname
+"Ma xac nhan dang ky dich vu Internet Banking cua ngan hang Agribank la 445566. Vui long khong tiet lo OTP nay.",0,0,0,brandname
+"Grab: Ma xac minh Grab cua ban la 5052. Vui long khong chia se ma nay voi bat ky ai, ke ca nhan vien Grab.",0,0,0,brandname
+"EVNHANOI: Quy khach da thanh toan thanh cong hoa don tien dien thang 05/2024. Chi tiet giao dich tai: https://evnhanoi.vn",0,1,0,brandname
+"Zalo: Ma kich hoat tai khoan cua ban la 334455. Ma xac nhan co hieu luc trong 60 giay.",0,0,0,brandname
+"Facebook: 129034 la ma khoi phuc mat khau cua ban. Nhap ma nay de xac nhan danh tinh.",0,0,0,brandname
+"Giao hang nhanh (GHN): Don hang tu Shop ABC dang duoc giao den ban. Xac nhan thoi gian nhan tai link https://ghn.vn",0,1,0,brandname
+"VietinBank: Quy khach vua thuc hien giao dich doi mat khau tai khoan ngan hang. Neu khong phai ban, goi 1900558868.",0,0,1,brandname
+"Momo: Ma OTP xac nhan lien ket ngan hang cua ban la 808909. Tuyet doi khong cung cap OTP cho nguoi la.",0,0,0,brandname
+"ViettelPost: Buu ta dang giao kien hang 123456789. Quy khach vui long chuan bi so tien 250.000VND de giao dich.",0,0,0,brandname
+"Ma xac nhan OTP cho giao dich thanh toan qua the Visa tai ngan hang Sacombank la 112299. Tran trong.",0,0,0,brandname
+"VPBank: Chuc mung sinh nhat Quy khach. Ngan hang gui tang voucher giam gia khi giao dich qua app. Chi tiet: https://vpbank.com.vn",0,1,0,brandname
+"Microsoft: Dung 443322 lam ma bao mat tai khoan Microsoft cua ban de xac nhan dang nhap.",0,0,0,brandname
+"TikTok: 556677 la ma xac minh TikTok cua ban. Ma nay chi dung de xac nhan chinh chu.",0,0,0,brandname
+"TPBank: Giao dich chuyen khoan 1.000.000VND thanh cong. Ma giao dich: 99887766. Link tai sao ke: https://tpb.vn",0,1,0,brandname
+"Ma OTP dang ky dich vu thong bao bien dong so du ngan hang VCB cua ban la 223344.",0,0,0,brandname
+"ShopeeFood: Tai xe dang den quan lay mon cho don hang 9982. Vui long xac nhan qua link https://shopeefood.vn",0,1,0,brandname
+"VNPAY: Ban da thanh toan 50.000VND cho giao dich tai Circle K. Ma xac nhan: 123456.",0,0,0,brandname
+"Ngan hang HD Bank thong bao: Ma OTP de kich hoat lai ung dung Mobile Banking la 667788.",0,0,0,brandname
+"BHXH Viet Nam thong bao: Ma xac nhan OTP de tra cuu qua trinh dong bao hiem cua ban la 990011.",0,0,0,brandname
+"Viettel: Quy khach da thanh toan 100.000VND cho giao dich nap tien dien thoai qua ngan hang.",0,0,0,brandname
+"LazadaLogistics: Kien hang dang duoc giao toi. Vui long bam link de xac nhan vi tri nhan hang https://lazada.vn",0,1,0,brandname
+"Ma OTP xac nhan rut tien tu vi dien tu ve tai khoan ngan hang la 554433. Khong chia se ma nay.",0,0,0,shortcode
+"Eximbank: Quy khach dang thuc hien giao dich thanh toan truc tuyen. Ma OTP cua ban la 102938.",0,0,0,brandname
+"Giao Hang Tiet Kiem: Don hang GHTK123456 da duoc lay thanh cong. Theo doi giao dich tai link https://ghtk.vn",0,1,0,brandname
+"Google: Ma xac minh danh tinh de thay doi mat khau la 778899. Vui long xac nhan tren trinh duyet.",0,0,0,brandname
+"Shinhan Bank: Tai khoan 700xxx bien dong +2.000.000VND. Noi dung: Luong thang 05. Link: https://shinhan.com.vn",0,1,0,brandname
+"Airbnb: Ma xac nhan dat phong cua ban la 4411. Vui long su dung ma nay de xac nhan tren ung dung.",0,0,0,brandname
+"Ma OTP xac nhan doi so dien thoai lien ket ngan hang PVcomBank la 885522. Tran trong.",0,0,0,brandname
+"Baemin: Don hang cua ban da duoc nha hang xac nhan. Theo doi giao dich tai link https://baemin.vn",0,1,0,brandname
+
+
+### Giải thích logic áp dụng:
+1.  **Label 0**: Tất cả đều là tin nhắn hợp lệ từ các Brandname lớn (Bank, Big Tech, E-commerce).
+2.  **Từ khóa dễ nhầm lẫn**: Lồng ghép khéo léo 'ngân hàng', 'OTP', 'xác nhận', 'giao dịch', 'link' trong ngữ cảnh chuẩn.
+3.  **has_url=1**: Chỉ áp dụng khi đường link dẫn về domain chính chủ (ví dụ: `vietcombank.com.vn`, `shopee.vn`, `lazada.vn`). Các link này an toàn.
+4.  **has_phone_number=0 (cho OTP)**: Các mã 4-6 số (123456, 882103...) được coi là mã xác thực (OTP/Token), không phải số điện thoại liên lạc.
+5.  **has_phone_number=1**: Chỉ áp dụng khi tin nhắn có số hotline chăm sóc khách hàng (ví dụ: `1900558868`).
+6.  **sender_type**: Sử dụng `brandname` cho các tổ chức có tên định danh và `shortcode` cho các đầu số dịch vụ (như 8088, 6089).
+Dưới đây là danh sách 40 tin nhắn SMS được gán nhãn 0 (TIN SẠCH), chứa các từ khóa nhạy cảm nhưng có nội dung giao dịch thực tế từ các nguồn uy tín, tuân thủ nghiêm ngặt các yêu cầu của bạn.
+
+
+content,label,has_url,has_phone_number,sender_type
+"VCB: So du TK 0011xxx -2,500,000 VND luc 10:30. ND: Chuyen tien thanh toan hoa don giao dich thang 10.",0,0,0,brandname
+"Ma OTP cua ban la 552901. Vui long khong chia se ma nay de bao mat tai khoan ngan hang.",0,0,0,brandname
+"Google: 882103 la ma xac nhan Google cua ban.",0,0,0,shortcode
+"Shopee: Don hang 240510ABC da duoc giao thanh cong. Danh gia ngay tai link: https://shopee.vn/user/purchase",0,1,0,brandname
+"ACB: Thong bao xac nhan giao dich thanh toan qua the Visa so duoi 4455 so tien 1,200,000 VND.",0,0,0,brandname
+"Apple: Ma xac minh ID Apple cua ban la 112233. Ma nay se het han sau 5 phut.",0,0,0,brandname
+"Lazada: Kien hang cua ban dang tren duong giao. Theo doi hanh trinh tai link: https://lazada.vn/track",0,1,0,brandname
+"Vietcombank: Quy khach dang thuc hien giao dich tren VCB Digibank. Ma OTP xac nhan la 998210.",0,0,0,brandname
+"Ngan hang Techcombank thong bao: So du tai khoan 190xxx thay doi -500,000 VND.",0,0,0,brandname
+"Facebook: 442109 la ma xac nhan khoi phuc mat khau cua ban.",0,0,0,shortcode
+"VNPAY: Ban da thanh toan thanh cong 50,000 VND cho giao dich nap tien dien thoai.",0,0,0,brandname
+"Grab: Ma xac minh Grab cua ban la 6652. Luu y: Khong cung cap OTP cho bat ky ai.",0,0,0,brandname
+"Agribank: TK 150xxx +2,000,000 VND. ND: Luong thang 10/2023. So du cuoi: 15,200,000 VND.",0,0,0,brandname
+"Zalo: 332190 la ma xac nhan dang nhap Zalo cua ban tren thiet bi moi.",0,0,0,brandname
+"Tiki: Don hang #88291 da duoc xac nhan. Chi tiet xem tai link: https://tiki.vn/order-history",0,1,0,brandname
+"BIDV: Quy khach dang dang ky dich vu SmartBanking. Ma OTP xac nhan la 114477.",0,0,0,brandname
+"Microsoft: Use 773102 as Microsoft account security code.",0,0,0,shortcode
+"TPBank: Giao dich rut tien tai ATM so tien 2,000,000 VND luc 15:45 thanh cong.",0,0,0,brandname
+"Momo: Ban da xac nhan thanh toan hoa don dien thang 10. Ma giao dich: 992817221.",0,0,0,brandname
+"MBBank: So du TK 068xxx +10,000,000 VND. ND: Ngan hang MB tra lai tien tiet kiem.",0,0,0,brandname
+"Giao hang nhanh: Don hang tu Shop ABC dang duoc giao den ban. Bam vao link de xem: https://ghn.vn/order",0,1,0,brandname
+"VIB: Ma OTP de xac nhan giao dich chuyen khoan 5,000,000 VND la 223301.",0,0,0,brandname
+"TikTok: 556210 la ma xac minh dang ky tai khoan cua ban.",0,0,0,shortcode
+"ShopeeFood: Tai xe dang giao don hang cua ban. Theo doi tai link: https://shopeefood.vn/track",0,1,0,brandname
+"Sacombank: Giao dich thanh toan 300,000 VND tai sieu thi Co.op Mart da duoc xac nhan.",0,0,0,brandname
+"Netflix: Ma xac nhan dang nhap cua ban la 881022. Ma co hieu luc trong 10 phut.",0,0,0,brandname
+"Vietnam Airlines: Chuyen bay VN123 da duoc xac nhan. Xem chi tiet tai https://vietnamairlines.com",0,1,0,brandname
+"VPBank: Quy khach vua thuc hien giao dich doi mat khau tren ngan hang so VPBank NEO.",0,0,0,brandname
+"Giao Hang Tiet Kiem: Shipper dang giao don hang 1122AA. Xem link: https://ghtk.vn/status",0,1,0,brandname
+"Steam: Your Steam confirmation code is 55432.",0,0,0,shortcode
+"SCB: Thong bao bien dong so du tai khoan 122xxx. Giao dich: +500,000 VND.",0,0,0,brandname
+"VinID: Ma OTP xac nhan thanh toan cua ban la 992103.",0,0,0,brandname
+"ViettelMoney: Ban da nhan duoc 200,000 VND tu giao dich chuyen tien noi bo.",0,0,0,brandname
+"Telegram: your code 77210. Do not give this code to anyone.",0,0,0,shortcode
+"HSBC: Ma OTP xac nhan giao dich mua sam truc tuyen la 330021.",0,0,0,brandname
+"VNPost: Buu pham 12345 dang cho phat. Quy khach vui long xac nhan tai link: https://vnpost.vn",0,1,0,brandname
+"Shinhan Bank: Quy khach da thuc hien giao dich thanh toan the tin dung so tien 1,500,000 VND.",0,0,0,brandname
+"Paypal: Your security code is 662910. It expires in 5 minutes.",0,0,0,brandname
+"HDBank: Ma OTP de xac nhan giao dich tai khoan ngan hang dien tu la 118822.",0,0,0,brandname
+"Bamboo Airways: Xac nhan thanh toan thanh cong ve may bay. Truy cap https://bambooairways.com",0,1,0,brandname
+
+
+### Giải thích các trường dữ liệu:
+1.  **content**: Nội dung tin nhắn mô phỏng giao dịch thực (Biến động số dư, mã OTP, thông báo giao hàng).
+2.  **label**: Luôn là `0` (Tin sạch).
+3.  **has_url**: 
+    *   Gán là `1` nếu tin nhắn chứa link dẫn về các domain chính thống (.vn, .com).
+    *   Gán là `0` nếu không có link.
+4.  **has_phone_number**: 
+    *   Gán là `0` đối với các mã OTP (thường là 5-6 chữ số) vì chúng không phải là số điện thoại liên lạc.
+    *   Gán là `0` cho hầu hết các mẫu vì nội dung tập trung vào OTP và link.
+5.  **sender_type**: 
+    *   `brandname`: Tên các ngân hàng (VCB, ACB, Techcombank...), sàn TMĐT (Shopee, Lazada), hoặc ứng dụng (Google, Apple).
+    *   `shortcode`: Các đầu số ngắn thường dùng gửi mã xác nhận tự động (Google, Facebook, Steam...).
+Dưới đây là 40 tin nhắn (label 0) theo phong cách chat cá nhân của người Việt, sử dụng teencode nhẹ và định dạng theo yêu cầu của bạn:
+
+
+content,0,0,0,personal_number
+Ok b nha,0,0,0,personal_number
+Mai di som nhe,0,0,0,personal_number
+Toi nay qua nha t choi ko?,0,0,0,personal_number
+Co j bao t sau,0,0,0,personal_number
+Hôm nay m có đi học ko?,0,0,0,personal_number
+Tới đâu rùi b ơi?,0,0,0,personal_number
+Mai đi cafe ko m?,0,0,0,personal_number
+Okie t bít rùi nha,0,0,0,personal_number
+Về tới nhà chưa đó?,0,0,0,personal_number
+Thui đừng buồn nữa m ơi,0,0,0,personal_number
+Co j alo t nhe,0,0,0,personal_number
+T đang bận chút xíu, tý t gọi lại,0,0,0,personal_number
+Ăn j chưa m? Đi ăn ko?,0,0,0,personal_number
+Oke t đang qua nè,0,0,0,personal_number
+Đợi t 5p nhe, sắp tới rùi,0,0,0,personal_number
+Chúc mừng sinh nhật b nhe!,0,0,0,personal_number
+Mua hộ t cái bánh mì với,0,0,0,personal_number
+Hom nay di lam ko m?,0,0,0,personal_number
+May gio thi xong vay b?,0,0,0,personal_number
+Thui t ko di dc dau,0,0,0,personal_number
+Co viec j ko b?,0,0,0,personal_number
+May gio m qua t?,0,0,0,personal_number
+Mai nho mang cho t quyen sach nhe,0,0,0,personal_number
+Okie t biet roi,0,0,0,personal_number
+Dang lam j do m?,0,0,0,personal_number
+Hom nay met qua b oi,0,0,0,personal_number
+Co chuyen j ke t nghe xem,0,0,0,personal_number
+Di choi ko m? Dang o dau do?,0,0,0,personal_number
+T ko biet dau, hoi m xem,0,0,0,personal_number
+Sáng mai dậy sớm gọi t với nhé,0,0,0,personal_number
+Di choi vui ve nhe b,0,0,0,personal_number
+Co can t qua don ko?,0,0,0,personal_number
+Thui de mai di, nay t ban rui,0,0,0,personal_number
+Sao m ko tra loi tin nhan t?,0,0,0,personal_number
+Oke chốt thế nhé m,0,0,0,personal_number
+Sang mai t qua nha m nha,0,0,0,personal_number
+Mua cho t ly cf nhe,0,0,0,personal_number
+Thui ko can dau t tu lam dc,0,0,0,personal_number
+Hom nay co j vui ko m?,0,0,0,personal_number
+Gap lai sau nhe b,0,0,0,personal_number
+
+Dưới đây là 40 tin nhắn SMS giả lập của người dùng di động tại Việt Nam với các chủ đề bạn yêu cầu, định dạng đúng file CSV:
+
+
+content,0,0,0,personal_number
+"Ê tối nay rảnh không đi cafe ở Highland chỗ cũ với tui nha.",0,0,0,personal_number
+"Cuối tuần này nhóm mình làm bữa nhậu nhẹt đi lâu quá chưa gặp nhé.",0,0,0,personal_number
+"Bà ơi lát đi làm về ghé mua dùm tui ly trà sữa ít đường nha.",0,0,0,personal_number
+"Trưa nay ăn gì nhỉ? Cho tui ké một suất cơm tấm với nhé.",0,0,0,personal_number
+"Ông đang ở đâu đấy? Qua nhà tui chơi tí đi rồi đi ăn luôn.",0,0,0,personal_number
+"Tối nay 7h có mặt ở sân bóng nha anh em thiếu người quá.",0,0,0,personal_number
+"Chúc mừng sinh nhật nha! Tối có tổ chức gì thì hú tui nhé.",0,0,0,personal_number
+"Mai rảnh thì qua trà chanh chém gió tí cho vui bà ơi.",0,0,0,personal_number
+"Ok ông nha chiều nay tầm 5h tui ghé qua chỗ ông.",0,0,0,personal_number
+"Cảm ơn bà nhiều nhé mai tui mời cafe bù nha.",0,0,0,personal_number
+"Mọi người ơi nhớ sáng nay 10h họp phòng mình ở lầu 2 nha.",0,0,0,personal_number
+"Anh ơi em vừa gửi báo cáo tuần qua mail rồi ạ anh check giúp em nhé.",0,0,0,personal_number
+"Nhớ chuẩn bị slide cho buổi thuyết trình chiều nay nha cả nhà.",0,0,0,personal_number
+"Lịch họp dời sang 2h chiều rồi nha mọi người chuẩn bị giúp em.",0,0,0,personal_number
+"Chị check tin nhắn zalo em gửi phương án mới rồi ạ.",0,0,0,personal_number
+"Mai đi làm sớm tí để chuẩn bị cho sự kiện ra mắt nhé.",0,0,0,personal_number
+"OK lát em qua phòng sếp lấy tài liệu ký xong rồi gửi lại ạ.",0,0,0,personal_number
+"Nhớ mang theo laptop để lát nữa mình họp nhóm dự án nha.",0,0,0,personal_number
+"Chiều nay họp xong có ai đi ăn gì không cho em theo với nhé.",0,0,0,personal_number
+"Sếp bảo mọi người hoàn thiện nốt task trước 5h chiều nay rồi nghỉ nha.",0,0,0,personal_number
+"Mẹ ơi tối nay con về hơi muộn mẹ đừng chờ cơm con nha.",0,0,0,personal_number
+"Ba ơi sáng mai nhớ uống thuốc sau khi ăn sáng đầy đủ nha.",0,0,0,personal_number
+"Cuối tuần này cả nhà mình về quê thăm ông bà ngoại nhé.",0,0,0,personal_number
+"Em mua đồ ăn sáng để trên bàn rồi anh dậy ăn đi nha.",0,0,0,personal_number
+"Vợ ơi nay anh đi làm về sớm có mua món em thích nè.",0,0,0,personal_number
+"Chị ơi mai cho em mượn cái váy đi đám cưới bạn nhé.",0,0,0,personal_number
+"Bố đi làm về nhớ mua giúp con ít trái cây nha bố.",0,0,0,personal_number
+"Con đang trên đường về rồi ạ tầm 15 phút nữa là tới nhà thôi.",0,0,0,personal_number
+"Cả nhà mình tối nay đi ăn lẩu đi lâu rồi chưa đi ăn ngoài nè.",0,0,0,personal_number
+"Dạ vâng ạ lát con ghé qua siêu thị mua đồ rồi về luôn.",0,0,0,personal_number
+"Mai thi môn Triết rồi bà đã học chữ nào vào đầu chưa?",0,0,0,personal_number
+"Sáng mai 8h tập trung ở cổng trường đi chung cho vui nhé.",0,0,0,personal_number
+"Nhớ nộp bài tập nhóm trên hệ thống trước 12h đêm nay nha ông.",0,0,0,personal_number
+"Ông có tài liệu ôn tập môn này không cho tui mượn photo với.",0,0,0,personal_number
+"Mai đi học nhớ mang theo cuốn vở cho tui mượn chép bài nha.",0,0,0,personal_number
+"Điểm thi có trên web rồi đó mấy bà check nhanh đi nha.",0,0,0,personal_number
+"Nhóm mình chiều nay 3h họp ở thư viện để làm tiểu luận nhé.",0,0,0,personal_number
+"Cố gắng ôn thi tốt nha thi xong tụi mình đi quẩy xả láng.",0,0,0,personal_number
+"Ê mai có đi học không? Đi thì gọi tui dậy với nha.",0,0,0,personal_number
+"Học bài xong chưa? Đi làm ván game rồi ngủ nhé ông.",0,0,0,personal_number
+
+Dưới đây là 40 mẫu tin nhắn SMS nhãn 0 (tin nhắn cá nhân/không phải spam) theo phong cách chat của người Việt, sử dụng teencode nhẹ và định dạng CSV theo yêu cầu:
+
+
+content,0,0,0,personal_number
+Ok b nha,0,0,0,personal_number
+Mai di som nhe,0,0,0,personal_number
+Toi nay qua nha t choi ko?,0,0,0,personal_number
+Co j bao t sau,0,0,0,personal_number
+Dang lam j day m?,0,0,0,personal_number
+"Oke, t bít rùi nha",0,0,0,personal_number
+Nay co di lam ko b?,0,0,0,personal_number
+Chut nua m qua don t nhe,0,0,0,personal_number
+Thui t ko di dc dau,0,0,0,personal_number
+Toi nay di an thoi m oi,0,0,0,personal_number
+Mai may gio di hoc the b?,0,0,0,personal_number
+"Sáng mai gọi t dậy với nhe, tks",0,0,0,personal_number
+Cho t muon cai sac dc ko?,0,0,0,personal_number
+Nay bận rùi ko di dc thui,0,0,0,personal_number
+Ve den nha chua m?,0,0,0,personal_number
+Co j mai t goi lai nhe,0,0,0,personal_number
+Happy birthday b nhe!,0,0,0,personal_number
+"Mua ho t bao thuoc voi, ti tra tien",0,0,0,personal_number
+Oke con de,0,0,0,personal_number
+Di xem phim ko dang co phim hay lam,0,0,0,personal_number
+Lau rui ko gap b,0,0,0,personal_number
+"M bít cho nao ban do an ngon ko, chi t",0,0,0,personal_number
+Cho t xin cai dia chi nha b,0,0,0,personal_number
+Sao ko tl tin nhan t?,0,0,0,personal_number
+Mai sang nha t an lau di m,0,0,0,personal_number
+Co chuyen j ke t nghe di,0,0,0,personal_number
+Dang lam j day m oi?,0,0,0,personal_number
+"Oke, t qua ngay day",0,0,0,personal_number
+"Co lay do ko, t mang qua cho",0,0,0,personal_number
+Bye b nhe mai gap,0,0,0,personal_number
+Hết tiền rùi cho vay ít dc ko b?,0,0,0,personal_number
+Mau len m oi sap tre rui,0,0,0,personal_number
+"Uhm, bít rùi khổ quá",0,0,0,personal_number
+Nay m di dau day?,0,0,0,personal_number
+Hen m hom khac nha t ban roi,0,0,0,personal_number
+An com chua b oi?,0,0,0,personal_number
+Toi nay di cafe ko b?,0,0,0,personal_number
+Gui t cai link shopee voi m,0,0,0,personal_number
+Toi nay co da bong ko m?,0,0,0,personal_number
+"T di ngu day, ngu ngon nha",0,0,0,personal_number
+
+Dưới đây là 40 tin nhắn SMS giả lập người dùng di động tại Việt Nam với các chủ đề bạn yêu cầu, tuân thủ đúng định dạng CSV và nhãn 0 (tin sạch).
+
+
+content,0,0,0,personal_number
+"Chiều nay rảnh không, đi cafe bên quán cũ nha.",0,0,0,personal_number
+"Lâu quá chưa gặp, cuối tuần này nhậu một bữa nhé ông.",0,0,0,personal_number
+"Tối nay 7h chỗ cũ nhen, đừng đến muộn đó.",0,0,0,personal_number
+"Mới biết quán bún đậu này ngon lắm, khi nào đi ăn không?",0,0,0,personal_number
+"Dạo này khỏe không bạn ơi? Có gì mới kể tui nghe với.",0,0,0,personal_number
+"Nhắc lịch họp team chiều nay 2h tại phòng họp lớn nhé mọi người.",0,0,0,personal_number
+"Mọi người nhớ gửi báo cáo tuần trước 5h chiều nay giúp em nha.",0,0,0,personal_number
+"Sếp dặn sáng mai họp sớm lúc 8h30, cả nhà đi đầy đủ ạ.",0,0,0,personal_number
+"Chốt lịch họp dự án mới vào thứ Tư tuần sau nha cả team.",0,0,0,personal_number
+"Thông báo: Lịch họp chiều nay đổi sang 3h nhé mọi người.",0,0,0,personal_number
+"Mẹ ơi tối nay con về muộn xíu, nhà mình cứ ăn cơm trước nhé.",0,0,0,personal_number
+"Cuối tuần này con về quê chơi, ba mẹ có cần mua gì không ạ?",0,0,0,personal_number
+"Anh ơi nhớ ghé mua sữa cho con rồi hãy về nha.",0,0,0,personal_number
+"Cả nhà ơi tối nay bà sang chơi, mọi người về sớm ăn cơm nhé.",0,0,0,personal_number
+"Em chuyển tiền điện tháng này rồi nha chị.",0,0,0,personal_number
+"Mai thi môn Triết rồi, tối nay nhớ ôn bài kỹ nha mấy đứa.",0,0,0,personal_number
+"Lịch học sáng mai đổi sang phòng 302 nhé cả lớp.",0,0,0,personal_number
+"Nhớ nộp bài tập nhóm trước 12h đêm nay nha ông ơi.",0,0,0,personal_number
+"Thứ Hai tuần sau có bài kiểm tra giữa kỳ, đừng quên nhé.",0,0,0,personal_number
+"Học nhóm ở thư viện lúc 9h sáng mai nha, mang theo laptop nhé.",0,0,0,personal_number
+"Tối nay di xem phim không, mới ra phim hay lắm nè.",0,0,0,personal_number
+"Ok chiều nay gặp nha, tui đến đúng giờ.",0,0,0,personal_number
+"Mai qua nhà tui chơi đi, mẹ mới gửi đồ ăn ở quê lên ngon lắm.",0,0,0,personal_number
+"Em nhận được tiền rồi nhé, cảm ơn chị ạ.",0,0,0,personal_number
+"Chiều nay đi đá bóng không mấy ông? 5h sân cũ nhé.",0,0,0,personal_number
+"Mọi người nhớ check mail mới nhất về dự án nhé.",0,0,0,personal_number
+"Mai đi làm nhớ mang theo hợp đồng để ký nha Duy.",0,0,0,personal_number
+"Sáng mai em xin phép đến muộn 15p vì đi khám bệnh nha sếp.",0,0,0,personal_number
+"Chủ nhật này sinh nhật tui, qua nhà ăn cơm cho vui nhé.",0,0,0,personal_number
+"Bạn ơi cho mình mượn cuốn sách hôm nọ với, mai mang đi học nhé.",0,0,0,personal_number
+"Tối nay ăn gì không, tui qua đón nhé?",0,0,0,personal_number
+"Dạ con biết rồi ạ, chiều con qua đón em về.",0,0,0,personal_number
+"Nhớ mua đồ ăn sáng cho tui với nha, cảm ơn nhiều.",0,0,0,personal_number
+"Lịch thi mới cập nhật trên web rồi đó, vào xem nhé.",0,0,0,personal_number
+"Mai nhớ đi đúng giờ để chụp ảnh kỷ yếu nhé cả lớp.",0,0,0,personal_number
+"Anh ơi em đặt đồ ăn rồi, tầm 15p nữa giao đến anh nhận nhé.",0,0,0,personal_number
+"Mọi người chuẩn bị tài liệu cho buổi thuyết trình ngày mai nha.",0,0,0,personal_number
+"Bà ơi chiều nay bà có ở nhà không, con qua biếu bà ít hoa quả ạ.",0,0,0,personal_number
+"Đi chợ mua giúp em ít hành với tỏi nhé, ok cảm ơn.",0,0,0,personal_number
+"Cuối tuần đi picnic không cả nhà, con mới đặt chỗ rồi nhé.",0,0,0,personal_number
+
+Dưới đây là danh sách 40 SMS nhãn 0 (Tin sạch) chứa các từ khóa nhạy cảm, tuân thủ nghiêm ngặt các yêu cầu về kỹ thuật và nội dung bạn đã đề ra.
+
+
+content,label,has_url,has_phone_number,sender_type
+"Ma OTP cua ban la 452891. Vui long khong chia se ma nay cho bat ky ai de bao mat tai khoan ngan hang.",0,0,0,brandname
+"VCB: 15/10/23 09:12; +2,000,000VND; GD tu: TRAN VAN B. ND: thanh toan tien hang.",0,0,0,brandname
+"G-882314 la ma xac nhan Google cua ban. Ma co hieu luc trong 5 phut.",0,0,0,brandname
+"Lazada: Don hang 552190 cua ban dang duoc giao. Theo doi hanh trinh tai: https://lazada.vn/track",0,1,0,brandname
+"Xac nhan giao dich rut tien mat tai ATM ngan hang MBBank so tien 1,000,000VND vao luc 14:00.",0,0,0,brandname
+"Ma OTP dang nhap Facebook cua ban la 772103. Tuyet doi khong cung cap cho nguoi khac.",0,0,0,brandname
+"Apple ID: Ma xac minh cua ban la 330192. Nhap ma nay de xac nhan thiet bi moi.",0,0,0,brandname
+"Shopee: Don hang SP12345 da thanh toan thanh cong. Xem chi tiet: https://shopee.vn/order",0,1,0,brandname
+"Techcombank: Quy khach dang thuc hien giao dich chuyen khoan 5,000,000VND. OTP la 119283.",0,0,0,brandname
+"ACB: So du TK ...889 thay doi -500,000VND. Phi dich vu ngan hang thang 10.",0,0,0,brandname
+"Ma xac nhan dang ky dich vu Mobile Banking cua ban tai ngan hang la 992013.",0,0,0,shortcode
+"Zalo: Ma kich hoat tai khoan cua ban la 665219. Vui long xac nhan tren ung dung.",0,0,0,brandname
+"Tiki: Cam on ban da mua hang. Truy cap https://tiki.vn de danh gia san pham.",0,1,0,brandname
+"VNPAY: Ban vua thanh toan 50,000VND tai cua hang. Ma giao dich: 99821.",0,0,0,brandname
+"Ma OTP xac nhan doi mat khau iCloud cua ban la 441029.",0,0,0,brandname
+"Grab: Tai xe dang den. Kiem tra lo trinh tai link: https://grab.com/trip/123",0,1,0,brandname
+"VietinBank: Quy khach vua thuc hien giao dich thanh toan hoa don dien. Ma GD: 7712.",0,0,0,brandname
+"Microsoft: Use 551029 as security code for your account verification.",0,0,0,brandname
+"Agribank: Thong bao bien dong so du TK ...123: +10,000,000VND tu ngan hang khac.",0,0,0,brandname
+"Xac nhan lich hen kham benh tai BV Tam Anh ngay 20/10. Chi tiet: https://tamanhhospital.vn",0,1,0,brandname
+"Ma OTP de ky so hop dong dien tu cua ban la 882103. Tran trong.",0,0,0,shortcode
+"ShopeePay: Ban da nhan duoc hoan tien 20,000VND tu giao dich ngay 15/10.",0,0,0,brandname
+"TPBank: Giao dich thanh toan tai POS so tien 1,200,000VND thanh cong.",0,0,0,brandname
+"VIB: Ma OTP de xac nhan kich hoat the tin dung cua ban la 332190.",0,0,0,brandname
+"Ma xac minh 2 lop cho tai khoan Instagram cua ban la 110928.",0,0,0,brandname
+"Giao hang nhanh: Don hang 662910 dang duoc giao den ban. LH shipper: 0901234567",0,0,1,brandname
+"Ngan hang VPBank thong bao: Han muc the tin dung cua ban da duoc nang len 50 trieu VND.",0,0,0,brandname
+"Ma OTP xac nhan thanh toan ve may bay Bamboo Airways la 552019.",0,0,0,brandname
+"Vietnam Airlines: Chuyen bay VN123 cua ban se khoi hanh luc 08:00. Checkin tai: https://vietnamairlines.com",0,1,0,brandname
+"MoMo: Ban da chuyen 200,000VND den NGUYEN VAN A. Ma giao dich: 8821039.",0,0,0,brandname
+"Ma xac minh tai khoan Telegram cua ban: 44921.",0,0,0,shortcode
+"Xac nhan don hang tai thegioididong.com thanh cong. Ma don: TGDD123.",0,1,0,brandname
+"Ngan hang Shinhan: Thong bao ky han so tiet kiem cua ban sap den ngay dao han.",0,0,0,brandname
+"Ma OTP xac nhan rut tien tu vi dien tu AirPay la 229103.",0,0,0,brandname
+"FPT Shop: Don hang cua ban da san sang tai cua hang. Chi tiet tai: https://fptshop.com.vn",0,1,0,brandname
+"Sacombank: Quy khach vua thuc hien giao dich chuyen khoan 300,000VND. OTP: 772103.",0,0,0,brandname
+"Ma xac minh dang nhap TikTok cua ban la 552109.",0,0,0,shortcode
+"Xac nhan dang ky khoa hoc thanh cong tai https://edumall.vn. Ma kich hoat: EDU123.",0,1,0,brandname
+"BIDV: Tai khoan ...445 thay doi +5,000,000VND. ND: Luong thang 10.",0,0,0,brandname
+"Ma OTP de xac nhan giao dich mua the cao dien thoai la 110293.",0,0,0,shortcode
+
+
+**Giải thích các trường dữ liệu:**
+*   **content**: Chứa đầy đủ các từ khóa 'ngân hàng', 'OTP', 'xác nhận', 'giao dịch', 'link' trong các ngữ cảnh giao dịch thực tế (Biến động số dư, OTP từ Big Tech, giao hàng).
+*   **label**: 0 (Tin sạch).
+*   **has_url**: 1 nếu link dẫn về domain chính thống (.vn, .com), 0 nếu không có link.
+*   **has_phone_number**: 0 đối với các mã OTP (6 số) hoặc mã đơn hàng. Chỉ là 1 nếu có số điện thoại liên hệ rõ ràng (như số shipper).
+*   **sender_type**: Sử dụng 'brandname' cho các tổ chức lớn và 'shortcode' cho các đầu số tổng đài mã xác nhận.
