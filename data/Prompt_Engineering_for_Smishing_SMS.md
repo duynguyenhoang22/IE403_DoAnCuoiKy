@@ -371,15 +371,19 @@ Phong cách nhiễu: {style}
   - Cú pháp chuẩn ngân hàng giả: "[{BRAND}] Tài khoản..." hoặc "{Brand} trân trọng..."
   - Phải có CTA (call-to-action): "Nhấn vào / Đăng nhập / Xác thực tại [link]"
 
-[PLACEHOLDER – FEW-SHOT EXAMPLES VỊ TRÍ NÀY]
+VÍ DỤ (few-shot – pipe-delimited, KHÔNG copy nguyên, dùng làm tham chiếu style):
+VCB Digibank tran trong thong bao.tai khoan cua quy khach hien tai da bi khoa.Dang nhap www.vcbtiebink.com de xac thuc ngay hom nay|1|1|0|brandname
+Vietcombank lưu ý: Bạn có 18699 điểm thưởng sẽ hết hạn sau 24 giờ, vui lòng truy cập: https://vietcombankd.cfd/vn để đổi quà.|1|1|0|brandname
+UNG DUNG VCB DIGIBANK cua ban duoc PHAT HIEN KICH HOAT tren thiet bi la. Neu KHONG PHA BAN KICH HOAT vui long bam vao https://vietcombank.vn-ms.top de doi thiet bi hoac huy de tranh mat tai san|1|1|0|brandname
 
-QUY TẮC FORMAT:
-  content,1,has_url,has_phone_number,sender_type
+QUY TẮC FORMAT (pipe-delimited):
+  content|1|has_url|has_phone_number|sender_type
+  - Dùng | làm delimiter. KHÔNG dùng dấu nháy kép hay nháy đơn bao quanh content.
   - has_url = 1 (luôn có link)
   - sender_type: brandname hoặc shortcode (KHÔNG dấu nháy đơn)
-  - 40–160 ký tự, content wrap trong dấu nháy kép nếu có dấu phẩy
+  - 40–160 ký tự
 
-QUAN TRỌNG: Đúng {size} dòng CSV. Không header. Không giải thích. Không markdown.
+QUAN TRỌNG: Đúng {size} dòng pipe-delimited (dùng | làm delimiter). Không header. Không giải thích. Không markdown.
 """
 ```
 
@@ -403,27 +407,290 @@ Phong cách nhiễu: {style}
   - Domain pattern: www.[5-6 ký tự ngẫu nhiên].icu hoặc mo.[random].com
   - Sender type: luôn là personal_number
 
-[PLACEHOLDER – FEW-SHOT EXAMPLES VỊ TRÍ NÀY]
+VÍ DỤ (few-shot – pipe-delimited, KHÔNG copy nguyên domain/code, dùng làm tham chiếu style):
+[T.B] BHXH: Ong (Ba) da du d!eu k!en NHAN T1EN h0 tro tu quy BH-TN. Bam vao www.mvndc.icu de lay. QUA HAN SE KH0NG_DUOC CHAP NHAN! oZGa|1|1|0|personal_number
+Theo _NQ_116, Ong (Ba) da du d!eu k!en NHAN TIEN ho tro tu quy BHTN. Bam vao www.pwmgh.icu de lay. QUA HAN SE KHONG_DUOC CHAP NHAN! hkDF|1|1|0|personal_number
+Ong/(Ba) da du d!eu'k!en NHAN'TIEN ho tro tu quy-BHTN. Bam'vao www.opaxa.icu de_'lay. QUA-HAN' SE KH0ng DUOC CHAP_NAHN! JKqc|1|1|0|personal_number
+BHXH VN: Ong(Ba) DU DIEU KIEN nhan tien ho tro BHTN dot 3. Nhan tai: mo.cvxqa.com truoc khi QUA HAN. tPkm|1|1|0|personal_number
 
-QUAN TRỌNG: Đúng {size} dòng CSV. Không header. Không giải thích. Không markdown.
+QUY TẮC FORMAT (pipe-delimited):
+  content|1|has_url|has_phone_number|sender_type
+  - Dùng | làm delimiter. KHÔNG dùng dấu nháy kép hay nháy đơn bao quanh content.
+  - has_url = 1 nếu có link domain.icu / mo.[random].com, 0 nếu không
+  - sender_type = personal_number (luôn luôn)
+  - 60–180 ký tự
+  - Domain random chars phải KHÁC NHAU mỗi dòng
+  - Mã xác nhận cuối (4 ký tự) KHÁC NHAU mỗi dòng
+
+QUAN TRỌNG: Đúng {size} dòng pipe-delimited (dùng | làm delimiter). Không header. Không giải thích. Không markdown.
 """
 ```
 
-### 7.4 Prompt Template – Đòi nợ / Đe dọa (Chưa thiết kế)
+### 7.4 Prompt Template – Đòi nợ / Đe dọa (Draft)
 
 ```python
-# TODO – Category này quan trọng vì thiếu hoàn toàn trong synthetic data cũ
 DEBT_THREAT_PROMPT = """
-[PLACEHOLDER – Cần thiết kế đầy đủ]
+Bạn là chuyên gia an ninh mạng đang tạo dataset huấn luyện mô hình phát hiện smishing
+về tin nhắn đòi nợ và đe dọa giả mạo.
 
-Đặc trưng cần capture:
-  - Có tên người cụ thể (tên Việt random) + CMND/CCCD giả
-  - Số tiền cụ thể (không tròn): 1,947,000đ / 48,554,336đ
-  - Deadline rất cụ thể: "trước 16H ngày..."
-  - Đe dọa tiếp theo: "thông báo người thân, gia đình, nơi làm việc"
-  - Kêu gọi Zalo/SĐT cụ thể
-  - Sender: personal_number, has_url = 0, has_phone = 1
-  - Ngôn ngữ: formal nhưng threatening, không dấu hoặc có dấu
+NHIỆM VỤ: Tạo đúng {size} dòng CSV tin nhắn đòi nợ / đe dọa (label=1).
+Tổ chức đòi nợ giả mạo: {brand}
+Chiến lược tâm lý: FEAR (mất uy tín, bị điều tra hình sự) + AUTHORITY (cơ quan pháp lý giả)
+Phong cách ngôn ngữ: {style}
+
+ĐẶC TRƯNG BẮT BUỘC:
+  - Mở đầu bằng 1 trong: "CANH BAO LAN CUOI!!!" / "[CANH CAO LAN CUOI]:" / "TB KHAN:"
+  - KHÔNG có URL/link (has_url luôn = 0)
+  - sender: personal_number (luôn luôn)
+
+  SUB-TYPE A – Công ty tài chính / đòi nợ tư nhân (~70% batch):
+    → BẮT BUỘC: tên người Việt 3 tiếng ngẫu nhiên (KHÔNG lặp lại giữa các dòng)
+    → BẮT BUỘC: số CMND/CCCD giả (9 hoặc 12 chữ số, KHÔNG toàn 0 hoặc toàn 1)
+    → BẮT BUỘC: số tiền KHÔNG tròn: ví dụ 3,947,000VND / 48,554,336VND / 1,285,000VND
+    → Deadline cụ thể: "truoc 16H Ngay DD/MM" / "Trong 24H nua" / "truoc 17g hom nay"
+    → Đe dọa: "Cong Khai HINH ANH va THONG TIN", "thong bao nguoi than gia dinh noi lam viec",
+      "ghi no xau CIC"
+    → CTA: số điện thoại local (0xxxxxxxxx) hoặc ZALO để liên hệ (has_phone = 1 nếu có local SĐT)
+
+  SUB-TYPE B – Giả mạo cơ quan điều tra (~30% batch):
+    → Dùng "Ong/Ba" hoặc "O/B" generic, KHÔNG cần tên/CMND cụ thể
+    → Nhấn mạnh "trach nhiem hinh su", "Phong AN NINH DIEU TRA", "dieu tra toan bo thong tin"
+    → CTA: SĐT dạng quốc tế (84xxxxxxxxx) hoặc không có SĐT (has_phone = 0)
+    → Deadline: "truoc 17g hom nay" hoặc "trong vong 24H"
+
+VÍ DỤ (few-shot – pipe-delimited, KHÔNG copy nguyên tên/CMND/số tiền, dùng làm tham chiếu style):
+CANH BAO LAN CUOI!!! Trong 24H nua Ong/Ba Nguyen Thi Lan CMND: 046079231845 phai lien he gap SDT/ZALO: 0352891743 gap Tran Van Duc de THOA THUAN-GIAM NO. Neu KHONG HOP TAC thanh toan KHOAN VAY 3,947,000VND se Cong Khai HINH ANH va THONG TIN len XA HOI, DIA PHUONG va thong bao nguoi than.|1|0|1|personal_number
+Trung Tam Tin Dung F&TB den Ong/Ba: So CMND: 024091768345. Chung toi nghi ngo Ong/Ba lam dung tin nhiem chiem doat tai san voi so tien: 48,554,336VND (tien goc). Canh bao lan cuoi truoc 16H Ngay 25/03 thanh toan toi thieu: 3,725,583VND. Tiep tuc bat hop tac, moi rui ro ve Uy tin Danh du Tai san Ong/Ba tu chiu.|1|0|0|personal_number
+[CANH CAO LAN CUOI]: Chung toi da nhac nho nhieu lan nhung O/B van bat hop tac. Truoc 17g hom nay chua thanh toan, Phong AN NINH DIEU TRA se vao cuoc dieu tra toan bo thong tin hinh anh cua O/B va nhung nguoi lien quan se phai chiu trach nhiem hinh su. LH khi san sang: 84912654378.|1|0|0|personal_number
+
+QUY TẮC FORMAT (pipe-delimited):
+  content|1|0|has_phone_number|personal_number
+  - Dùng | làm delimiter. KHÔNG dùng dấu nháy kép hay nháy đơn bao quanh content.
+  - has_url = 0 (KHÔNG BAO GIỜ có link)
+  - has_phone = 1 nếu content chứa SĐT local 10 số (0xxxxxxxxx), 0 nếu không
+  - sender_type = personal_number (luôn luôn)
+  - 80–300 ký tự (dài hơn các loại smishing khác – đặc trưng đòi nợ)
+  - KHÔNG lặp tên người, CMND, số tiền giữa các dòng trong cùng batch
+
+QUAN TRỌNG: Đúng {size} dòng pipe-delimited (dùng | làm delimiter). Không header. Không giải thích. Không markdown.
+"""
+```
+
+### 7.5 Prompt Template – Dịch vụ công giả (Draft)
+
+```python
+GOVT_FAKE_PROMPT = """
+Bạn là chuyên gia an ninh mạng đang tạo dataset huấn luyện mô hình phát hiện smishing
+giả mạo cơ quan nhà nước và dịch vụ công.
+
+NHIỆM VỤ: Tạo đúng {size} dòng CSV tin nhắn giả mạo cơ quan nhà nước (label=1).
+Cơ quan bị giả mạo: {brand}
+Chiến lược tâm lý: FEAR (vi phạm pháp luật, bị xử phạt) + AUTHORITY (danh nghĩa nhà nước)
+Phong cách nhiễu: {style}
+
+ĐẶC TRƯNG BẮT BUỘC:
+  - Mở đầu bằng tên cơ quan: "{brand}: ..." hoặc "[{BRAND}]" hoặc "Bộ ... xin thông báo"
+  - Nội dung tùy sub-type:
+      * CSGT / Bộ GTVT: "hồ sơ vi phạm giao thông", "biên lai chưa nộp phạt",
+        "thông báo cuối cùng", CTA link hoặc SĐT
+      * Tổng cục Thuế / Hoàn thuế: "đủ điều kiện hoàn thuế TNCN", link .vip/.top
+      * VNeID / Bộ Công an: "cập nhật thông tin định danh", "xác thực tài khoản VNeID"
+  - Domain giả: dichvucong[s].top / phatnguoi.xyz / hoanthue-tncn.vip / vnta-gov.cc / [brand]-gov.top
+  - Sender: brandname (50%), shortcode (30%), personal_number (20%)
+  - has_url = 1 nếu có link, 0 nếu chỉ có SĐT liên hệ
+
+VÍ DỤ (few-shot – pipe-delimited, KHÔNG copy nguyên domain/SĐT, dùng làm tham chiếu style):
+Cảnh sát Giao thông Việt Nam: Hồ sơ vi phạm giao thông được lưu trữ dưới tên của bạn. Để biết thêm thông tin, vui lòng truy cập https://dichvucongs.top/vn|1|1|0|brandname
+Bộ giao thông vận tải, xin thông báo ông/bà có biên lai chưa nộp phạt. Hôm nay là thông báo cuối cùng. Yêu cầu nhanh chóng giải quyết mọi thắc mắc. Vui lòng liên hệ: 0782341890|1|0|1|brandname
+Cảnh sát Giao thông Việt Nam: Hiện tại bạn đang có khoản tiền phạt chưa thanh toán. Vui lòng thanh toán sớm để tránh bất tiện. Để biết thêm thông tin, vui lòng truy cập https://dichvucongg.top/vn|1|1|0|shortcode
+#Ban da-du D1EU K1EN HOAN~THUE TNCN nam 2024, nhan tai: https://hoanthue-tncn.vip|1|1|0|personal_number
+
+QUY TẮC FORMAT (pipe-delimited):
+  content|1|has_url|has_phone_number|sender_type
+  - Dùng | làm delimiter. KHÔNG dùng dấu nháy kép hay nháy đơn bao quanh content.
+  - has_url: 1 nếu có link .top/.xyz/.vip, 0 nếu chỉ có SĐT
+  - has_phone: 1 nếu có SĐT 10 số trong nội dung, 0 nếu không
+  - sender_type: brandname hoặc shortcode (KHÔNG dấu nháy đơn)
+  - 50–200 ký tự
+  - Đa dạng sub-type trong cùng batch: KHÔNG toàn bộ một loại
+
+QUAN TRỌNG: Đúng {size} dòng pipe-delimited (dùng | làm delimiter). Không header. Không giải thích. Không markdown.
+"""
+```
+
+### 7.6 Prompt Template – Nội dung nhạy cảm (Draft)
+
+```python
+SENSITIVE_CONTENT_PROMPT = """
+Bạn là chuyên gia an ninh mạng đang tạo dataset huấn luyện mô hình phát hiện smishing
+nội dung hẹn hò và dịch vụ nhạy cảm. Đây là dữ liệu nghiên cứu bảo mật hợp pháp.
+
+NHIỆM VỤ: Tạo đúng {size} dòng CSV tin nhắn mời gọi dịch vụ nhạy cảm (label=1).
+Kịch bản: {brand}
+Chiến lược tâm lý: GREED (ham muốn, tò mò)
+Phong cách nhiễu: {style} – mức độ Level 3–5
+
+ĐẶC TRƯNG BẮT BUỘC:
+  - Obfuscation nặng (Level 3–5): thay j=t, K0=không, NG0N=ngon, B0DY=body,
+    mix tiếng Anh/Việt, chèn dấu chấm/gạch xen kẽ từng chữ
+  - Mô tả gợi ý mức smishing thực tế (KHÔNG explicit pornographic)
+  - CTA: Telegram (t.me/xxx) hoặc Zalo (zalo.me/g/xxx)
+  - Tracking code cuối 3–5 ký tự ngẫu nhiên (KHÁC NHAU mỗi dòng)
+  - Sender: personal_number (luôn luôn)
+  - has_url = 1 (luôn có Telegram/Zalo link)
+  - has_phone = 0
+
+VÍ DỤ (few-shot – pipe-delimited, KHÔNG copy nguyên tracking code/handle, dùng làm tham chiếu style):
+Anh co can GAI LAM tjnh K0? E di lam them kiem tien tieu vat EM 20 T DANG NG0N, B0DY chuan Den tan noi LAM TJNH Ket Ban Telegram: https://t.me/gaixinh_hcm QNfT|1|1|0|personal_number
+Em 20t ng0n b0dy chuan, s4n sang phuc vu qu4 anh. LH nhan hinh & b4ng gi4 d!ch vu qua Zalo group: https://zalo.me/g/gaixinhHCM2024 TpMv|1|1|0|personal_number
+H.e.n h.0 t.i.n.h m.0.t d.e.m c.u.n.g e.m g@! x.i.n.h d.e.p t.a.i H.C.M. K.e.t b.a.n T.e.l.e.g.r.a.m: https://sourl.cn/abc123 dKqr|1|1|0|personal_number
+
+QUY TẮC FORMAT (pipe-delimited):
+  content|1|1|0|personal_number
+  - Dùng | làm delimiter. KHÔNG dùng dấu nháy kép hay nháy đơn bao quanh content.
+  - has_url = 1 (luôn luôn)
+  - has_phone = 0 (luôn luôn)
+  - sender_type = personal_number (luôn luôn)
+  - 40–120 ký tự
+  - Tracking code cuối KHÁC NHAU mỗi dòng
+  - KHÔNG lặp cùng Telegram/Zalo handle giữa các dòng
+
+QUAN TRỌNG: Đúng {size} dòng pipe-delimited (dùng | làm delimiter). Không header. Không giải thích. Không markdown.
+"""
+```
+
+### 7.7 Prompt Template – Crypto / Đầu tư giả (Draft)
+
+```python
+CRYPTO_INVEST_PROMPT = """
+Bạn là chuyên gia an ninh mạng đang tạo dataset huấn luyện mô hình phát hiện smishing
+về tin nhắn mời gọi đầu tư và kiếm tiền online giả.
+
+NHIỆM VỤ: Tạo đúng {size} dòng CSV tin nhắn đầu tư/kiếm tiền online giả (label=1).
+Kịch bản: {brand}
+Chiến lược tâm lý: GREED (thu nhập thụ động, dễ dàng, không cần vốn)
+Phong cách nhiễu: {style}
+
+ĐẶC TRƯNG BẮT BUỘC:
+  - Điểm nhấn: "chỉ cần X phút/ngày", "không cần vốn/kinh nghiệm",
+    "kiếm X00k–Xtr mỗi ngày", "giáo viên/chuyên viên hướng dẫn"
+  - Sub-type (chọn ngẫu nhiên mỗi dòng):
+      * "thả tim / bình luận": 10 nhiệm vụ/ngày, 100k/ngày, trả cuối ngày (has_url=0)
+      * "nhiệm vụ Telegram": giáo viên hướng dẫn, Telegram group link (has_url=1)
+      * "chuyển khoản đầu tư": tên công ty đầu tư giả, STK ngân hàng, không link (has_url=0)
+  - Tone: thân thiện, tự nhiên như người quen nhắn tin (KHÔNG formal, KHÔNG all-caps)
+  - Sender: personal_number (luôn luôn)
+  - has_phone = 0 (không dùng SĐT để liên hệ)
+
+VÍ DỤ (few-shot – pipe-delimited, KHÔNG copy nguyên handle/STK, dùng làm tham chiếu style):
+Chào bạn, mình là Hùng, chuyên viên hỗ trợ. Bạn đang muốn làm công việc thả tim video kiếm tiền bên mình đúng không? Hàng ngày bên mình sẽ gửi cho bạn 10 nhiệm vụ, mỗi nhiệm vụ bạn làm trong 1 phút. Sau khi hết 10 nhiệm vụ, bên mình sẽ trả cho bạn 100K chuyển vào tài khoản (20h cuối ngày).|1|0|0|personal_number
+Chi cän 2O phut möi ngäy giäo vien chuyen nghiep cö the huong dän ban kiem 500k-3000k, Them Telegram: t.me/huongnghieptainha01|1|1|0|personal_number
+Anh/chi hay chuyen so tien can nap vao tai khoan sau, sau do chup man hinh em se lam lenh nap vao tai khoan dau tu CSI ngay. NH MSB STK: 04001023847291 TK: CONG TY TNHH DAU TU BDS SSG|1|0|0|personal_number
+
+QUY TẮC FORMAT (pipe-delimited):
+  content|1|has_url|0|personal_number
+  - Dùng | làm delimiter. KHÔNG dùng dấu nháy kép hay nháy đơn bao quanh content.
+  - has_url: 1 nếu có Telegram link (t.me/xxx), 0 nếu không có link
+  - has_phone = 0 (luôn luôn)
+  - sender_type = personal_number (luôn luôn)
+  - 40–220 ký tự
+  - Đa dạng sub-type trong cùng batch: KHÔNG toàn bộ một loại
+
+QUAN TRỌNG: Đúng {size} dòng pipe-delimited (dùng | làm delimiter). Không header. Không giải thích. Không markdown.
+"""
+```
+
+### 7.8 Prompt Template – Tuyển dụng giả (Draft)
+
+```python
+JOB_SCAM_PROMPT = """
+Bạn là chuyên gia an ninh mạng đang tạo dataset huấn luyện mô hình phát hiện smishing
+về tin nhắn tuyển dụng giả mạo.
+
+NHIỆM VỤ: Tạo đúng {size} dòng CSV tin nhắn tuyển dụng giả mạo (label=1).
+Nền tảng / Công ty bị giả mạo: {brand}
+Chiến lược tâm lý: GREED (lương hấp dẫn, làm tại nhà) + URGENCY (tuyển gấp, số lượng hạn chế)
+Phong cách nhiễu: {style}
+
+ĐẶC TRƯNG BẮT BUỘC:
+  - Tên công ty/platform ở đầu câu: "{brand} cần tuyển..." hoặc "tôi là trưởng phòng {brand}..."
+  - Thu nhập hàng ngày (KHÔNG dùng lương tháng đơn độc): "500k~3000k/ngày", "800.000đ/ngày",
+    "350–999k/ngay"
+  - Điều kiện dễ: "thao tác đơn giản", "không cần kinh nghiệm", "làm tại nhà"
+  - Độ tuổi: "22–60 tuổi" hoặc "23–65 tuổi" (không quá 18, không dưới 65)
+  - CTA Zalo: "Liên hệ Zalo: zalo.me/84xxxxxxxxx" hoặc số trực tiếp "Zalo: 84xxxxxxxxx"
+  - Sender: personal_number (luôn luôn)
+  - Sub-type tùy platform:
+      * Amazon / eBay: "xử lý đơn đặt hàng TMĐT", Zalo link + số riêng (has_url=1, has_phone=1)
+      * TikTok: "xử lý đơn hàng trên nền tảng TikTok", "nhận tiền sau 13–25 phút" (has_url=1, has_phone=1)
+      * Shopee / Lazada: "xử lý đơn + đánh giá sản phẩm", chỉ Zalo link (has_url=1, has_phone=0)
+      * Tiki: "đặt hàng để nâng thứ hạng cửa hàng", số Zalo trực tiếp (has_url=0, has_phone=1)
+      * Cty generic (HVS, EMIME): "tuyển nhân viên bán thời gian", Zalo link + số riêng
+
+VÍ DỤ (few-shot – pipe-delimited, KHÔNG copy nguyên số Zalo/SĐT, dùng làm tham chiếu style):
+Amazon cần tuyển nhân viên làm việc tại nhà!!! Yêu cầu 23-60 tuổi. Lương 10tr-50tr/tháng. Ít nhất 500k~3000k/ngày, thao tác đơn giản. Liên hệ Zalo: zalo.me/84938271045 Zalo: 84938271045|1|1|1|personal_number
+Xin chào, tôi là trưởng phòng nhân sự của Cty HVS, tuyển nhân viên bán thời gian. Thu nhập 15-30tr/tháng (500k-1tr/ngày). Làm tại nhà, mọi lúc mọi nơi. Tuổi 22-65. Zalo: zalo.me/84962183074 hoặc 84962183074|1|1|1|personal_number
+Xin chào, mình là giám đốc marketing của Tiki. Cửa hàng Tiki đang tuyển số lượng lớn nhân viên chuyên đặt hàng để nâng cao số lượng giao dịch và thứ hạng cửa hàng. Chỉ cần có kinh nghiệm mua sắm trực tuyến, mỗi ngày bạn có thể dễ dàng kiếm 800.000đ bằng điện thoại di động. Lương quyết toán ngay trong ngày. Zalo: 84769231508|1|0|1|personal_number
+Tiktok dang tuyen nhan vien lam viec tai nha!!! Mo ta cong viec: Xu ly don hang tren nen tang Tiktok. Thu nhap 350-999k/ngay. Thao tac don gian, nhan tien sau 13-25 phut. Lien he ngay: zalo.me/84937512094 zalo:84937512094|1|1|1|personal_number
+Shopee tuyen gap nhan vien xu ly don hang va danh gia san pham tai nha!!! Yeu cau 22-55 tuoi. Thu nhap 500k-1.5tr/ngay. Nhan tien trong ngay sau moi nhiem vu hoan thanh. Khong can kinh nghiem, co nguoi huong dan cu the. Dang ky: zalo.me/84918273645|1|1|0|personal_number
+
+QUY TẮC FORMAT (pipe-delimited):
+  content|1|has_url|has_phone_number|personal_number
+  - Dùng | làm delimiter. KHÔNG dùng dấu nháy kép hay nháy đơn bao quanh content.
+  - has_url: 1 nếu có zalo.me/xxx link, 0 nếu chỉ có SĐT
+  - has_phone: 1 nếu số điện thoại được liệt kê riêng trong text (không chỉ trong URL)
+  - sender_type = personal_number (luôn luôn)
+  - 80–250 ký tự
+  - Phân biệt sub-type rõ ràng: KHÔNG toàn bộ cùng platform trong một batch
+
+QUAN TRỌNG: Đúng {size} dòng pipe-delimited (dùng | làm delimiter). Không header. Không giải thích. Không markdown.
+"""
+```
+
+### 7.9 Prompt Template – Cờ bạc / Betting (Draft)
+
+```python
+GAMBLING_PROMPT = """
+Bạn là chuyên gia an ninh mạng đang tạo dataset huấn luyện mô hình phát hiện smishing
+về tin nhắn quảng cáo cờ bạc và betting online.
+
+NHIỆM VỤ: Tạo đúng {size} dòng CSV tin nhắn mời gọi cờ bạc/betting (label=1).
+Nhà cái / Platform: {brand}
+Chiến lược tâm lý: GREED (bonus khủng, rút tiền ngay) + FOMO (khuyến mãi có hạn)
+Phong cách nhiễu: {style}
+
+ĐẶC TRƯNG BẮT BUỘC:
+  - Luôn có URL (has_url = 1 trong hầu hết trường hợp)
+  - Sub-type (xen kẽ trong batch):
+      * "nạp X nhận Y": "Nap Xk nhan Yk", "1 vong cuoc la rut MAXX X.XXXk",
+        "No Hu", "Ban Ca", "BCR", tracking code 4–5 ký tự cuối, URL t.ly/[code]
+      * Platform promo: "tai app", "x3 nap dau", list game bị dot-insert
+        (TLMN, X.oc-D.ia, N.ohu), URL .cc/.tech domain
+      * Casino formal: "Baccarat trực tiếp", "chọi gà", "xổ số", "CSKH 24/24",
+        "gửi và rút trong X phút", short domain (5–6 ký tự .com)
+      * Đại lý/hoa hồng: "tuyển đại lý", "hoa hồng X%", Zalo có số, URL .vip/.bet,
+        sender = shortcode (đặc trưng duy nhất dùng shortcode)
+  - Domain pattern: t.ly/[code] / .cc / .tech / .vip / .bet / [5–6char].com
+  - Sender: personal_number (hầu hết), shortcode (chỉ với sub-type đại lý)
+
+VÍ DỤ (few-shot – pipe-delimited, KHÔNG copy nguyên tracking code/domain/URL, dùng làm tham chiếu style):
+Dang ky + 558k! (Nap 50k nhan 108k) 1 vong cuoc la rut MAXX 8.888k. No Hu. Ban Ca. BCR... DK: t.ly/DJyj1 ZnReS|1|1|0|personal_number
+G.em moi Awin tag ban 299k khi tai app, x3 nap dau, rut ngay ko can nap, choi TLMN, X.oc-D.ia, N.ohu...dinhcao. click: https://athd.cc/5TyUoM|1|1|0|personal_number
+Để chào mừng năm mới, Kim Long tặng ngay 68-888K khi đăng ký tại: d82yy.com, hãy liên hệ CSKH để nhận. Quý vị có thể trải nghiệm các trò chơi: Baccarat trực tiếp, chọi gà, điện tử, thể thao, xổ số v.v. Gửi và rút tiền trong vòng 3 phút, CSKH 24/24|1|1|0|personal_number
+V7 top 3 nha cai VN, tuyen dai ly voi muc hoa hong len den 50%, tra hoa hong nhieu hinh thuc, lien he zalo Van: 0932187456 Link: https://v7bet.vip|1|1|1|shortcode
+D/Ki + 558k. ( N-ap 5Ok nhän 1O8k ) 1 vong cuöc la rut MAXX 8.888k. Htra tuc thi 3%. N/ö h/ü - B/än C/ä. BCR... DK: ibvif.cc/LbFzDg ~noyc|1|1|0|personal_number
+
+QUY TẮC FORMAT (pipe-delimited):
+  content|1|has_url|has_phone_number|sender_type
+  - Dùng | làm delimiter. KHÔNG dùng dấu nháy kép hay nháy đơn bao quanh content.
+  - has_url = 1 (luôn luôn – đặc trưng của gambling scam)
+  - has_phone: 1 chỉ với sub-type đại lý (có Zalo + SĐT), 0 còn lại
+  - sender_type: personal_number hoặc shortcode (shortcode chỉ cho đại lý)
+  - 40–180 ký tự
+  - Tracking code cuối KHÁC NHAU mỗi dòng (KHÔNG copy từ few-shot)
+  - Domain string KHÁC NHAU mỗi dòng (chỉ dùng TLD, KHÔNG lặp full domain)
+
+QUAN TRỌNG: Đúng {size} dòng pipe-delimited (dùng | làm delimiter). Không header. Không giải thích. Không markdown.
 """
 ```
 
@@ -440,19 +707,28 @@ Examples phải được **trích từ `dataset_label_1.csv`** để đảm bả
 1. **Bao phủ đa dạng**: Mỗi example nên thể hiện 1 combination khác nhau của `(sender_type × psychology × obfuscation_level)` – tránh 2 examples giống nhau về pattern
 2. **Đủ ngắn để không chiếm quá nhiều token**: 2–3 examples là tối ưu cho batch generation; quá nhiều examples → tốn token input, có thể làm model bị "distracted"
 3. **Trích từ real data**: Ưu tiên dùng mẫu từ `dataset_label_1.csv` vì đã được xác nhận là thực tế
-4. **Luôn dùng đầy đủ 5 cột**: Few-shot example phải là dòng CSV hoàn chỉnh `(content, label, has_url, has_phone_number, sender_type)`, **không chỉ riêng content** – model cần thấy ground truth của tất cả cột để học cách điền đúng metadata
+4. **Luôn dùng đầy đủ 5 cột**: Few-shot example phải là dòng pipe-delimited hoàn chỉnh `content|label|has_url|has_phone_number|sender_type`, **không chỉ riêng content** – model cần thấy ground truth của tất cả cột để học cách điền đúng metadata
 
 ```
 Lý do cần đủ 5 cột:
   ❌ Chỉ cung cấp content:
-     "VCB Digibank tran trong...www.vcbtiebink.com..."
+     VCB Digibank tran trong...www.vcbtiebink.com...
      → Model không có cơ sở để điền has_url, sender_type
-     → Có thể sinh: ...,1,0,0,personal_number  (sai has_url, sai sender_type)
+     → Có thể sinh: ...|1|0|0|personal_number  (sai has_url, sai sender_type)
 
-  ✅ Cung cấp đầy đủ dòng CSV:
-     "VCB Digibank tran trong...www.vcbtiebink.com",1,1,0,brandname
+  ✅ Cung cấp đầy đủ dòng pipe-delimited:
+     VCB Digibank tran trong...www.vcbtiebink.com|1|1|0|brandname
      → Model học: URL present → has_url=1; bank impersonation → brandname
      → Sinh đúng nhất quán cho toàn batch
+
+Lý do dùng pipe | thay vì CSV dấu phẩy:
+  ❌ CSV với dấu phẩy: "Nhấp vào ""link"" này",1,1,0,brandname
+     → LLM thường không escape đúng RFC 4180 → parse error
+     → Content chứa dấu phẩy cần wrap quotes → LLM hay bỏ sót
+
+  ✅ Pipe-delimited: Nhấp vào "link" này|1|1|0|brandname
+     → Không cần escape, không cần wrap quotes
+     → gen_label_1.py parse bằng split("|") → re-serialize bằng csv.writer → RFC 4180
 ```
 
 **Coverage Matrix lý tưởng** (3 examples cho Label 1):
@@ -466,17 +742,13 @@ Lý do cần đủ 5 cột:
 
 ```
 ✅ Candidate 1 (brandname + fear + Level 1):
-  Input row: "VCB Digibank tran trong thong bao.tai khoan cua quy khach hien tai 
-              da bi khoa.Dang nhap www.vcbtiebink.com de xac thuc ngay hom nay",1,1,0,brandname
+  Input row: VCB Digibank tran trong thong bao.tai khoan cua quy khach hien tai da bi khoa.Dang nhap www.vcbtiebink.com de xac thuc ngay hom nay|1|1|0|brandname
 
 ✅ Candidate 2 (brandname + greed + Level 1):
-  Input row: "Vietcombank lưu ý: Bạn có 18699 điểm thưởng sẽ hết hạn sau 24 giờ, 
-              vui lòng truy cập: https://vietcombankd.cfd/vn để đổi quà.",1,1,0,brandname
+  Input row: Vietcombank lưu ý: Bạn có 18699 điểm thưởng sẽ hết hạn sau 24 giờ, vui lòng truy cập: https://vietcombankd.cfd/vn để đổi quà.|1|1|0|brandname
 
 ✅ Candidate 3 (brandname + fear + Level 2):
-  Input row: "UNG DUNG VCB DIGIBANK cua ban duoc PHAT HIEN KICH HOAT tren thiet bi la.
-              Neu KHONG PHA BAN KICH HOAT vui long bam vao https://vietcombank.vn-ms.top 
-              de doi thiet bi hoac huy de tranh mat tai san",1,1,0,brandname
+  Input row: UNG DUNG VCB DIGIBANK cua ban duoc PHAT HIEN KICH HOAT tren thiet bi la. Neu KHONG PHA BAN KICH HOAT vui long bam vao https://vietcombank.vn-ms.top de doi thiet bi hoac huy de tranh mat tai san|1|1|0|brandname
 
 ✅ Quyết định: Dùng cả 3 candidates trên làm few-shot cho Banking Fraud prompt.
    - Brand name (VCB, Vietcombank) giữ nguyên trong few-shot → calibrate style cụ thể từng bank
@@ -488,20 +760,16 @@ Lý do cần đủ 5 cột:
 
 ```
 ✅ Candidate 1 (Level 2, random code, TLD .icu):
-  "[T.B] BHXH: Ong (Ba) da du d!eu k!en NHAN T1EN h0 tro tu quy BH-TN. 
-   Bam vao www.mvndc.icu de lay. QUA HAN SE KH0NG_DUOC CHAP NHAN! oZGa",1,1,0,personal_number
+  [T.B] BHXH: Ong (Ba) da du d!eu k!en NHAN T1EN h0 tro tu quy BH-TN. Bam vao www.mvndc.icu de lay. QUA HAN SE KH0NG_DUOC CHAP NHAN! oZGa|1|1|0|personal_number
 
 ✅ Candidate 2 (Level 3, NQ-116, TLD .icu):
-  "Theo _NQ_116, Ong (Ba) da du d!eu k!en NHAN TIEN ho tro tu quy BHTN. 
-   Bam vao www.pwmgh.icu de lay. QUA HAN SE KHONG_DUOC CHAP NHAN! hkDF",1,1,0,personal_number
+  Theo _NQ_116, Ong (Ba) da du d!eu k!en NHAN TIEN ho tro tu quy BHTN. Bam vao www.pwmgh.icu de lay. QUA HAN SE KHONG_DUOC CHAP NHAN! hkDF|1|1|0|personal_number
 
 ✅ Candidate 3 (Level 1, với dấu, TLD .icu):
-  "Ong/(Ba) da du d!eu'k!en NHAN'TIEN ho tro tu quy-BHTN. 
-   Bam'vao www.opaxa.icu de_'lay. QUA-HAN' SE KH0ng DUOC CHAP_NAHN! JKqc",1,1,0,personal_number
+  Ong/(Ba) da du d!eu'k!en NHAN'TIEN ho tro tu quy-BHTN. Bam'vao www.opaxa.icu de_'lay. QUA-HAN' SE KH0ng DUOC CHAP_NAHN! JKqc|1|1|0|personal_number
 
 ✅ Candidate 4 (Level 2, TLD .com – biến thể mo.[random].com):
-  "BHXH VN: Ong(Ba) DU DIEU KIEN nhan tien ho tro BHTN dot 3.
-   Nhan tai: mo.cvxqa.com truoc khi QUA HAN. tPkm",1,1,0,personal_number
+  BHXH VN: Ong(Ba) DU DIEU KIEN nhan tien ho tro BHTN dot 3. Nhan tai: mo.cvxqa.com truoc khi QUA HAN. tPkm|1|1|0|personal_number
 ```
 
 > **Phân tích domain overlap:** Cả 4 candidates đều dùng domain pattern ngẫu nhiên – đây là **Level A overlap** (pattern trùng, string khác) và là chủ ý đúng đắn, phản ánh thực tế scammer dùng random subdomain. Điều quan trọng hơn là **string domain không được trùng nhau** (Level B) trong cùng một batch sinh ra.
@@ -537,32 +805,19 @@ Lý do cần đủ 5 cột:
 
 ```
 ✅ Candidate 1 (Amazon, Zalo link + greed, Level 0, has_url=1, has_phone=1):
-  "Amazon cần tuyển nhân viên làm việc tại nhà!!! Yêu cầu 23-60 tuổi. 
-   Lương 10tr-50tr/tháng. Ít nhất 500k~3000k/ngày, thao tác đơn giản. 
-   Liên hệ Zalo: zalo.me/84938271045 Zalo: 84938271045",1,1,1,personal_number
+  Amazon cần tuyển nhân viên làm việc tại nhà!!! Yêu cầu 23-60 tuổi. Lương 10tr-50tr/tháng. Ít nhất 500k~3000k/ngày, thao tác đơn giản. Liên hệ Zalo: zalo.me/84938271045 Zalo: 84938271045|1|1|1|personal_number
 
 ✅ Candidate 2 (Cty HVS generic, formal style, Level 0, has_url=1, has_phone=1):
-  "Xin chào, tôi là trưởng phòng nhân sự của Cty HVS, tuyển nhân viên bán thời gian. 
-   Thu nhập 15-30tr/tháng. Làm tại nhà, mọi lúc mọi nơi. Tuổi 22-65. 
-   Zalo: zalo.me/84962183074 hoặc 84962183074",1,1,1,personal_number
+  Xin chào, tôi là trưởng phòng nhân sự của Cty HVS, tuyển nhân viên bán thời gian. Thu nhập 15-30tr/tháng (500k-1tr/ngày). Làm tại nhà, mọi lúc mọi nơi. Tuổi 22-65. Zalo: zalo.me/84962183074 hoặc 84962183074|1|1|1|personal_number
 
 ✅ Candidate 3 (Tiki "đặt đơn nâng rank", Level 0, has_url=0, has_phone=1):
-  "Xin chào, mình là giám đốc marketing của Tiki. Cửa hàng Tiki đang tuyển số lượng 
-   lớn nhân viên chuyên đặt hàng để nâng cao số lượng giao dịch và thứ hạng cửa hàng. 
-   Chỉ cần có kinh nghiệm mua sắm trực tuyến, mỗi ngày bạn có thể dễ dàng kiếm 
-   800.000đ bằng điện thoại di động. Lương quyết toán ngay trong ngày. 
-   Zalo: 84769231508",1,0,1,personal_number
+  Xin chào, mình là giám đốc marketing của Tiki. Cửa hàng Tiki đang tuyển số lượng lớn nhân viên chuyên đặt hàng để nâng cao số lượng giao dịch và thứ hạng cửa hàng. Chỉ cần có kinh nghiệm mua sắm trực tuyến, mỗi ngày bạn có thể dễ dàng kiếm 800.000đ bằng điện thoại di động. Lương quyết toán ngay trong ngày. Zalo: 84769231508|1|0|1|personal_number
 
 ✅ Candidate 4 (TikTok "xử lý đơn hàng", Level 1 – bỏ dấu, has_url=1, has_phone=1):
-  "Tiktok dang tuyen nhan vien lam viec tai nha!!! Mo ta cong viec: Xu ly don hang 
-   tren nen tang Tiktok. Thu nhap 350-999k/ngay. Thao tac don gian, nhan tien sau 
-   13-25 phut. Lien he ngay: zalo.me/84937512094 zalo:84937512094",1,1,1,personal_number
+  Tiktok dang tuyen nhan vien lam viec tai nha!!! Mo ta cong viec: Xu ly don hang tren nen tang Tiktok. Thu nhap 350-999k/ngay. Thao tac don gian, nhan tien sau 13-25 phut. Lien he ngay: zalo.me/84937512094 zalo:84937512094|1|1|1|personal_number
 
 ✅ Candidate 5 (Shopee / Lazada "xử lý đơn + đánh giá SP", Level 0, has_url=1, has_phone=0):
-  "Shopee tuyen gap nhan vien xu ly don hang va danh gia san pham tai nha!!! 
-   Yeu cau 22-55 tuoi. Thu nhap 500k-1.5tr/ngay. Nhan tien trong ngay sau moi 
-   nhiem vu hoan thanh. Khong can kinh nghiem, co nguoi huong dan cu the. 
-   Dang ky: zalo.me/84918273645",1,1,0,personal_number
+  Shopee tuyen gap nhan vien xu ly don hang va danh gia san pham tai nha!!! Yeu cau 22-55 tuoi. Thu nhap 500k-1.5tr/ngay. Nhan tien trong ngay sau moi nhiem vu hoan thanh. Khong can kinh nghiem, co nguoi huong dan cu the. Dang ky: zalo.me/84918273645|1|1|0|personal_number
 ```
 
 > **Phân tích đặc trưng từng platform (trích từ `dataset_label_1.csv`):**
@@ -596,24 +851,19 @@ Lý do cần đủ 5 cột:
 
 ```
 ✅ Candidate 1 (Level 1, t.ly, tracking code, personal_number):
-  "Dang ky + 558k! (Nap 50k nhan 108k) 1 vong cuoc la rut MAXX 8.888k. 
-   No Hu. Ban Ca. BCR... DK: t.ly/DJyj1 ZnReS",1,1,0,personal_number
+  Dang ky + 558k! (Nap 50k nhan 108k) 1 vong cuoc la rut MAXX 8.888k. No Hu. Ban Ca. BCR... DK: t.ly/DJyj1 ZnReS|1|1|0|personal_number
 
 ✅ Candidate 2 (Level 2, .cc domain, dotted-platform list, personal_number):
-  "G.em moi Awin tag ban 299k khi tai app, x3 nap dau, rut ngay ko can nap, 
-   choi TLMN, X.oc-D.ia, N.ohu...dinhcao. click: https://athd.cc/5TyUoM",1,1,0,personal_number
+  G.em moi Awin tag ban 299k khi tai app, x3 nap dau, rut ngay ko can nap, choi TLMN, X.oc-D.ia, N.ohu...dinhcao. click: https://athd.cc/5TyUoM|1|1|0|personal_number
 
 ✅ Candidate 3 (Level 0, casino formal, short domain, personal_number):
-  "Để chào mừng năm mới, Kim Long tặng ngay 68-888K khi đăng ký tại: d82yy.com, hãy liên hệ CSKH để nhận. Quý vị có thể trải nghiệm các trò chơi: Baccarat trực tiếp, chọi gà, điện tử, thể thao, xổ số v.v. Gửi và rút tiền trong vòng 3 phút, CSKH 24/24",1,1,0,personal_number
+  Để chào mừng năm mới, Kim Long tặng ngay 68-888K khi đăng ký tại: d82yy.com, hãy liên hệ CSKH để nhận. Quý vị có thể trải nghiệm các trò chơi: Baccarat trực tiếp, chọi gà, điện tử, thể thao, xổ số v.v. Gửi và rút tiền trong vòng 3 phút, CSKH 24/24|1|1|0|personal_number
 
 ✅ Candidate 4 (Level 1, .vip domain, đại lý/hoa hồng recruit, shortcode):
-  "V7 top 3 nha cai VN, tuyen dai ly voi muc hoa hong len den 50%, 
-   tra hoa hong nhieu hinh thuc, lien he zalo Van: 0932187456 
-   Link: https://v7bet.vip",1,1,1,shortcode
+  V7 top 3 nha cai VN, tuyen dai ly voi muc hoa hong len den 50%, tra hoa hong nhieu hinh thuc, lien he zalo Van: 0932187456 Link: https://v7bet.vip|1|1|1|shortcode
 
 ✅ Candidate 5 (Level 3, slash-dash obfuscation, .cc domain, personal_number):
-  "D/Ki + 558k. ( N-ap 5Ok nhän 1O8k ) 1 vong cuöc la rut MAXX 8.888k. 
-   Htra tuc thi 3%. N/ö h/ü - B/än C/ä. BCR... DK: ibvif.cc/LbFzDg ~noyc",1,1,0,personal_number
+  D/Ki + 558k. ( N-ap 5Ok nhän 1O8k ) 1 vong cuöc la rut MAXX 8.888k. Htra tuc thi 3%. N/ö h/ü - B/än C/ä. BCR... DK: ibvif.cc/LbFzDg ~noyc|1|1|0|personal_number
 ```
 
 > **Phân tích đặc trưng từng sub-type (trích từ `dataset_label_1.csv`):**
@@ -658,6 +908,148 @@ Few-shot examples được trích từ data thực nên có thể chứa thông 
    "Ông/Bà Trần Minh Khoa..."   → Model học: pattern tên Việt 3 tiếng
    "CMND số 079123456789"       → Model học: CCCD = 12 chữ số
 ```
+
+---
+
+### 8.7 Candidates cho Debt/Threat Examples (Cat 2)
+
+**Coverage Matrix:**
+
+| Candidate | Style | Obf Level | has_url | has_phone | sender_type | Unique pattern |
+|---|---|---|---|---|---|---|
+| C1 | CANH BAO LAN CUOI, tên + CMND + SĐT Zalo | 0 | 0 | 1 | personal_number | Đe dọa công khai MXH + gia đình |
+| C2 | Trung tâm tín dụng formal, số tiền + % tối thiểu | 0 | 0 | 0 | personal_number | Hai mức tiền: gốc + tối thiểu |
+| C3 | Phòng AN NINH ĐIỀU TRA, deadline giờ cụ thể | 1 | 0 | 0 | personal_number | "chiu trach nhiem hinh su" |
+
+```
+✅ Candidate 1 (CANH BAO LAN CUOI, tên + CMND + SĐT, Level 0, has_url=0, has_phone=1):
+  CANH BAO LAN CUOI!!! Trong 24H nua Ong/Ba Nguyen Thi Lan CMND: 046079231845 phai lien he gap SDT/ZALO: 0352891743 gap Tran Van Duc de THOA THUAN-GIAM NO. Neu KHONG HOP TAC thanh toan KHOAN VAY 3,947,000VND se Cong Khai HINH ANH va THONG TIN len XA HOI, DIA PHUONG va thong bao nguoi than.|1|0|1|personal_number
+
+✅ Candidate 2 (Trung tâm tín dụng formal, 2 mức tiền, Level 0, has_url=0, has_phone=0):
+  Trung Tam Tin Dung F&TB den Ong/Ba: So CMND: 024091768345. Chung toi nghi ngo Ong/Ba lam dung tin nhiem chiem doat tai san voi so tien: 48,554,336VND (tien goc). Canh bao lan cuoi truoc 16H Ngay 25/03 thanh toan toi thieu: 3,725,583VND. Tiep tuc bat hop tac, moi rui ro ve Uy tin Danh du Tai san Ong/Ba tu chiu.|1|0|0|personal_number
+
+✅ Candidate 3 (Phòng AN NINH ĐIỀU TRA, deadline giờ, Level 1, has_url=0, has_phone=0):
+  [CANH CAO LAN CUOI]: Chung toi da nhac nho nhieu lan nhung O/B van bat hop tac. Truoc 17g hom nay chua thanh toan, Phong AN NINH DIEU TRA se vao cuoc dieu tra toan bo thong tin hinh anh cua O/B va nhung nguoi lien quan se phai chiu trach nhiem hinh su. LH khi san sang: 84912654378.|1|0|0|personal_number
+```
+
+> **Phân tích đặc trưng (trích từ `dataset_label_1.csv` rows 6, 41, 155, 156):**
+>
+> | Pattern | Từ khoá đặc trưng | has_url | has_phone |
+> |---|---|---|---|
+> | **Công ty tài chính** | "CANH BAO LAN CUOI", tên người + CMND, số tiền không tròn, deadline giờ | 0 | 1 (SĐT Zalo local 10 số) |
+> | **Trung tâm tín dụng** | "Trung Tam Tin Dung", 2 mức tiền (gốc + tối thiểu), "tu chiu trach nhiem" | 0 | 0 |
+> | **Cơ quan điều tra giả** | "Phong AN NINH DIEU TRA", "chiu trach nhiem hinh su", deadline giờ | 0 | 0 |
+>
+> **Lưu ý `has_phone`:** SĐT local 10 số (0xxxxxxxxx) trong nội dung → `has_phone=1`. SĐT dạng quốc tế (84xxxxxxxxx) → `has_phone=0` theo convention của `dataset_label_1.csv`.
+
+> ⚠️ **Anonymization note**: Tên người (Lê Hoàng Nam → Nguyen Thi Lan, Nguyen Van Tai → Tran Van Duc), CMND (079095012345 → 046079231845), SĐT (0901234567 → 0352891743) đã được thay hoàn toàn. SĐT trong C3 dùng format quốc tế `84xxxxxxxxx` theo đúng row 6 gốc.
+
+---
+
+### 8.8 Candidates cho Government Fake Examples (Cat 6)
+
+**Coverage Matrix:**
+
+| Candidate | Cơ quan | Sub-type | sender_type | has_url | has_phone | Level |
+|---|---|---|---|---|---|---|
+| C1 | CSGT | Hồ sơ vi phạm + link .top | brandname | 1 | 0 | 0 |
+| C2 | Bộ GTVT | Biên lai phạt + SĐT | brandname | 0 | 1 | 0 |
+| C3 | CSGT | Tiền phạt chưa thanh toán + link .top | shortcode | 1 | 0 | 0 |
+| C4 | Tổng cục Thuế | Hoàn thuế TNCN + link .vip, obfuscated | personal_number | 1 | 0 | 2 |
+
+```
+✅ Candidate 1 (CSGT + link .top, Level 0, has_url=1, has_phone=0, brandname):
+  Cảnh sát Giao thông Việt Nam: Hồ sơ vi phạm giao thông được lưu trữ dưới tên của bạn. Để biết thêm thông tin, vui lòng truy cập https://dichvucongs.top/vn|1|1|0|brandname
+
+✅ Candidate 2 (Bộ GTVT + biên lai + SĐT, Level 0, has_url=0, has_phone=1, brandname):
+  Bộ giao thông vận tải, xin thông báo ông/bà có biên lai chưa nộp phạt. Hôm nay là thông báo cuối cùng. Yêu cầu nhanh chóng giải quyết mọi thắc mắc. Vui lòng liên hệ: 0782341890|1|0|1|brandname
+
+✅ Candidate 3 (CSGT + tiền phạt + link .top, Level 0, has_url=1, has_phone=0, shortcode):
+  Cảnh sát Giao thông Việt Nam: Hiện tại bạn đang có khoản tiền phạt chưa thanh toán. Vui lòng thanh toán sớm để tránh bất tiện. Để biết thêm thông tin, vui lòng truy cập https://dichvucongg.top/vn|1|1|0|shortcode
+
+✅ Candidate 4 (Hoàn thuế TNCN + link .vip, Level 2 obfuscated, has_url=1, has_phone=0, personal_number):
+  #Ban da-du D1EU K1EN HOAN~THUE TNCN nam 2024, nhan tai: https://hoanthue-tncn.vip|1|1|0|personal_number
+```
+
+> **Phân tích đặc trưng (trích từ `dataset_label_1.csv` rows 14, 60, 63, 113, 87, 119):**
+>
+> | Sub-type | Từ khoá đặc trưng | Domain pattern | sender |
+> |---|---|---|---|
+> | **CSGT** | "hồ sơ vi phạm giao thông", "khoản tiền phạt chưa thanh toán" | dichvucong[s/g].top | brandname, shortcode |
+> | **Bộ GTVT** | "biên lai chưa nộp phạt", "thông báo cuối cùng", SĐT liên hệ | (không có link) | brandname |
+> | **Thuế / Hoàn thuế** | "đủ điều kiện hoàn thuế TNCN", obfuscation Level 2+ | hoanthue-tncn.vip | personal_number |
+
+> ⚠️ **Anonymization note**: C2 phone `0782320830` (real data row 14) đã được thay bằng `0782341890`. C1, C3, C4 không có thông tin cá nhân – dùng nguyên từ real data.
+
+---
+
+### 8.9 Candidates cho Sensitive Content Examples (Cat 7)
+
+**Coverage Matrix:**
+
+| Candidate | Sub-type | Obf Level | Platform | sender_type | Unique pattern |
+|---|---|---|---|---|---|
+| C1 | Hẹn hò / dịch vụ, leet nặng | 3 | Telegram | personal_number | tjnh, K0, NG0N, B0DY |
+| C2 | Hẹn hò / dịch vụ, vowel-leet | 3 | Zalo group | personal_number | s4n sang, hi4nh, gi4 |
+| C3 | Dot-split extreme | 4 | Telegram (sourl.cn) | personal_number | h.e.n h.0 tách từng chữ |
+
+```
+✅ Candidate 1 (Level 3, Telegram t.me, leet substitution, personal_number):
+  Anh co can GAI LAM tjnh K0? E di lam them kiem tien tieu vat EM 20 T DANG NG0N, B0DY chuan Den tan noi LAM TJNH Ket Ban Telegram: https://t.me/gaixinh_hcm QNfT|1|1|0|personal_number
+
+✅ Candidate 2 (Level 3, Zalo group link, vowel-leet style, personal_number):
+  Em 20t ng0n b0dy chuan, s4n sang phuc vu qu4 anh. LH nhan hinh & b4ng gi4 d!ch vu qua Zalo group: https://zalo.me/g/gaixinhHCM2024 TpMv|1|1|0|personal_number
+
+✅ Candidate 3 (Level 4, dot-split obfuscation, shortlink, personal_number):
+  H.e.n h.0 t.i.n.h m.0.t d.e.m c.u.n.g e.m g@! x.i.n.h d.e.p t.a.i H.C.M. K.e.t b.a.n T.e.l.e.g.r.a.m: https://sourl.cn/abc123 dKqr|1|1|0|personal_number
+```
+
+> **Phân tích đặc trưng (trích từ `dataset_label_1.csv` row 52 + Section 4.1):**
+>
+> | Pattern | Obf technique | Platform | Tracking code |
+> |---|---|---|---|
+> | Leet substitution | j=t, K0=không, NG0N, B0DY | Telegram (t.me) | Có (3–5 ký tự cuối) |
+> | Vowel-number | 4=a, i4nh, gi4 | Zalo group | Có |
+> | Dot-split | mỗi ký tự cách nhau bằng dấu chấm | Telegram/shortlink | Có |
+>
+> **Lưu ý an toàn:** Candidates ở Level 3–4 đủ đặc trưng để model nhận dạng pattern nhưng không chứa nội dung explicit. Phù hợp với safety framing của prompt (nghiên cứu bảo mật).
+
+> ⚠️ **Anonymization note**: C1 dùng nguyên từ real data row 52 (Telegram handle là thông tin giả/hết hiệu lực). C2, C3 được tổng hợp từ pattern thực tế vì real data không có đủ đa dạng sub-type.
+
+---
+
+### 8.10 Candidates cho Crypto/Investment Examples (Cat 8)
+
+**Coverage Matrix:**
+
+| Candidate | Sub-type | Obf Level | has_url | has_phone | sender_type | Unique pattern |
+|---|---|---|---|---|---|---|
+| C1 | Thả tim / 10 nhiệm vụ/ngày | 0 | 0 | 0 | personal_number | Tone thân thiện, trả 20h cuối ngày |
+| C2 | Giáo viên hướng dẫn + Telegram | 2 | 1 | 0 | personal_number | "20 phút/ngày", 500k–3000k |
+| C3 | Chuyển khoản đầu tư + STK ngân hàng | 0 | 0 | 0 | personal_number | Tên công ty giả + số tài khoản |
+
+```
+✅ Candidate 1 (thả tim / nhiệm vụ, Level 0, has_url=0, has_phone=0, personal_number):
+  Chào bạn, mình là Hùng, chuyên viên hỗ trợ. Bạn đang muốn làm công việc thả tim video kiếm tiền bên mình đúng không? Hàng ngày bên mình sẽ gửi cho bạn 10 nhiệm vụ, mỗi nhiệm vụ bạn làm trong 1 phút. Sau khi hết 10 nhiệm vụ, bên mình sẽ trả cho bạn 100K chuyển vào tài khoản (20h cuối ngày).|1|0|0|personal_number
+
+✅ Candidate 2 (giáo viên + Telegram, Level 2 – vowel substitution, has_url=1, has_phone=0, personal_number):
+  Chi cän 2O phut möi ngäy giäo vien chuyen nghiep cö the huong dän ban kiem 500k-3000k, Them Telegram: t.me/huongnghieptainha01|1|1|0|personal_number
+
+✅ Candidate 3 (chuyển khoản đầu tư giả, Level 0, has_url=0, has_phone=0, personal_number):
+  Anh/chi hay chuyen so tien can nap vao tai khoan sau, sau do chup man hinh em se lam lenh nap vao tai khoan dau tu CSI ngay. NH MSB STK: 04001023847291 TK: CONG TY TNHH DAU TU BDS SSG|1|0|0|personal_number
+```
+
+> **Phân tích đặc trưng (trích từ `dataset_label_1.csv` rows 120, 135, 190, 191):**
+>
+> | Sub-type | Từ khoá đặc trưng | has_url | Tone |
+> |---|---|---|---|
+> | **Thả tim / nhiệm vụ** | "10 nhiệm vụ", "1 phút/nhiệm vụ", "100K", "trả 20h cuối ngày" | 0 | Thân thiện, như bạn bè |
+> | **Giáo viên + Telegram** | "20 phút/ngày", "giáo viên chuyên nghiệp", "500k–3000k" | 1 | Nhẹ obfuscation |
+> | **Chuyển khoản đầu tư** | Tên công ty + STK ngân hàng, "lệnh nạp vào tài khoản" | 0 | Formal, hướng dẫn step-by-step |
+>
+> **Phân biệt với Job Scam (Cat 4):** Crypto/Đầu tư KHÔNG đề cập nền tảng TMĐT (Shopee, TikTok Shop), KHÔNG có Zalo phone contact, thu nhập được frame là "đầu tư / nhiệm vụ" thay vì "lương tháng".
+
+> ⚠️ **Anonymization note**: C1 và C3 dùng nguyên từ real data (rows 135, 120). C2 Telegram handle được thay từ handle thật (`t.me/Nguyenthingocthuy00`) bằng handle giả (`t.me/huongnghieptainha01`). STK ngân hàng C3 giữ nguyên – đây là tài khoản của scammer, không phải nạn nhân.
 
 ---
 
@@ -732,22 +1124,46 @@ def check_distribution(filepath: str):
 
 ## 10. Roadmap cải tiến
 
-### 10.1 Ưu tiên ngay (Sprint hiện tại)
+### 10.1 Sprint 1 – Xây dựng nền tảng (Đã hoàn thành)
 
-- [ ] **[P0]** Chọn và điền few-shot examples vào Section 8
-- [ ] **[P0]** Thiết kế BHXH prompt hoàn chỉnh (Section 7.3) – thiếu hoàn toàn trong v2
-- [ ] **[P0]** Thiết kế Debt/Threat prompt (Section 7.4) – thiếu hoàn toàn trong v2
-- [ ] **[P1]** Map đầy đủ Category → Psychology trong `gen_label_1.py`
+- [x] **[P0]** Chọn và xây dựng few-shot library cho tất cả 8 categories (Sections 8.2–8.5, 8.7–8.10)
+- [x] **[P0]** Thiết kế BHXH prompt draft (Section 7.3)
+- [x] **[P0]** Thiết kế Debt/Threat prompt draft (Section 7.4)
+- [x] **[P0]** Thiết kế Dịch vụ công prompt draft (Section 7.5)
+- [x] **[P0]** Thiết kế Nội dung nhạy cảm prompt draft (Section 7.6)
+- [x] **[P0]** Thiết kế Crypto/Đầu tư prompt draft (Section 7.7)
+- [x] **[P0]** Map đầy đủ 8 Category trong `gen_label_1.py` (`SCENARIOS` dictionary)
+- [x] **[P0]** Phân tích anonymization rules (Section 8.6)
 
-### 10.2 Ưu tiên tiếp theo
+**Trạng thái sau Sprint 1 → Sprint 2 (Hoàn thành):**
 
+| Category | Few-shot | Prompt Template | Trạng thái |
+|---|---|---|---|
+| 1 – Giả mạo ngân hàng | ✅ 8.2 (3 candidates) | ✅ 7.2 (hoàn chỉnh) | ✅ Hoàn thành |
+| 2 – Đòi nợ / Đe dọa | ✅ 8.7 (3 candidates) | ✅ 7.4 (hoàn chỉnh) | ✅ Hoàn thành |
+| 3 – BHXH / Trợ cấp | ✅ 8.3 (4 candidates) | ✅ 7.3 (hoàn chỉnh) | ✅ Hoàn thành |
+| 4 – Tuyển dụng giả | ✅ 8.4 (5 candidates) | ✅ 7.8 (hoàn chỉnh) | ✅ Hoàn thành |
+| 5 – Cờ bạc / Betting | ✅ 8.5 (5 candidates) | ✅ 7.9 (hoàn chỉnh) | ✅ Hoàn thành |
+| 6 – Dịch vụ công | ✅ 8.8 (4 candidates) | ✅ 7.5 (hoàn chỉnh) | ✅ Hoàn thành |
+| 7 – Nội dung nhạy cảm | ✅ 8.9 (3 candidates) | ✅ 7.6 (hoàn chỉnh) | ✅ Hoàn thành |
+| 8 – Crypto / Đầu tư | ✅ 8.10 (3 candidates) | ✅ 7.7 (hoàn chỉnh) | ✅ Hoàn thành |
+
+### 10.2 Sprint 2 – Hoàn thiện Prompt Templates (Hiện tại)
+
+- [x] **[P0]** Thiết kế prompt template cho **Job Scam** (Cat 4) – Section 7.8
+- [x] **[P0]** Thiết kế prompt template cho **Gambling** (Cat 5) – Section 7.9
+- [x] **[P0]** Final review & cross-check toàn bộ templates ↔ few-shot (phiên thứ tám)
+- [x] **[P0]** Áp dụng 4 sửa đổi: A1 (HVS daily rate), A2 (STK Crypto), A3 (Debt sub-type), B1 (egeR prefix)
+- [x] **[P0]** Giải quyết vấn đề Quote Escaping trong CSV → đổi sang pipe-delimited (phiên thứ chín)
+- [x] **[P0]** Cập nhật toàn bộ QUY TẮC FORMAT (8 templates) và 30 few-shot candidates sang pipe-delimited
+- [x] **[P0]** Điền few-shot examples vào `[PLACEHOLDER]` trong tất cả 8 prompt templates (phiên thứ mười)
 - [ ] **[P1]** Thêm "Negative examples" vào prompt (chỉ rõ output KHÔNG mong muốn)
 - [ ] **[P1]** Thử nghiệm few-shot với 2 vs 3 examples → so sánh diversity
-- [ ] **[P2]** Tạo Category-specific temperature: Level 4–5 obfuscation cần temperature cao hơn
-- [ ] **[P2]** Thiết kế prompt cho nội dung nhạy cảm (Level 4–5) – an toàn với safety filter
 
-### 10.3 Đánh giá sau khi hoàn thành
+### 10.3 Sprint 3 – Chạy & Đánh giá
 
+- [ ] Chạy thử batch nhỏ (10–20 rows/category) → kiểm tra format CSV và metadata
+- [ ] **[P1]** Tạo category-specific `temperature`: Level 4–5 obfuscation cần temperature cao hơn
 - [ ] Chạy KNN similarity giữa synthetic và real data → đo Fidelity
 - [ ] Đo inter-sample cosine similarity → đo Diversity
 - [ ] Chạy thử mô hình với old vs new synthetic data → đo impact thực tế
@@ -902,4 +1318,224 @@ Phân biệt 2 cấp độ overlap hoàn toàn khác nhau về mức độ ảnh
 | 7 – Nội dung nhạy cảm | ❌ Chưa có | ❌ Chưa có | Defer – safety filter |
 | 8 – Crypto / Đầu tư | ❌ Chưa có | ❌ Chưa có | Cần làm |
 
-**Bước tiếp theo:** Thiết kế prompt template cho 4 category đã có few-shot (Cat 1, 3, 4, 5), ưu tiên theo thứ tự tác động lớn nhất đến dataset quality.
+**Bước tiếp theo:** ~~Thiết kế prompt template cho 4 category đã có few-shot (Cat 1, 3, 4, 5)~~ → **Đã điều chỉnh trong phiên thứ bảy**: ưu tiên xây dựng few-shot + draft template cho 4 category còn thiếu hoàn toàn (Cat 2, 6, 7, 8) trước để đưa toàn bộ 8 categories về trạng thái "có nền tảng". Xem phiên thảo luận thứ bảy và thứ tám bên dưới.
+
+---
+
+### [2026-03-23] Phiên thảo luận thứ bảy – Hoàn thiện toàn bộ Prompt Templates (Section 7) & Few-Shot Library (Section 8)
+
+**Chủ đề thảo luận:** Xây dựng đồng thời nội dung cho 4 category chưa có template/few-shot (Cat 2, 6, 7, 8) **và** thiết kế template cho 2 category còn thiếu (Cat 4, 5) – đưa toàn bộ 9 prompt templates về trạng thái "draft hoàn chỉnh".
+
+**Lý do điều chỉnh ưu tiên so với kế hoạch phiên 6:**
+- Phiên 6 dự kiến thiết kế template cho 4 category *đã có* few-shot (Cat 1, 3, 4, 5)
+- Quyết định: ưu tiên bổ sung 4 category *chưa có gì* (Cat 2, 6, 7, 8) trước để đưa cả 8 categories về cùng baseline; sau đó ngay trong phiên này thiết kế nốt 2 template còn thiếu (Cat 4, 5)
+
+**Nội dung đã thực hiện:**
+
+*Section 7 – Prompt Templates (6 templates được thêm/cập nhật):*
+- **7.4 (Đòi nợ / Đe dọa)**: Thay placeholder bằng draft đầy đủ. CANH BAO LAN CUOI + tên/CMND giả + số tiền không tròn + deadline giờ + đe dọa leo thang. Constraint cứng: `has_url=0` luôn luôn.
+- **7.5 (Dịch vụ công giả)**: Template mới. 3 sub-type: CSGT (link .top), Bộ GTVT (SĐT), Thuế/Hoàn thuế (link .vip). Sender đa dạng: brandname/shortcode/personal_number.
+- **7.6 (Nội dung nhạy cảm)**: Template mới. Bắt buộc Level 3–5 obfuscation, Telegram/Zalo link, tracking code cuối mỗi dòng. Safety framing nghiên cứu bảo mật.
+- **7.7 (Crypto / Đầu tư giả)**: Template mới. 3 sub-type: thả tim (has_url=0), Telegram nhiệm vụ (has_url=1), chuyển khoản STK (has_url=0). Tone thân thiện – phân biệt với Job Scam.
+- **7.8 (Tuyển dụng giả)**: Template mới. Platform-specific sub-type: Amazon/eBay/TikTok (Zalo link + số), Shopee/Lazada (Zalo link only), Tiki (số trực tiếp, has_url=0). Thu nhập/ngày thay lương/tháng.
+- **7.9 (Cờ bạc / Betting)**: Template mới. 4 sub-type: nạp X nhận Y + tracking code / platform promo dot-insert / casino formal / đại lý hoa hồng (shortcode). `has_url=1` luôn luôn. Constraint: tracking code và domain khác nhau mỗi dòng.
+
+*Section 8 – Few-Shot Candidates (4 sections được thêm mới):*
+- **8.7 (Debt/Threat, 3 candidates)**: C1 từ row 41 (CANH BAO + tên+CMND+SĐT Zalo), C2 từ row 155 (Trung tâm tín dụng formal, 2 mức tiền), C3 từ row 6 (Phòng AN NINH ĐIỀU TRA). `has_url=0` trong cả 3.
+- **8.8 (Government Fake, 4 candidates)**: C1 row 60 (CSGT brandname + link .top), C2 row 14 (Bộ GTVT+SĐT), C3 row 63 (CSGT shortcode + link .top), C4 row 113 (Hoàn thuế obf Level 2).
+- **8.9 (Sensitive Content, 3 candidates)**: C1 row 52 (real data, leet Level 3), C2–C3 tổng hợp từ pattern (vowel-leet + dot-split Level 4).
+- **8.10 (Crypto/Investment, 3 candidates)**: C1 row 135 (thả tim, has_url=0), C2 row 190 (giáo viên+Telegram, Level 2), C3 row 120 (chuyển khoản STK ngân hàng).
+
+**Trạng thái sau phiên thứ bảy – tất cả 8 categories:**
+
+| Category | Few-shot | Prompt Template | Trạng thái |
+|---|---|---|---|
+| 1 – Giả mạo ngân hàng | ✅ 8.2 (3 candidates) | 🔨 7.2 (draft) | Chờ điền few-shot vào template |
+| 2 – Đòi nợ / Đe dọa | ✅ 8.7 (3 candidates) | 🔨 7.4 (draft) | Chờ điền few-shot vào template |
+| 3 – BHXH / Trợ cấp | ✅ 8.3 (4 candidates) | 🔨 7.3 (draft) | Chờ điền few-shot vào template |
+| 4 – Tuyển dụng giả | ✅ 8.4 (5 candidates) | 🔨 7.8 (draft) | Chờ điền few-shot vào template |
+| 5 – Cờ bạc / Betting | ✅ 8.5 (5 candidates) | 🔨 7.9 (draft) | Chờ điền few-shot vào template |
+| 6 – Dịch vụ công | ✅ 8.8 (4 candidates) | 🔨 7.5 (draft) | Chờ điền few-shot vào template |
+| 7 – Nội dung nhạy cảm | ✅ 8.9 (3 candidates) | 🔨 7.6 (draft) | Chờ điền few-shot vào template |
+| 8 – Crypto / Đầu tư | ✅ 8.10 (3 candidates) | 🔨 7.7 (draft) | Chờ điền few-shot vào template |
+
+**Điểm cần thảo luận sâu (chưa chốt):**
+
+1. **8.7 C3 (Đòi nợ)**: SĐT dạng quốc tế `84912654378` → `has_phone=0` theo convention. Có cần chuyển sang local `0xxxxxxxxx` để `has_phone=1` không?
+2. **8.8 (Dịch vụ công)**: Hiện bao phủ CSGT + Bộ GTVT + Thuế. Có cần thêm sub-type VNeID / Bộ Công an không?
+3. **8.9 C2, C3**: Tổng hợp từ pattern (không có trong real data) – cần xác nhận mức obfuscation đủ realistic không?
+4. **8.10 C3**: STK ngân hàng `04001012266596` giữ nguyên từ real data (tài khoản scammer). Có cần thay bằng STK giả không?
+
+**Quyết định pending:**
+- [x] Thảo luận và chốt 4 điểm trên → xem phiên thảo luận thứ tám bên dưới
+- [ ] Điền few-shot vào `[PLACEHOLDER]` trong tất cả 8 prompt templates (Sprint 2 còn lại)
+
+---
+
+### [2026-03-23] Phiên thảo luận thứ tám – Final Review & Áp dụng sửa đổi
+
+**Chủ đề thảo luận:** Kiểm tra kỹ lưỡng lần cuối toàn bộ document trước khi điền few-shot vào templates; chốt các pending decisions từ phiên 7; áp dụng 4 sửa đổi phát hiện trong quá trình cross-check.
+
+**Phương pháp review:**
+Cross-check từng cặp (Template 7.x ↔ Few-shot 8.x) theo 4 tiêu chí: metadata 5 cột, sender_type coverage, psychology/obfuscation coverage, constraint consistency.
+
+**Issues phát hiện và đã xử lý:**
+
+1. **A1 – 8.4 C2 (HVS) vi phạm constraint "hàng ngày"** ✅ Đã sửa
+   - Template 7.8 quy định `"Thu nhập hàng ngày (KHÔNG dùng lương tháng đơn độc)"` nhưng C2 chỉ có `"15-30tr/tháng"` → thêm `"(500k-1tr/ngày)"` vào content
+
+2. **A2 – 8.10 C3 STK ngân hàng từ real data** ✅ Đã sửa
+   - `04001012266596` (tài khoản scammer thật) → thay bằng `04001023847291` (giả đúng format MSB 14 chữ số)
+   - Áp dụng nguyên tắc anonymization Section 8.6: thay thông tin thực bằng giả đúng format
+
+3. **A3 – Template 7.4 thiếu phân biệt 2 sub-type Đòi nợ** ✅ Đã sửa
+   - C3 (8.7) là sub-type "cơ quan điều tra" không có tên/CMND, mâu thuẫn với constraint "BẮT BUỘC" tên+CMND
+   - Bổ sung vào ĐẶC TRƯNG BẮT BUỘC: Sub-type A (~70%) → tên+CMND+số tiền bắt buộc; Sub-type B (~30%) → "O/B" generic + hình sự hóa, không cần tên/CMND
+
+4. **B1 – 8.8 C4 prefix "egeR" gây nhiễu** ✅ Đã sửa
+   - `"egeR #Ban da-du..."` → `"#Ban da-du D1EU K1EN HOAN~THUE TNCN nam 2024..."` 
+   - Bỏ tracking noise vô nghĩa, thêm năm `2024` giữ "token lạ" mở đầu có nghĩa
+
+**Pending decisions từ phiên 7 đã chốt:**
+
+| # | Quyết định | Kết luận |
+|---|---|---|
+| 1 | 8.7 C3 – `has_phone=0` cho `84912654378` | ✅ **Giữ nguyên** – đúng convention quốc tế vs local |
+| 2 | 8.8 – Có cần thêm VNeID/Bộ Công an few-shot? | ✅ **Không thêm** – template instruction đủ, model tự generalize |
+| 3 | 8.9 C2, C3 synthesized – có đủ realistic? | ✅ **Chấp nhận** – phản ánh đúng taxonomy obfuscation Section 4.3 |
+| 4 | 8.10 C3 – STK ngân hàng có cần thay không? | ✅ **Đã thay** (A2 ở trên) |
+
+**Issues được xác nhận KHÔNG cần sửa:**
+- Banking fraud (8.2): Thiếu few-shot shortcode → Chấp nhận, banking scam thực tế ~90% brandname/personal_number
+- Gov fake VNeID (8.8): Thiếu few-shot candidate → Chấp nhận, instruction text đủ để model generalize
+- Sensitive content (8.9) C2, C3 synthesized → Chấp nhận
+
+**Trạng thái sau phiên thứ tám – sẵn sàng điền few-shot:**
+
+| Category | Few-shot | Template | Trạng thái |
+|---|---|---|---|
+| 1 – Giả mạo ngân hàng | ✅ 8.2 (3 candidates) | ✅ 7.2 (sạch) | **Sẵn sàng điền** |
+| 2 – Đòi nợ / Đe dọa | ✅ 8.7 (3 candidates) | ✅ 7.4 (đã sửa A3) | **Sẵn sàng điền** |
+| 3 – BHXH / Trợ cấp | ✅ 8.3 (4 candidates) | ✅ 7.3 (sạch) | **Sẵn sàng điền** |
+| 4 – Tuyển dụng giả | ✅ 8.4 (5 candidates, đã sửa A1) | ✅ 7.8 (sạch) | **Sẵn sàng điền** |
+| 5 – Cờ bạc / Betting | ✅ 8.5 (5 candidates) | ✅ 7.9 (sạch) | **Sẵn sàng điền** |
+| 6 – Dịch vụ công | ✅ 8.8 (4 candidates, đã sửa B1) | ✅ 7.5 (sạch) | **Sẵn sàng điền** |
+| 7 – Nội dung nhạy cảm | ✅ 8.9 (3 candidates) | ✅ 7.6 (sạch) | **Sẵn sàng điền** |
+| 8 – Crypto / Đầu tư | ✅ 8.10 (3 candidates, đã sửa A2) | ✅ 7.7 (sạch) | **Sẵn sàng điền** |
+
+**Thứ tự ưu tiên điền `[PLACEHOLDER]` (Sprint 2):**
+1. Cat 3 (BHXH) → Cat 1 (Banking) → Cat 5 (Gambling) → Cat 7 (Sensitive) – 4 category không issue
+2. Cat 2 (Debt) → Cat 4 (Job) → Cat 6 (Gov) → Cat 8 (Crypto) – 4 category đã có sửa đổi
+
+**Quyết định pending:**
+- [ ] Điền few-shot vào `[PLACEHOLDER]` trong tất cả 8 prompt templates theo thứ tự trên
+
+---
+
+### [2026-03-23] Phiên thảo luận thứ chín – Quote Escaping & Pipe-Delimited Architecture
+
+**Chủ đề thảo luận:** Xử lý toàn diện vấn đề dấu nháy kép trong CSV output của LLM; thay đổi kiến trúc output format.
+
+**Vấn đề được phát hiện:**
+
+Root cause chain:
+1. LLM sinh ra CSV với dấu nháy kép không đúng RFC 4180 (ví dụ: `"Nhấp vào "link" này"` – internal quotes không được escape)
+2. `csv.reader` trong `extract_valid_rows()` (phiên bản cũ) có thể misparse hoặc reject dòng đó
+3. Dù có validate, script vẫn ghi **raw string từ LLM** (`f.write("\n".join(valid_rows))`) thay vì re-serialized string → malformed quotes đi thẳng vào file
+4. `pd.read_csv()` ở bước hậu xử lý gặp malformed CSV → parse sai hoặc crash
+
+**Nguyên tắc cốt lõi:** Không thể yêu cầu LLM không sinh ra dấu nháy trong nội dung tin nhắn – phải xử lý ở tầng kiến trúc.
+
+**Giải pháp đã áp dụng – hai lớp:**
+
+*Lớp 1 – Thay delimiter trong prompt: từ dấu phẩy (CSV) → dấu `|` (pipe)*
+- Ký tự `|` hầu như không xuất hiện trong SMS Việt Nam
+- LLM không cần quote, không cần escape gì cả
+- Output format: `content|label|has_url|has_phone_number|sender_type`
+
+*Lớp 2 – Parse-and-reserialize trong `gen_label_1.py` (người dùng tự sửa)*
+
+| Hàm/đoạn | Trước | Sau |
+|---|---|---|
+| `extract_valid_rows()` return type | `list[str]` (raw lines) | `list[list[str]]` (parsed rows) |
+| `extract_valid_rows()` logic | `csv.reader` trên từng line | `split("|")`, lấy last 4 parts làm metadata |
+| Header write | `f.write("content,label,...")` | `csv.writer(f).writerow([...])` |
+| Data write | `f.write("\n".join(valid_rows))` | `csv.writer(f, QUOTE_MINIMAL).writerows(valid_rows)` |
+| File open | `open(..., "w")` | `open(..., "w", newline="")` |
+
+*Lý do "last 4 parts" approach:*
+```
+line.split("|") → parts
+content  = "|".join(parts[:-4])   # nếu content có |, ghép lại đúng
+metadata = parts[-4:]              # label, has_url, has_phone, sender luôn ở cuối
+```
+Robust ngay cả khi content tình cờ chứa ký tự `|`.
+
+*Flow hoàn chỉnh sau thay đổi:*
+```
+LLM output (pipe, no quoting):
+  Nhấp vào "link" này để xac thuc|1|1|0|brandname
+
+extract_valid_rows():
+  → content = 'Nhấp vào "link" này để xac thuc'  (Python string bình thường)
+
+csv.writer ghi ra file (RFC 4180, tự động escape):
+  "Nhấp vào ""link"" này để xac thuc",1,1,0,brandname
+
+pd.read_csv(): parse hoàn toàn đúng ✅
+```
+
+**Thay đổi trong document (do assistant thực hiện):**
+1. Tất cả 8 `QUY TẮC FORMAT` trong Section 7 → đổi sang `QUY TẮC FORMAT (pipe-delimited)`
+2. Tất cả 30 few-shot candidates trong Section 8 → đổi sang pipe format (xóa `"..."` wrap, thay `,1,` → `|1|`, etc.)
+3. Section 8.1 → cập nhật nguyên tắc 4 (CSV → pipe-delimited) + giải thích lý do
+4. Roadmap 10.2 → thêm 2 dòng completed
+
+**Lưu ý còn lại:** `build_prompt()` trong `gen_label_1.py` (placeholder function) vẫn còn instruction CSV cũ – sẽ được thay thế hoàn toàn khi điền few-shot vào templates (Sprint 2 tiếp theo).
+
+**Quyết định pending:**
+- [x] Điền few-shot vào `[PLACEHOLDER]` trong tất cả 8 prompt templates → xem phiên thứ mười bên dưới
+
+---
+
+### [2026-03-23] Phiên thảo luận thứ mười – Hoàn thành Sprint 2: Điền few-shot vào 8 Templates
+
+**Chủ đề thảo luận:** Điền few-shot examples từ Section 8 vào tất cả 8 `[PLACEHOLDER]` trong Section 7, hoàn tất Sprint 2.
+
+**Nội dung đã thực hiện:**
+
+Theo thứ tự ưu tiên chốt ở phiên thứ tám (4 category không issue trước, 4 category đã sửa đổi sau):
+
+| Template | Few-shot điền vào | Số examples | Ghi chú |
+|---|---|---|---|
+| 7.2 – Giả mạo ngân hàng | 8.2 C1, C2, C3 | 3 | Bao phủ: fear+lock / greed+points / fear+device-activation |
+| 7.3 – BHXH / Trợ cấp | 8.3 C1, C2, C3, C4 | 4 | Bao phủ: Level 2 .icu / Level 3 NQ-116 / Level 1 dấu / .com variant |
+| 7.9 – Cờ bạc / Betting | 8.5 C1, C2, C3, C4, C5 | 5 | Bao phủ: t.ly / .cc / casino formal / đại lý shortcode / slash-dash obf |
+| 7.6 – Nội dung nhạy cảm | 8.9 C1, C2, C3 | 3 | Bao phủ: leet Level 3 / vowel-leet Zalo / dot-split Level 4 |
+| 7.4 – Đòi nợ / Đe dọa | 8.7 C1, C2, C3 | 3 | Bao phủ: Sub-A tên+CMND+Zalo / Sub-A 2 mức tiền / Sub-B cơ quan điều tra |
+| 7.8 – Tuyển dụng giả | 8.4 C1–C5 | 5 | Bao phủ: Amazon / HVS / Tiki / TikTok / Shopee |
+| 7.5 – Dịch vụ công | 8.8 C1, C2, C3, C4 | 4 | Bao phủ: CSGT brandname / GTVT SĐT / CSGT shortcode / Hoàn thuế obf |
+| 7.7 – Crypto / Đầu tư | 8.10 C1, C2, C3 | 3 | Bao phủ: thả tim / giáo viên+Telegram / chuyển khoản STK |
+
+**Quy tắc đặt few-shot trong template:**
+- Tiêu đề: `VÍ DỤ (few-shot – pipe-delimited, KHÔNG copy nguyên [loại thông tin], dùng làm tham chiếu style):`
+- Format: mỗi dòng = một pipe-delimited row đầy đủ 5 cột
+- Không có header, không có giải thích kèm theo từng dòng
+- Instruction "KHÔNG copy nguyên" nhắc LLM tham khảo style, không sao chép string cụ thể
+
+**Trạng thái Sprint 2 sau phiên thứ mười:**
+
+| Task | Trạng thái |
+|---|---|
+| Thiết kế 8 prompt template | ✅ Hoàn thành |
+| Xây dựng few-shot library 8 sections | ✅ Hoàn thành |
+| Điền few-shot vào 8 `[PLACEHOLDER]` | ✅ Hoàn thành |
+| Chuyển đổi sang pipe-delimited | ✅ Hoàn thành |
+| Final cross-check & 4 sửa đổi | ✅ Hoàn thành |
+
+**Sprint 2 – HOÀN THÀNH. Sẵn sàng chuyển sang Sprint 3.**
+
+**Bước tiếp theo (Sprint 3):**
+- Cập nhật `build_prompt()` trong `gen_label_1.py` để sử dụng 8 template mới
+- Chạy thử batch nhỏ (10–20 rows/category) → kiểm tra format và metadata
+- Đo chất lượng: KNN similarity vs real data (Fidelity), inter-sample cosine similarity (Diversity)

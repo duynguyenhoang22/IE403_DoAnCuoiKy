@@ -195,45 +195,42 @@ def call_api_with_retry(prompt: str) -> str:
     return ""
 
 
-def extract_valid_rows(raw_text: str) -> list[str]:
+def extract_valid_rows(raw_text: str) -> list[list[str]]:
     """
-    Lọc các dòng CSV hợp lệ từ response thô của model.
-
-    Loại bỏ:
-      - Markdown code fence (```csv ... ```)
-      - Dòng tiêu đề lặp lại
-      - Dòng giải thích bằng ngôn ngữ tự nhiên
-      - Dòng có label != 1 hoặc sender_type không hợp lệ
-      - Dòng có cấu trúc CSV sai (thiếu cột)
-
-    Lưu ý: Dùng csv.reader để xử lý đúng content có chứa dấu phẩy.
+    Parse pipe-delimited output từ LLM → trả về list các row đã parsed.
+    Dùng | làm delimiter: LLM không cần quote, không cần escape.
+    Để tránh lỗi khi content tình cờ chứa |, luôn lấy LAST 4 parts làm metadata.
     """
-    cleaned = raw_text.replace("```csv", "").replace("```", "")
-    valid: list[str] = []
+    cleaned = raw_text.replace("```csv", "").replace("```", "").strip()
+    valid: list[list[str]] = []
 
     for line in cleaned.splitlines():
         line = line.strip()
-        if not line or line.lower().startswith("content,"):
+        if not line or line.lower().startswith("content"):
             continue
 
-        # Parse bằng csv.reader để xử lý quoted fields
-        try:
-            row = next(csv.reader(io.StringIO(line)))
-        except csv.Error:
+        parts = line.split("|")
+        if len(parts) < 5:
             continue
 
-        if len(row) < 5:
+        # Lấy 4 cột cuối làm metadata (robust kể cả khi content chứa |)
+        label_val  = parts[-4].strip().strip("'\"")
+        has_url    = parts[-3].strip().strip("'\"")
+        has_phone  = parts[-2].strip().strip("'\"")
+        sender     = parts[-1].strip().strip("'\"")
+        # Tất cả phần còn lại (trước 4 cột cuối) ghép lại thành content
+        content    = "|".join(parts[:-4]).strip()
+
+        if label_val != "1":
+            continue
+        if sender not in VALID_SENDER_TYPES:
+            continue
+        if has_url not in ("0", "1") or has_phone not in ("0", "1"):
+            continue
+        if not content:
             continue
 
-        label_col  = row[1].strip().strip("'\"")
-        sender_col = row[4].strip().strip("'\"")
-
-        if label_col != "1":
-            continue
-        if sender_col not in VALID_SENDER_TYPES:
-            continue
-
-        valid.append(line)
+        valid.append([content, label_val, has_url, has_phone, sender])
 
     return valid
 
@@ -261,8 +258,9 @@ def main() -> None:
 
     # Khởi tạo file nếu chưa có
     if not os.path.exists(OUTPUT_FILE):
-        with open(OUTPUT_FILE, "w", encoding="utf-8-sig") as f:
-            f.write("content,label,has_url,has_phone_number,sender_type\n")
+        with open(OUTPUT_FILE, "w", encoding="utf-8-sig", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["content", "label", "has_url", "has_phone_number", "sender_type"])
 
     # Checkpoint: tiếp tục từ điểm dừng nếu file đã có dữ liệu
     current_total = count_existing_samples(OUTPUT_FILE)
@@ -294,8 +292,9 @@ def main() -> None:
             print("  ⚠️  Không có dòng CSV hợp lệ trong response. Bỏ qua batch.")
             continue
 
-        with open(OUTPUT_FILE, "a", encoding="utf-8-sig") as f:
-            f.write("\n".join(valid_rows) + "\n")
+        with open(OUTPUT_FILE, "a", encoding="utf-8-sig", newline="") as f:
+            writer = csv.writer(f, quoting=csv.QUOTE_MINIMAL)
+            writer.writerows(valid_rows)
 
         added          = len(valid_rows)
         current_total += added
