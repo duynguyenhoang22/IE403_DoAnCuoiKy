@@ -35,11 +35,66 @@ model = genai.GenerativeModel(MODEL_NAME)
 # =============================================================================
 # 2. KỊCH BẢN & PHONG CÁCH NHIỄU
 # =============================================================================
+# 8 category theo Section 7.1 của Prompt_Engineering_for_Smishing_SMS.md
+# Mỗi category có danh sách brand/entity để randomize mỗi batch
 SCENARIOS: dict[str, list[str]] = {
-    "Dịch vụ công":        ["VNeID", "Tổng cục Thuế", "Cục Viễn thông", "Bộ Công an", "BHXH"],
-    "Tuyển dụng & TMĐT":   ["TikTok Shop", "Shopee Mall", "Tiki", "Amazon Job", "Lazada"],
-    "Tài chính & Quà tặng":["Mcredit", "FE Credit", "Vietcombank", "Lì xì Tết 2026", "SHB Digibank"],
-    "Giải trí & Nhạy cảm": ["Telegram Hẹn hò", "789Bet", "Kwin668", "Gái xinh Zalo", "Cá độ bóng đá"],
+    # Cat 1 – Giả mạo ngân hàng
+    # Psychology: fear + urgency | sender: brandname (60%) | Obf: Level 1–2
+    "Giả mạo ngân hàng": [
+        "Vietcombank", "VCB Digibank", "BIDV", "Techcombank",
+        "ACB", "MB Bank", "TPBank", "SHB Digibank", "MSB", "Sacombank",
+    ],
+
+    # Cat 2 – Đòi nợ / Đe dọa
+    # Psychology: fear + authority | sender: personal_number | Obf: Level 0–1
+    # Không có brand cố định – dùng tên tổ chức đòi nợ giả
+    "Đòi nợ / Đe dọa": [
+        "Trung tâm Thu hồi Nợ", "Phòng An ninh Điều tra",
+        "Công ty Tài chính FE", "Mcredit", "Home Credit",
+        "HD Saison", "Mirae Asset",
+    ],
+
+    # Cat 3 – BHXH / Trợ cấp giả
+    # Psychology: greed + urgency | sender: personal_number | Obf: Level 2–3
+    "BHXH / Trợ cấp giả": [
+        "BHXH Việt Nam", "Quỹ BHTN", "Bộ LĐ-TB-XH",
+        "Hỗ trợ COVID-19", "Hoàn thuế TNCN", "Trợ cấp NQ-116",
+    ],
+
+    # Cat 4 – Tuyển dụng giả
+    # Psychology: greed | sender: personal_number | Obf: Level 0–2
+    "Tuyển dụng giả": [
+        "Amazon", "TikTok", "Shopee", "Lazada", "Tiki",
+        "eBay", "Cty HVS", "EMIME Company",
+    ],
+
+    # Cat 5 – Cờ bạc / Betting
+    # Psychology: greed | sender: personal_number, shortcode | Obf: Level 2–3
+    "Cờ bạc / Betting": [
+        "789Bet", "Kwin668", "V7Bet", "Kim Long Casino",
+        "8DAY", "JILI", "Awin", "Giải trí 2Q",
+    ],
+
+    # Cat 6 – Dịch vụ công giả
+    # Psychology: fear + authority | sender: brandname, shortcode | Obf: Level 1–2
+    "Dịch vụ công giả": [
+        "Cảnh sát Giao thông", "Bộ GTVT", "Tổng cục Thuế",
+        "VNeID", "Bộ Công an", "Bộ Y Tế", "Cục Viễn thông",
+    ],
+
+    # Cat 7 – Nội dung nhạy cảm
+    # Psychology: greed (nhu cầu) | sender: personal_number | Obf: Level 3–5
+    "Nội dung nhạy cảm": [
+        "Telegram Hẹn hò", "Zalo Gái xinh", "Dịch vụ người lớn",
+        "Hẹn hò tình một đêm", "Nhóm kín Telegram",
+    ],
+
+    # Cat 8 – Crypto / Đầu tư giả
+    # Psychology: greed | sender: personal_number | Obf: Level 1–3
+    "Crypto / Đầu tư giả": [
+        "TikTok nhiệm vụ", "Thả tim kiếm tiền", "Đặt đơn hàng online",
+        "Sàn đầu tư XYZ", "Copy trade Forex", "Nhóm Telegram đầu tư",
+    ],
 }
 
 TEENCODE_STYLES: list[str] = [
