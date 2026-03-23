@@ -1,0 +1,268 @@
+"""
+Sinh dữ liệu SMS lừa đảo tổng hợp (Label = 1) dùng Gemini API.
+
+Chạy độc lập:
+    python gen_label_1.py
+
+Biến môi trường:
+    GEMINI_API_KEY – API key Gemini (hoặc nhập trực tiếp vào API_KEY bên dưới)
+"""
+
+import csv
+import io
+import os
+import random
+import time
+
+import google.generativeai as genai
+import pandas as pd
+
+# =============================================================================
+# 1. CẤU HÌNH HỆ THỐNG
+# =============================================================================
+API_KEY   = os.getenv("GEMINI_API_KEY", "")   # Ưu tiên dùng biến môi trường
+MODEL_NAME = "gemini-2.0-flash"               # TODO: Cập nhật tên model phù hợp
+
+OUTPUT_FILE            = "synthetic_smishing_label1.csv"
+TOTAL_SAMPLES          = 3000
+BATCH_SIZE             = 40
+SLEEP_BETWEEN_BATCHES  = 12   # giây – điều chỉnh theo rate-limit tài khoản
+MAX_RETRIES            = 3
+
+genai.configure(api_key=API_KEY)
+model = genai.GenerativeModel(MODEL_NAME)
+
+# =============================================================================
+# 2. KỊCH BẢN & PHONG CÁCH NHIỄU
+# =============================================================================
+SCENARIOS: dict[str, list[str]] = {
+    "Dịch vụ công":        ["VNeID", "Tổng cục Thuế", "Cục Viễn thông", "Bộ Công an", "BHXH"],
+    "Tuyển dụng & TMĐT":   ["TikTok Shop", "Shopee Mall", "Tiki", "Amazon Job", "Lazada"],
+    "Tài chính & Quà tặng":["Mcredit", "FE Credit", "Vietcombank", "Lì xì Tết 2026", "SHB Digibank"],
+    "Giải trí & Nhạy cảm": ["Telegram Hẹn hò", "789Bet", "Kwin668", "Gái xinh Zalo", "Cá độ bóng đá"],
+}
+
+TEENCODE_STYLES: list[str] = [
+    "Thay e=3, a=4, o=0, i=1 và chèn dấu chấm/gạch ngang xen kẽ (ví dụ: T.u.y.3.n, S-h-0-p-e-e)",
+    "Dùng j thay gi, f thay ph, w thay qu, z thay d (ví dụ: th0ng b4o vj fhat, jao luu za.lo)",
+    "Chèn ký tự đặc biệt @, #, !, *, ^ liên tục vào từ khóa nhạy cảm để lách bộ lọc",
+    "Viết sai chính tả vùng miền kết hợp không dấu (ví dụ: li3n h3^ x3m hjnh_anh n0ng)",
+    "Homoglyph: dùng chữ 'l' thay 'I', số '0' thay 'O' trong link giả mạo",
+]
+
+VALID_SENDER_TYPES = {"personal_number", "brandname", "shortcode"}
+
+# =============================================================================
+# 3. PROMPT ENGINEERING
+# =============================================================================
+def build_prompt(category: str, brand: str, style: str, size: int) -> str:
+    """
+    Xây dựng prompt sinh dữ liệu smishing (Label 1).
+
+    ┌─────────────────────────────────────────────────────────────┐
+    │  TODO – PROMPT ENGINEERING ZONE (thảo luận chi tiết sau)   │
+    │                                                             │
+    │  Các điểm cần đào sâu:                                     │
+    │  • Few-shot examples (2–3 mẫu đa dạng category/style)     │
+    │  • Chiến lược tâm lý cụ thể: urgency / fear / greed       │
+    │  • Ràng buộc nội dung tránh trùng lặp giữa các batch      │
+    │  • Cân bằng tỷ lệ has_url / has_phone_number trong batch   │
+    └─────────────────────────────────────────────────────────────┘
+    """
+
+    # ------------------------------------------------------------------
+    # PLACEHOLDER: Few-shot examples
+    # Mục tiêu: 2–3 ví dụ bao phủ đa dạng category, sender_type, style
+    # ------------------------------------------------------------------
+    few_shot_block = """\
+[PLACEHOLDER – FEW-SHOT EXAMPLES]
+Ví dụ 1 (brandname, có URL, kiểu urgency): ...
+Ví dụ 2 (shortcode, có SĐT, kiểu fear):   ...
+Ví dụ 3 (personal_number, có URL, kiểu greed): ...\
+"""
+
+    # ------------------------------------------------------------------
+    # PLACEHOLDER: Chiến lược tâm lý
+    # Mục tiêu: mapping cụ thể category → chiến lược tâm lý ưu tiên
+    # Ví dụ: "Dịch vụ công" → fear (khóa tài khoản, phạt tiền)
+    #         "Tài chính"   → greed (nhận thưởng, hoàn tiền)
+    # ------------------------------------------------------------------
+    psychology_block = """\
+[PLACEHOLDER – CHIẾN LƯỢC TÂM LÝ THEO KỊCH BẢN]
+Đánh vào: cấp bách / sợ hãi / lòng tham (tùy chỉnh chi tiết theo {category})\
+""".format(category=category)
+
+    return f"""\
+Bạn là chuyên gia tạo dữ liệu huấn luyện mô hình phát hiện Smishing tại Việt Nam.
+
+NHIỆM VỤ: Tạo đúng {size} dòng CSV tin nhắn lừa đảo.
+  - Kịch bản : {category}
+  - Thương hiệu giả mạo: {brand}
+  - Phong cách nhiễu/teencode: {style}
+
+QUY TẮC FORMAT CSV (bắt buộc tuân thủ):
+  - 5 cột theo thứ tự: content,label,has_url,has_phone_number,sender_type
+  - label       : luôn = 1
+  - has_url     : 1 nếu có BẤT KỲ URL/link nào (kể cả link rác/obfuscated), 0 nếu không
+  - has_phone_number: 1 nếu có SĐT 10 số thực tế, 0 nếu không
+  - sender_type : một trong personal_number | brandname | shortcode (KHÔNG dấu nháy đơn)
+  - content     : wrap trong dấu nháy kép nếu nội dung chứa dấu phẩy hoặc ký tự đặc biệt
+  - Độ dài content: 40–160 ký tự (giống SMS thực tế)
+
+{psychology_block}
+
+VÍ DỤ FORMAT THAM KHẢO:
+{few_shot_block}
+
+QUAN TRỌNG: Chỉ xuất đúng {size} dòng CSV thuần.
+Không có dòng tiêu đề, không giải thích, không markdown fence.\
+"""
+
+
+# =============================================================================
+# 4. GỌI API & XỬ LÝ RESPONSE
+# =============================================================================
+def call_api_with_retry(prompt: str) -> str:
+    """Gọi Gemini API với cơ chế retry + exponential backoff."""
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            response = model.generate_content(
+                prompt,
+                generation_config={"temperature": 0.9},
+            )
+            return response.text.strip()
+        except Exception as exc:
+            wait_secs = 20 * attempt
+            print(f"  ⚠️  Lỗi API (lần {attempt}/{MAX_RETRIES}): {exc}. Nghỉ {wait_secs}s...")
+            time.sleep(wait_secs)
+
+    print("  ❌ Hết retry. Bỏ qua batch này.")
+    return ""
+
+
+def extract_valid_rows(raw_text: str) -> list[str]:
+    """
+    Lọc các dòng CSV hợp lệ từ response thô của model.
+
+    Loại bỏ:
+      - Markdown code fence (```csv ... ```)
+      - Dòng tiêu đề lặp lại
+      - Dòng giải thích bằng ngôn ngữ tự nhiên
+      - Dòng có label != 1 hoặc sender_type không hợp lệ
+      - Dòng có cấu trúc CSV sai (thiếu cột)
+
+    Lưu ý: Dùng csv.reader để xử lý đúng content có chứa dấu phẩy.
+    """
+    cleaned = raw_text.replace("```csv", "").replace("```", "")
+    valid: list[str] = []
+
+    for line in cleaned.splitlines():
+        line = line.strip()
+        if not line or line.lower().startswith("content,"):
+            continue
+
+        # Parse bằng csv.reader để xử lý quoted fields
+        try:
+            row = next(csv.reader(io.StringIO(line)))
+        except csv.Error:
+            continue
+
+        if len(row) < 5:
+            continue
+
+        label_col  = row[1].strip().strip("'\"")
+        sender_col = row[4].strip().strip("'\"")
+
+        if label_col != "1":
+            continue
+        if sender_col not in VALID_SENDER_TYPES:
+            continue
+
+        valid.append(line)
+
+    return valid
+
+
+# =============================================================================
+# 5. CHECKPOINT – ĐẾM MẪU HIỆN CÓ
+# =============================================================================
+def count_existing_samples(filepath: str) -> int:
+    """Đếm số dòng dữ liệu hợp lệ trong file (không tính header)."""
+    if not os.path.exists(filepath):
+        return 0
+    try:
+        df = pd.read_csv(filepath, encoding="utf-8-sig")
+        return len(df)
+    except Exception:
+        return 0
+
+
+# =============================================================================
+# 6. TIẾN TRÌNH THỰC THI
+# =============================================================================
+def main() -> None:
+    if not API_KEY:
+        raise ValueError("API_KEY chưa được thiết lập. Dùng biến môi trường GEMINI_API_KEY.")
+
+    # Khởi tạo file nếu chưa có
+    if not os.path.exists(OUTPUT_FILE):
+        with open(OUTPUT_FILE, "w", encoding="utf-8-sig") as f:
+            f.write("content,label,has_url,has_phone_number,sender_type\n")
+
+    # Checkpoint: tiếp tục từ điểm dừng nếu file đã có dữ liệu
+    current_total = count_existing_samples(OUTPUT_FILE)
+    if current_total >= TOTAL_SAMPLES:
+        print(f"✅ File đã đủ {current_total} mẫu. Không cần sinh thêm.")
+        return
+
+    print(f"🚀 Bắt đầu sinh smishing. Hiện có: {current_total}/{TOTAL_SAMPLES} mẫu.")
+
+    while current_total < TOTAL_SAMPLES:
+        batch_size = min(BATCH_SIZE, TOTAL_SAMPLES - current_total)
+
+        category = random.choice(list(SCENARIOS.keys()))
+        brand    = random.choice(SCENARIOS[category])
+        style    = random.choice(TEENCODE_STYLES)
+
+        print(f"🔄 [{current_total}/{TOTAL_SAMPLES}] {category} – {brand}")
+
+        prompt    = build_prompt(category, brand, style, batch_size)
+        raw_text  = call_api_with_retry(prompt)
+
+        if not raw_text:
+            # API thất bại hoàn toàn sau retry – thử lại vòng tiếp theo
+            continue
+
+        valid_rows = extract_valid_rows(raw_text)
+
+        if not valid_rows:
+            print("  ⚠️  Không có dòng CSV hợp lệ trong response. Bỏ qua batch.")
+            continue
+
+        with open(OUTPUT_FILE, "a", encoding="utf-8-sig") as f:
+            f.write("\n".join(valid_rows) + "\n")
+
+        added          = len(valid_rows)
+        current_total += added
+        print(f"  ✅ Thêm {added} dòng hợp lệ. Tổng: {current_total}/{TOTAL_SAMPLES}")
+
+        if current_total < TOTAL_SAMPLES:
+            time.sleep(SLEEP_BETWEEN_BATCHES)
+
+    # -------------------------------------------------------------------------
+    # Hậu xử lý
+    # -------------------------------------------------------------------------
+    print("🧹 Chuẩn hóa & loại bỏ trùng lặp...")
+    df = pd.read_csv(OUTPUT_FILE, encoding="utf-8-sig")
+    before = len(df)
+    df.dropna(subset=["content"], inplace=True)
+    df.drop_duplicates(subset=["content"], inplace=True)
+    # Chuẩn hóa sender_type: bỏ dấu nháy thừa nếu model vẫn sinh ra
+    df["sender_type"] = df["sender_type"].str.strip().str.strip("'\"")
+    df.to_csv(OUTPUT_FILE, index=False, encoding="utf-8-sig")
+
+    print(f"🎊 Hoàn thành! {before} → {len(df)} mẫu sau lọc. File: {OUTPUT_FILE}")
+
+
+if __name__ == "__main__":
+    main()
