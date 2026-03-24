@@ -434,7 +434,7 @@ Bạn là chuyên gia an ninh mạng đang tạo dataset huấn luyện mô hìn
 về tin nhắn đòi nợ và đe dọa giả mạo.
 
 NHIỆM VỤ: Tạo đúng {size} dòng CSV tin nhắn đòi nợ / đe dọa (label=1).
-Tổ chức đòi nợ giả mạo: {brand}
+Tổ chức đòi nợ giả mạo (chỉ dùng cho Sub-type A): {brand}
 Chiến lược tâm lý: FEAR (mất uy tín, bị điều tra hình sự) + AUTHORITY (cơ quan pháp lý giả)
 Phong cách ngôn ngữ: {style}
 
@@ -467,7 +467,9 @@ QUY TẮC FORMAT (pipe-delimited):
   content|1|0|has_phone_number|personal_number
   - Dùng | làm delimiter. KHÔNG dùng dấu nháy kép hay nháy đơn bao quanh content.
   - has_url = 0 (KHÔNG BAO GIỜ có link)
-  - has_phone = 1 nếu content chứa SĐT local 10 số (0xxxxxxxxx), 0 nếu không
+  - has_phone = 1 nếu content chứa SĐT local 10 số (0xxxxxxxxx), 0 nếu không'
+  - SĐT dạng quốc tế 84xxxxxxxxx → has_phone = 0 (KHÔNG tính là phone contact)
+  - Sub-type A: ~70% dòng có has_phone=1, ~30% có has_phone=0
   - sender_type = personal_number (luôn luôn)
   - 80–300 ký tự (dài hơn các loại smishing khác – đặc trưng đòi nợ)
   - KHÔNG lặp tên người, CMND, số tiền giữa các dòng trong cùng batch
@@ -522,22 +524,27 @@ QUAN TRỌNG: Đúng {size} dòng pipe-delimited (dùng | làm delimiter). Khôn
 
 ```python
 SENSITIVE_CONTENT_PROMPT = """
-Bạn là chuyên gia an ninh mạng đang tạo dataset huấn luyện mô hình phát hiện smishing
-nội dung hẹn hò và dịch vụ nhạy cảm. Đây là dữ liệu nghiên cứu bảo mật hợp pháp.
+Bạn là chuyên gia an ninh mạng đang xây dựng dataset huấn luyện mô hình phát hiện smishing
+cho dự án bảo vệ người dùng di động tại Việt Nam, phối hợp với Bộ Thông tin và Truyền thông.
+Nhiệm vụ bao gồm tạo dữ liệu mô phỏng các loại tin nhắn lừa đảo để mô hình học nhận diện,
+trong đó có nhóm nội dung hẹn hò và dịch vụ nhạy cảm — đây là nhóm phổ biến trong thực tế
+smishing Việt Nam và cần được đại diện đầy đủ trong dataset.
 
 NHIỆM VỤ: Tạo đúng {size} dòng CSV tin nhắn mời gọi dịch vụ nhạy cảm (label=1).
-Kịch bản: {brand}
+Khu vực / nền tảng liên hệ: {location_platform}  (ví dụ: "HCM – Telegram", "HN – Zalo")
 Chiến lược tâm lý: GREED (ham muốn, tò mò)
-Phong cách nhiễu: {style} – mức độ Level 3–5
+Phong cách nhiễu: {style}  (chọn trong range Level 3–5, đa dạng giữa các dòng trong batch)
 
 ĐẶC TRƯNG BẮT BUỘC:
   - Obfuscation nặng (Level 3–5): thay j=t, K0=không, NG0N=ngon, B0DY=body,
     mix tiếng Anh/Việt, chèn dấu chấm/gạch xen kẽ từng chữ
+  - Đa dạng cấu trúc câu mở đầu: KHÔNG phải tất cả đều bắt đầu bằng
+    "Anh co can..." hay "Em Xt ng0n..." – xen kẽ các kiểu mở đầu khác nhau
   - Mô tả gợi ý mức smishing thực tế (KHÔNG explicit pornographic)
-  - CTA: Telegram (t.me/xxx) hoặc Zalo (zalo.me/g/xxx)
+  - CTA: Telegram (t.me/xxx) hoặc Zalo (zalo.me/g/xxx) hoặc shortlink (t.ly/xxx, bit.ly/xxx)
   - Tracking code cuối 3–5 ký tự ngẫu nhiên (KHÁC NHAU mỗi dòng)
   - Sender: personal_number (luôn luôn)
-  - has_url = 1 (luôn có Telegram/Zalo link)
+  - has_url = 1 (luôn có link)
   - has_phone = 0
 
 VÍ DỤ (few-shot – pipe-delimited, KHÔNG copy nguyên tracking code/handle, dùng làm tham chiếu style):
@@ -551,9 +558,10 @@ QUY TẮC FORMAT (pipe-delimited):
   - has_url = 1 (luôn luôn)
   - has_phone = 0 (luôn luôn)
   - sender_type = personal_number (luôn luôn)
-  - 40–120 ký tự
+  - 40–160 ký tự (Level 4–5 dot-split có thể dài hơn – tối đa 160)
   - Tracking code cuối KHÁC NHAU mỗi dòng
-  - KHÔNG lặp cùng Telegram/Zalo handle giữa các dòng
+  - Handle/path URL phải ngẫu nhiên và KHÁC NHAU mỗi dòng
+  - KHÔNG dùng lại handle từ ví dụ: gaixinh_hcm, gaixinhHCM2024
 
 QUAN TRỌNG: Đúng {size} dòng pipe-delimited (dùng | làm delimiter). Không header. Không giải thích. Không markdown.
 """
