@@ -26,7 +26,7 @@ API_KEY    = os.getenv("GEMINI_API_KEY", "")
 MODEL_NAME = "gemini-3-flash-preview" 
 
 OUTPUT_FILE            = "synthetic_data/synthetic_smishing_label1_test.csv"
-TOTAL_SAMPLES          = 600
+TOTAL_SAMPLES          = 3000
 BATCH_SIZE             = 40
 SLEEP_BETWEEN_BATCHES  = 12   
 MAX_RETRIES            = 3
