@@ -1679,7 +1679,7 @@ Theo thứ tự ưu tiên chốt ở phiên thứ tám (4 category không issue 
 
 **Bước tiếp theo (Sprint 3):**
 
-- Cập nhật `build_prompt()` trong `gen_label_1_test.py` để sử dụng 8 template mới ✅ (đã hoàn thành trong code)
+- Cập nhật `build_prompt()` trong `gen_label_1.py` để sử dụng 8 template mới ✅ (đã hoàn thành trong code)
 - Chạy thử batch nhỏ (10–20 rows/category) → kiểm tra format và metadata
 - Đo chất lượng: KNN similarity vs real data (Fidelity), inter-sample cosine similarity (Diversity)
 
@@ -1687,7 +1687,7 @@ Theo thứ tự ưu tiên chốt ở phiên thứ tám (4 category không issue 
 
 ### [2026-03-26] Phiên thảo luận thứ mười một – Cross-Check Document ↔ Code & Cập nhật Đồng bộ
 
-**Chủ đề thảo luận:** Kiểm tra kỹ lưỡng toàn bộ mâu thuẫn giữa `gen_label_1_test.py` (code thực thi) và document này; áp dụng các sửa đổi cần thiết để đồng bộ hóa.
+**Chủ đề thảo luận:** Kiểm tra kỹ lưỡng toàn bộ mâu thuẫn giữa `gen_label_1.py` (code thực thi) và document này; áp dụng các sửa đổi cần thiết để đồng bộ hóa.
 
 **Phương pháp review:**
 So sánh từng cặp (Section document ↔ đoạn code tương ứng) theo 5 tiêu chí: tên file, phân phối sender_type, kiến trúc sinh batch, constraint TLD, trạng thái implement.
@@ -1698,16 +1698,15 @@ So sánh từng cặp (Section document ↔ đoạn code tương ứng) theo 5 t
 
 | ID | Vị trí | Mâu thuẫn | Hành động |
 |----|--------|-----------|-----------|
-| M1 | Header dòng 5 | Document ghi `gen_label_1.py` và `synthetic_2000_smishing_v2.csv` nhưng file code thực tế là `gen_label_1_test.py`, output là `synthetic_smishing_label1_test.csv` | ✅ Đã sửa tên file trong header |
-| M2 | Section 4.2 | Bảng phân phối sender_type ghi banking: "30% personal_number" trong khi code prompt cấm hẳn personal_number; thiếu dòng Crypto/Đầu tư | ✅ Đã cập nhật: banking → `brandname (~60%), shortcode (~40%) – KHÔNG dùng personal_number`; thêm dòng `Crypto / Đầu tư → 100% personal_number` |
-| M3 | Section 7.1 & 7.5 | Section 7.1 và QUY TẮC FORMAT của 7.5 không liệt kê `personal_number` cho Dịch vụ công, mâu thuẫn với Section 4.2 và code `_prompt_govt_fake()` | ✅ Đã cập nhật Section 7.1 và 7.5 để thêm `personal_number (~20%)` |
-| M4 | Section 6.3 | Pseudocode mô tả kiến trúc cũ: `brand = random.choice()` (1 brand), `OBFUSCATION_LEVELS`, `CATEGORY_PSYCHOLOGY` – các biến này không tồn tại trong code | ✅ Đã viết lại pseudocode phản ánh đúng: `brands_str`, `pick_mixed_style()`, `CATEGORY_OBF_RANGE` |
-| M5 | Section 10.2 / Phiên thứ chín | Note "build_prompt() vẫn còn instruction CSV cũ" đã lỗi thời – code đã dùng pipe-delimited hoàn chỉnh | ✅ Đã thêm "→ Đã hoàn thành ✅" vào note |
-| M6 | Section 7.5 QUY TẮC FORMAT | `has_url` constraint liệt kê TLD `.top/.xyz/.vip` nhưng thiếu `.cc` – trong khi code và few-shot C4 đều dùng `.cc` | ✅ Đã bổ sung `.cc` vào danh sách TLD |
-| M7 | Section 4.2 | Bảng phân phối sender_type thiếu category Crypto/Đầu tư | ✅ Đã thêm dòng (xử lý cùng M2) |
-| M8 | Phiên thứ bảy | Ghi "đưa toàn bộ **9** prompt templates" trong khi chỉ có 8 categories | ✅ Đã sửa thành "8 prompt templates" |
-| M9 | Section 7.4 QUY TẮC FORMAT | Dòng `has_phone` kết thúc bằng dấu nháy đơn thừa `'` | ✅ Đã xóa |
-| M10 | Section 9.1 & 9.3 | `validate_smishing_row()` và `check_distribution()` được trình bày như đã implement nhưng không có trong code | ✅ Đã thêm ghi chú "(sau khi đã đủ data - hiện chưa kiểm tra)" / "(hiện chưa triển khai)" vào heading |
+| M1 | Section 4.2 | Bảng phân phối sender_type ghi banking: "30% personal_number" trong khi code prompt cấm hẳn personal_number; thiếu dòng Crypto/Đầu tư | ✅ Đã cập nhật: banking → `brandname (~60%), shortcode (~40%) – KHÔNG dùng personal_number`; thêm dòng `Crypto / Đầu tư → 100% personal_number` |
+| M2 | Section 7.1 & 7.5 | Section 7.1 và QUY TẮC FORMAT của 7.5 không liệt kê `personal_number` cho Dịch vụ công, mâu thuẫn với Section 4.2 và code `_prompt_govt_fake()` | ✅ Đã cập nhật Section 7.1 và 7.5 để thêm `personal_number (~20%)` |
+| M3 | Section 6.3 | Pseudocode mô tả kiến trúc cũ: `brand = random.choice()` (1 brand), `OBFUSCATION_LEVELS`, `CATEGORY_PSYCHOLOGY` – các biến này không tồn tại trong code | ✅ Đã viết lại pseudocode phản ánh đúng: `brands_str`, `pick_mixed_style()`, `CATEGORY_OBF_RANGE` |
+| M4 | Section 10.2 / Phiên thứ chín | Note "build_prompt() vẫn còn instruction CSV cũ" đã lỗi thời – code đã dùng pipe-delimited hoàn chỉnh | ✅ Đã thêm "→ Đã hoàn thành ✅" vào note |
+| M5 | Section 7.5 QUY TẮC FORMAT | `has_url` constraint liệt kê TLD `.top/.xyz/.vip` nhưng thiếu `.cc` – trong khi code và few-shot C4 đều dùng `.cc` | ✅ Đã bổ sung `.cc` vào danh sách TLD |
+| M6 | Section 4.2 | Bảng phân phối sender_type thiếu category Crypto/Đầu tư | ✅ Đã thêm dòng (xử lý cùng M2) |
+| M7 | Phiên thứ bảy | Ghi "đưa toàn bộ **9** prompt templates" trong khi chỉ có 8 categories | ✅ Đã sửa thành "8 prompt templates" |
+| M8 | Section 7.4 QUY TẮC FORMAT | Dòng `has_phone` kết thúc bằng dấu nháy đơn thừa `'` | ✅ Đã xóa |
+| M9 | Section 9.1 & 9.3 | `validate_smishing_row()` và `check_distribution()` được trình bày như đã implement nhưng không có trong code | ✅ Đã thêm ghi chú "(sau khi đã đủ data - hiện chưa kiểm tra)" / "(hiện chưa triển khai)" vào heading |
 
 ---
 
@@ -1724,7 +1723,6 @@ So sánh từng cặp (Section document ↔ đoạn code tương ứng) theo 5 t
 
 | Tiêu chí | Trước phiên này | Sau phiên này |
 |---|---|---|
-| Tên file tham chiếu | ❌ Sai (`gen_label_1.py`) | ✅ Đúng (`gen_label_1_test.py`) |
 | Phân phối sender_type (banking) | ❌ Không khớp code | ✅ Khớp code |
 | Phân phối sender_type (Dịch vụ công) | ❌ Thiếu personal_number | ✅ Đầy đủ |
 | Phân phối sender_type (Crypto) | ❌ Thiếu dòng | ✅ Đã bổ sung |
@@ -1734,6 +1732,6 @@ So sánh từng cặp (Section document ↔ đoạn code tương ứng) theo 5 t
 | Trạng thái implement Section 9 | ❌ Không rõ là pseudocode | ✅ Ghi chú rõ ràng |
 
 **Bước tiếp theo (Sprint 3 – không thay đổi):**
-- Chạy `gen_label_1_test.py` batch nhỏ (10–20 rows/category) để kiểm tra format và metadata
+- Chạy `gen_label_1.py` batch nhỏ (10–20 rows/category) để kiểm tra format và metadata
 - Đo Fidelity (KNN similarity vs real data) và Diversity (inter-sample cosine similarity)
 
