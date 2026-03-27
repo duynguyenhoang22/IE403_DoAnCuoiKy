@@ -45,7 +45,7 @@ import pandas as pd
 # =============================================================================
 load_dotenv()
 API_KEY    = os.getenv("GEMINI_API_KEY", "")
-MODEL_NAME = "gemini-2.5-flash-preview-04-17"
+MODEL_NAME = "gemini-3-flash-preview"
 
 OUTPUT_FILE           = "synthetic_data/synthetic_legitimate_label0.csv"
 TOTAL_SAMPLES         = 3000
