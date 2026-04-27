@@ -31,7 +31,7 @@ except ImportError:
 def load_system(model_choice, threshold):
     model_paths = {
         "XGBoost (Tuned)": "../smishing_xgb.pkl",
-        "Best Model (RF)": "../best_model.pkl"
+        "Best Model": "../best_model.pkl"
     }
     
     model_path = model_paths.get(model_choice, "../best_model.pkl")

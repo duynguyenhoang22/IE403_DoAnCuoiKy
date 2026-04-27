@@ -3,7 +3,7 @@ import pandas as pd
 from predict_system import SmishingDetectionSystem
 
 # ─── CẤU HÌNH ── Chỉ cần sửa phần này ────────────────────────────────────────
-DATASET_PATH = "D:\\UIT\\TTXH\\IE403_DoAnCuoiKy\\synthetic_data\\dataset_mixed.csv"   # ← tên file CSV của bạn
+DATASET_PATH = "synthetic_data\\dataset_mixed.csv"   # ← tên file CSV của bạn
 TEXT_COL     = "content"            # ← cột nội dung SMS
 LABEL_COL    = "label"              # ← cột nhãn: 0 = ham, 1 = smishing
 SENDER_COL   = "sender_type"        # ← cột sender
@@ -12,7 +12,7 @@ IS_URL_COL   = "has_url"
 IS_PHONE_COL = "has_phone_number"
 N_SAMPLES    = 100
 RANDOM_SEED  = 42
-OUTPUT_PATH  = "D:\\UIT\\TTXH\\IE403_DoAnCuoiKy\\Smishing\\error_analysis_results.csv"
+OUTPUT_PATH  = "Smishing\\error_analysis_results.csv"
 # ──────────────────────────────────────────────────────────────────────────────
 
 class Color:

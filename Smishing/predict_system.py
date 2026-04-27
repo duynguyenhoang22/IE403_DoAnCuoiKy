@@ -15,16 +15,39 @@ except ImportError as e:
     exit()
 
 class SmishingDetectionSystem:
-    def __init__(self, model_path='best_model.pkl', encoder_path='sender_encoder.pkl', threshold=0.46, model_name='Default'):
-        self.threshold = threshold
+    def __init__(self, model_path='best_model.pkl', encoder_path='sender_encoder.pkl',
+                 threshold=None, model_name='Default'):
         self.model_name = model_name
-        print(f"🔄 Starting System (Threshold={self.threshold})...")
+        print(f"🔄 Starting System...")
         try:
             self.model = joblib.load(model_path)
             self.le = joblib.load(encoder_path)
             self.extractor = SmishingFeatureExtractor()
             self.verifier = DomainVerifier()
-            print("✅ SYSTEM READY!")
+
+            # Load metadata (feature_names & threshold) nếu có file .meta.pkl
+            meta_path = model_path.replace('.pkl', '.meta.pkl')
+            try:
+                meta = joblib.load(meta_path)
+                self.feature_names = meta.get('feature_names', None)
+                saved_threshold = meta.get('threshold', None)
+            except FileNotFoundError:
+                self.feature_names = None
+                saved_threshold = None
+
+            # Ưu tiên: threshold truyền vào > threshold trong meta > fallback 0.46
+            if threshold is not None:
+                self.threshold = threshold
+            elif saved_threshold is not None:
+                self.threshold = saved_threshold
+            else:
+                self.threshold = 0.46
+                warnings.warn(
+                    f"Không tìm thấy {meta_path}. Dùng threshold mặc định 0.46.",
+                    UserWarning
+                )
+
+            print(f"✅ SYSTEM READY! (Threshold={self.threshold:.4f})")
         except Exception as e:
             print(f"FAIL: {e}")
             exit()
@@ -35,18 +58,35 @@ class SmishingDetectionSystem:
         text = "".join(ch for ch in text if not unicodedata.combining(ch))
         return text.lower()
 
+    def _build_input_vector(self, text, sender_type):
+        """
+        Xây dựng vector đầu vào theo đúng thứ tự feature_names đã lưu lúc train.
+        Nếu không có metadata, dùng thứ tự mặc định [sender_code] + text_features.
+        """
+        text_features = self.extractor.extract_features(text)
+        try:
+            sender_code = int(self.le.transform([sender_type])[0])
+        except Exception:
+            warnings.warn(f"sender_type '{sender_type}' không có trong encoder. Dùng mã 0.", UserWarning)
+            sender_code = 0
+
+        if self.feature_names is not None:
+            import pandas as pd
+            feat_dict = {'sender_type': sender_code}
+            feat_dict.update(dict(zip(self.extractor.get_feature_names(), text_features)))
+            # Tái tạo vector theo đúng thứ tự feature_names đã train
+            row = pd.DataFrame([[feat_dict.get(col, 0) for col in self.feature_names]],
+                               columns=self.feature_names)
+            return row
+        else:
+            return [[sender_code] + text_features]
+
     def predict(self, text, sender_type='unknown'):
         # ---------------------------------------------------------
         # BƯỚC 1: AI SCORING (BASELINE)
         # ---------------------------------------------------------
-        text_features = self.extractor.extract_features(text)
-        try:
-            sender_code = self.le.transform([sender_type])[0]
-        except:
-            sender_code = 0 
-            
-        full_vector = [sender_code] + text_features
-        ai_prob = float(self.model.predict_proba([full_vector])[:, 1][0])
+        input_vector = self._build_input_vector(text, sender_type)
+        ai_prob = float(self.model.predict_proba(input_vector)[:, 1][0])
 
         # ---------------------------------------------------------
         # BƯỚC 2: DOMAIN VERIFICATION
