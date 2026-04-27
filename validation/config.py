@@ -1,14 +1,9 @@
 # ─── config.py ──────────────────────────────────────────────────────────────
 
 import os
+from dotenv import load_dotenv
 
-# ── API Keys (đọc từ environment variables) ──────────────────────────────────
-API_KEYS = {
-    "gemini":   os.getenv("GOOGLE_API_KEY",     ""),
-    "grok":     os.getenv("XAI_API_KEY",        ""),
-    "qwen":     os.getenv("DASHSCOPE_API_KEY",  ""),
-    "deepseek": os.getenv("DEEPSEEK_API_KEY",   ""),
-}
+load_dotenv()
 
 # ── Model endpoints & names (free tier) ──────────────────────────────────────
 MODEL_CONFIG = {
