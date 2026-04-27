@@ -102,25 +102,17 @@ class SmishingDetectionSystem:
 
         # --- LOGIC 2: WHITELIST (RISK = -1.0) ---
         elif risk_score == -1.0:
-            ugc_keywords = ['google', 'drive', 'docs', 'sheet', 'form', 'dropbox', 'bit.ly', 'tinyurl', 'zalopay']
-            is_ugc_platform = any(kw in domain_reason.lower() for kw in ugc_keywords)
 
-            if is_ugc_platform:
-                if ai_prob > 0.65:
-                    final_score = ai_prob
-                    is_smishing = True
-                    decision_phase = "Hybrid Warning"
-                    final_reason = f"Cảnh báo: Tên miền sạch ({domain_reason}) nhưng nội dung có dấu hiệu lừa đảo."
-                else:
-                    final_score = 0.2
-                    is_smishing = False
-                    decision_phase = "Hybrid Safe"
-                    final_reason = "An toàn: Tên miền dịch vụ lưu trữ/rút gọn uy tín."
+            if ai_prob > 0.65:
+                final_score = ai_prob
+                is_smishing = True
+                decision_phase = "Hybrid Warning"
+                final_reason = f"Cảnh báo: Tên miền sạch ({domain_reason}) nhưng nội dung có dấu hiệu lừa đảo."
             else:
-                final_score = 0.0
+                final_score = 0.2
                 is_smishing = False
-                decision_phase = "Authority Whitelist"
-                final_reason = f"An toàn: Tên miền chính chủ đã được xác thực ({domain_reason})."
+                decision_phase = "Hybrid Safe"
+                final_reason = "An toàn: Tên miền dịch vụ lưu trữ/rút gọn uy tín."
 
         # --- LOGIC 3: AI DECISION ---
         else:
