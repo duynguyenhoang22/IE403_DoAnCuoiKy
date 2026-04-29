@@ -1,0 +1,828 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{balance}
+\usepackage{multirow}
+\usepackage[T5]{fontenc}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+% ── Document ──────────────────────────────────────────────────────────────────
+\begin{document}
+
+\title{A Hybrid Smishing Detection Framework: Integrating Machine Learning,
+Rule-Based Filtering, and Domain Reputation Analysis}
+
+
+
+% \author{
+%     \IEEEauthorblockN{
+%     Duy Hoang Nguyen\IEEEauthorrefmark{1}\IEEEauthorrefmark{2}\IEEEauthorrefmark{3}\IEEEauthorrefmark{4},
+%     Hai Nguyen-Nam Tran\IEEEauthorrefmark{1}\IEEEauthorrefmark{2}\IEEEauthorrefmark{3}\IEEEauthorrefmark{4},
+%     Hai Thanh Tran\IEEEauthorrefmark{1}\IEEEauthorrefmark{2}\IEEEauthorrefmark{3}\IEEEauthorrefmark{4},\\
+%     Quan Anh Vo\IEEEauthorrefmark{1}\IEEEauthorrefmark{2}\IEEEauthorrefmark{3}\IEEEauthorrefmark{4},
+%     Vu Truong Cao\IEEEauthorrefmark{1}\IEEEauthorrefmark{2}\IEEEauthorrefmark{3}\IEEEauthorrefmark{4},
+%     Tin Van Huynh\IEEEauthorrefmark{1}\IEEEauthorrefmark{2}\IEEEauthorrefmark{3}\IEEEauthorrefmark{5}
+% }
+%     \IEEEauthorblockA{
+%         \IEEEauthorrefmark{1}Faculty of Information Science and Engineering\\
+%         \IEEEauthorrefmark{2}University of Information Technology, Ho Chi Minh City, Vietnam\\
+%         \IEEEauthorrefmark{3}Vietnam National University, Ho Chi Minh City, Vietnam\\
+%         \IEEEauthorrefmark{4}\texttt{\{22520327, 22520391, 22520392, 22521192, 22521686\}@gm.uit.edu.vn}\\
+%         \IEEEauthorrefmark{5}\texttt{tinhv@uit.edu.vn}
+%     }
+% }
+
+
+
+\author{
+    \IEEEauthorblockN{Anonymous Authors}
+}
+
+\maketitle
+
+% ── Abstract ──────────────────────────────────────────────────────────────────
+\begin{abstract}
+The rise of SMS phishing (smishing) attacks poses a significant threat to
+mobile security, particularly for Vietnamese users whose linguistic environment
+is inadequately served by existing international solutions.
+This paper makes three primary contributions.
+First, we construct a Vietnamese smishing dataset comprising 2,600
+labeled SMS messages, collected from real-world devices and
+community-sourced reports.
+Second, we propose a Hybrid Smishing Detection Framework featuring a
+four-layer linguistic preprocessing pipeline designed to handle
+Vietnamese text obfuscation, including teencode, Leetspeak, and broken Telex
+input.
+Third, we integrate this pipeline with a tree-based ML classifier and a
+Hybrid Decision Logic that incorporates Domain Verification.
+On a held-out test set of 520 samples, the XGBoost-based system achieves an
+overall accuracy of 97.5\% and a smishing recall of 78\%, outperforming
+single-model baselines in the precision-recall trade-off relevant to
+cyber-security deployment.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Smishing, SMS Phishing, Machine Learning, Vietnamese NLP,
+Linguistic Feature Extraction, Hybrid Architecture
+\end{IEEEkeywords}
+
+% ── 1. INTRODUCTION ───────────────────────────────────────────────────────────
+\section{Introduction}
+
+In the modern digital era, SMS remains one of the most reliable communication
+channels, with an open rate and near-immediate readership that far surpass those of other channels such as email.
+This trust has made it a prime vector for \textit{smishing} (SMS Phishing) - a
+form of social engineering where attackers deceive victims into revealing
+sensitive information or installing malware. In Vietnam, attackers routinely
+impersonate banks, e-commerce platforms, and government agencies, often
+exploiting Brandname abuse to bypass traditional filters, causing significant
+financial and data losses for unsuspecting users.
+
+Existing defenses remain limited: static blacklists and simple keyword
+matching fail against obfuscated text (teencode, Leetspeak, mixed-character
+URLs) and dynamic URL shorteners. Advanced ML pipelines from the international
+literature are furthermore optimized for English; applying them to Vietnamese
+yields suboptimal results due to diacritical marks, tone-dependent semantics,
+and local obfuscation conventions. To the best of our knowledge, no
+comprehensive system currently adapts these architectures specifically for
+the Vietnamese linguistic and telecommunication landscape.
+
+We define the smishing detection task as a binary text classification problem.
+Given an incoming SMS message $T$ with sender type $S$, the system must assign
+a label $L \in \{\textit{Smishing},\, \textit{Legitimate}\}$. Formally:
+
+\begin{itemize}
+    \item \textbf{Input:} A tuple $(T, S)$, where $T$ is the raw SMS message
+          body and $S$ denotes the sender type (e.g. Brandname, Phone Number,
+          Unknown).
+    \item \textbf{Output:} A label $L$, a confidence score
+          $\text{Score} \in [0,1]$, and a natural-language explanation of the
+          decision.
+\end{itemize}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\columnwidth]{fig1_examples.jpg}
+    \caption{Exambples for each type of SMS.}
+    \label{fig:domain}
+\end{figure}
+
+To address the challenges above, we propose a Hybrid Real-Time Smishing
+Detection System tailored for Vietnamese. Our key contributions are:
+\begin{enumerate}
+    \item \textbf{Dataset:} A composite Vietnamese dataset of 2,600 labeled
+          SMS samples built via dual-channel acquisition and a five-annotator
+          majority-vote protocol.
+    \item \textbf{Framework:} A four-layer linguistic preprocessing pipeline
+          for Vietnamese, combined with an ML classifier and deterministic
+          Domain Verification integrated through a Hybrid Decision Logic.
+    \item \textbf{Experiments:} Comparative evaluation of Decision Tree,
+          Random Forest, and XGBoost demonstrating our hybrid approach
+          outperforms TF-IDF baselines in the precision-recall trade-off
+          critical for cyber-security deployment.
+\end{enumerate}
+% ── 2. RELATED WORKS ──────────────────────────────────────────────────────────
+\section{Related Works}
+\label{sec:related}
+
+\subsection{Related Methods}
+
+The landscape of smishing detection has evolved from simple rule-based filters
+toward increasingly sophisticated machine learning and deep learning approaches.
+Broad surveys confirm that machine learning is among the most promising
+anti-smishing methods, yet continuous evaluation of algorithms is required as
+attacker tactics evolve~\cite{mahmood2023review}. Within this space, deep
+learning architectures have attracted significant attention: Mahmud
+\textit{et al.}~\cite{mahmud2024hybrid} propose a hybrid model combining
+Bidirectional Gated Recurrent Units (Bi-GRUs) with Convolutional Neural
+Networks (CNNs) for smishing classification, while Mehmood
+\textit{et al.}~\cite{mehmood2024smishing} aggregate CNNs and Long Short-Term
+Memory (LSTM) networks to automatically extract features from SMS text and
+reduce false-positive rates. Beyond text-only input, Shinde
+\textit{et al.}~\cite{shinde2024ocr} expand the feature space using optical
+character recognition (OCR) to detect scams embedded in image-based messages,
+combining unsupervised and deep semi-supervised learning.
+
+Despite their expressive power, deep architectures demand large labeled
+corpora and sacrifice interpretability-two critical constraints in our
+setting. Mishra and Soni~\cite{mishra2023dsmishsms} demonstrate that a
+Defense-in-Depth hybrid coupling a Domain Checking Phase (URL validation via
+search-engine signatures) with an SMS Classification Phase based on five
+hand-crafted features achieves 97.93\% accuracy while remaining fully
+interpretable. Goel \textit{et al.}~\cite{goel2024smishing} further show
+that explicit text normalization before classification yields 96.2\% accuracy
+on an English dataset; we extend this normalization philosophy to Vietnamese,
+where tone-mark interactions, Telex artifacts, and Leet obfuscation demand a
+multi-layer pipeline rather than a single normalization pass. Mishra and Soni
+also found that 74.22\% of smishing messages contain character substitutions
+(e.g. ``P@ytm''$\to$``Paytm'') to bypass keyword filters, a finding
+corroborated by Li and Zeng~\cite{li2021leet} who document how such
+substitutions systematically evade dictionary-based detectors-a challenge
+amplified in Vietnamese due to diacritical marks. Crucially, Tuan
+\textit{et al.}~\cite{tuan2023vietnamese} evaluate SVM, Naïve Bayes, Random
+Forests, CNN, and LSTM specifically on Vietnamese SMS, noting measurable
+performance differences when processing text with and without diacritics and
+confirming that language-specific treatment is indispensable. Building on
+these findings, we adopt XGBoost~\cite{chen2016xgboost}-a scalable
+tree-boosting system with a sparsity-aware split-finding algorithm and
+second-order gradient statistics-as our core classifier, since the
+28-dimensional dense feature vector produced by our linguistic pipeline
+constitutes exactly the kind of structured, heterogeneous input for which
+gradient-boosted trees excel over both shallow models and sparse TF-IDF
+representations, while remaining interpretable and efficient for real-time
+deployment.
+
+\subsection{Related Datasets}
+
+A persistent challenge in smishing research is the scarcity of labeled,
+publicly available datasets that reflect real-world attack patterns. Almeida
+\textit{et al.}~\cite{almeida2011sms} introduced the UCI SMS Spam Collection,
+comprising 5,574 English-language messages, which became the de facto
+benchmark for SMS spam research; however, it does not capture the linguistic
+properties of other languages. More recently, Timko and
+Rahman~\cite{timko2024smishtank} compiled a large community-sourced smishing
+corpus from Smishtank.com, providing detailed metadata including sender
+information, message bodies, and referenced brands-advancing the field with
+richer annotation but remaining English-centric.
+
+On the Vietnamese side, Nguyen \textit{et al.}~\cite{nhi2024vilexnorm}
+developed ViLexNorm, a lexical normalization corpus of annotated Vietnamese
+social media sentence pairs designed to address intended and unintended
+linguistic variances such as teencode and Leetspeak. While ViLexNorm provides
+a valuable normalization resource, no publicly available Vietnamese-specific
+smishing dataset exists. Our work addresses this gap by constructing a corpus
+of 2,600 labeled SMS messages through a dual-channel acquisition strategy,
+enabling evaluation under Vietnamese obfuscation conventions and
+Brandname-abuse patterns that no existing public dataset covers.
+
+% ── 3. DATA COLLECTION ────────────────────────────────────────────────────────
+\section{Data Collection}
+\label{sec:data}
+
+Due to the scarcity of standardized Vietnamese smishing datasets, we
+constructed a composite corpus through a dual-channel acquisition strategy.
+
+\paragraph{Manual Transcription from Public Sources.}
+
+The first channel harvested confirmed smishing messages frequently reported
+as screenshots on Vietnamese cyber-security forums and anti-scam community
+groups. We performed manual transcription rather than OCR to accurately
+preserve linguistic nuances-teencode, special character obfuscations, and
+malicious URLs - that automated recognition tools often corrupt. This yielded
+a high-quality set of distinct smishing signatures targeting banking and
+e-commerce sectors.
+
+\subsection{Real-World Data Acquisition via Mobile Utility}
+
+The second channel collected real-world SMS data-legitimate conversations,
+OTPs, and carrier advertisements-from real Android devices using
+\textit{SMS Backup \& Restore}, with explicit consent from participants.
+This application exports local message repositories into a structured XML
+format, allowing efficient extraction of message body, timestamp, and
+sender information.
+
+\paragraph{Real-World Data Acquisition via Mobile Utility.}
+
+Following aggregation, cleaning, and normalization, the final dataset
+comprises 2,600 unique rows (Table~\ref{tab:dataset}). Labels were assigned
+by five annotators using pre-defined guidelines: a message is
+\textit{Smishing} if it contains (1) a URL leading to a non-whitelisted
+or suspicious domain, (2) impersonation of a trusted entity, (3) financial
+pressure or urgency combined with a request for personal information, or
+(4) unrealistic recruitment offers. Final labels were decided by majority
+vote; unresolved samples were discarded to maintain dataset purity.
+
+\begin{table}[htbp]
+    \caption{Dataset Class Distribution}
+    \label{tab:dataset}
+    \centering
+    \begin{tabular}{lcc}
+        \toprule
+        \textbf{Class} & \textbf{Count} & \textbf{Percentage} \\
+        \midrule
+        Legitimate (Ham) & 2,353 & 90.5\% \\
+        Smishing (Spam)  & 247   &  9.5\% \\
+        \midrule
+        \textbf{Total}   & \textbf{2,600} & \textbf{100\%}  \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+% ── 4. DATA PREPROCESSING ─────────────────────────────────────────────────────
+\section{Data Preprocessing}
+\label{sec:preprocess}
+
+SMS data contains significant noise and lacks structural uniformity. In spam
+messages, obfuscation techniques-inserting random spaces within URL
+segments, applying Leetspeak, or mixing characters-actively bypass
+keyword-based filters. A single-pass normalization approach fails to address
+these interacting noise sources, motivating our four-layer design. Each layer
+targets a distinct noise category; their outputs also serve as discriminative
+classifier features.
+
+\paragraph{Layer 1 - Entity Masking.}
+Specific entities are replaced with standardized tokens (e.g. \texttt{<URL>},
+\texttt{<PHONE>}, \texttt{<MONEY>}) using an OrderedDict to enforce
+conflict-free processing order. The pipeline executes in the following order:
+\begin{itemize}
+    \item \textbf{Platform Links:} Zalo and Telegram links (\texttt{<LINK>}).
+    \item \textbf{Emails, URLs:} Standard email regex; custom logic for
+          obfuscated malicious links (\texttt{<EMAIL>}, \texttt{<URL>}).
+    \item \textbf{Bank Accounts, Telecommunications:} Context-aware
+          extraction for hotlines, landlines, and mobile numbers.
+    \item \textbf{Datetime, Monetary Values, Codes \& OTPs:}
+          \texttt{<TIME>}, \texttt{<MONEY>}, \texttt{<CODE>}.
+    \item \textbf{Anti-Evasion URL Detection:} Detects intentional spacing
+          in domains (e.g. bit.\,ly/abc), and protocol-agnostic
+          domains matching high-risk TLD patterns (.xyz, .top, .moe).
+\end{itemize}
+
+\paragraph{Layer 2 - Text Normalization and Leetspeak Decoding.}
+The \textit{TextNormalizer} standardizes the character set and decodes
+obfuscations via a weighted scoring system validated against a Vietnamese
+dictionary. Three levels of obfuscation are recognized:
+\begin{itemize}
+    \item \textbf{Symbol Leet} (weight 1.2--1.5): e.g. @$\to$a,
+          !$\to$i. Highly indicative of spam.
+    \item \textbf{Visual Leet} (weight 1.0): e.g. 0$\to$o,
+          4$\to$a (\textit{h0tro} $\to$ \textit{ho tro}).
+    \item \textbf{Teencode} (weight 0.3): e.g. \textit{ko}$\to$\textit{khong}.
+\end{itemize}
+A placeholder mechanism protects Layer~1 tokens from corruption during
+separator removal.
+
+\paragraph{Layer 3 - Whitelist Filtering.}
+Valid out-of-dictionary tokens - brand names (Shopee, VCB), technical jargon
+(OTP, 4G), and SMS abbreviations (\textit{lh}, \textit{sdt}) - are exempted
+from further processing to prevent erroneous spell-check corrections
+(e.g. ``VCB'' $\to$ ``viec'').
+
+\paragraph{Layer 4 - Spell Check and Anomaly Detection.}
+Remaining Out-Of-Vocabulary (OOV) tokens are analyzed by a Dual-Lookup
+Mechanism (full-diacritics dictionary + accent-free shadow dictionary).
+Tokens failing both checks are tagged as one of four error categories used
+as classifier features: \textit{Telex Artifacts} (aa, aw,
+dd), \textit{Run-On Words} (bisection heuristic, e.g.
+\textit{vui\,+\,long}), \textit{Gibberish Strings} (violating Vietnamese
+phonotactics), or \textit{Character Repetition} (3+ identical characters,
+e.g. \textit{HOTTT}). A Data Capacity Whitelist proactively exempts
+telco tokens (e.g. \texttt{3gb}, \texttt{12mbps}) that are technically OOV
+but valid in SMS contexts.
+
+% ── 5. PROPOSED SYSTEM ────────────────────────────────────────────────────────
+\section{Proposed System Methodology}
+\label{sec:method}
+
+The framework combines a Machine Learning scorer, a Domain Verification
+module, and a Hybrid Decision Logic. A purely statistical model is vulnerable
+to adversarial evasion; a purely rule-based system cannot generalize to novel
+attack patterns. The hybrid architecture addresses both shortcomings.
+
+\subsection{Machine Learning Model}
+\label{subsec:ml}
+
+The raw SMS $T$ is passed through the 4-Layer Pipeline
+(Section~\ref{sec:preprocess}) to generate a 27-dimensional linguistic vector
+$F_\text{vec}$. Unlike sparse TF-IDF matrices, this dense vector directly
+encodes obfuscation indicators prevalent in Vietnamese fraud. The Sender
+Type $S$ (Brandname, Phone Number, etc.) is label-encoded and appended:
+\begin{equation}
+    V = \text{COMBINE}(F_\text{vec},\, S) \in \mathbb{R}^{28}
+\end{equation}
+The pre-trained XGBoost model $M_{AI}$ produces a probability score:
+\begin{equation}
+    P_{AI} = M_{AI}.\text{predict\_proba}(V), \quad P_{AI} \in [0, 1]
+\end{equation}
+A score near~1 reflects high obfuscation and urgency cues; near~0 indicates
+legitimate patterns. $P_{AI}$ feeds the Hybrid Decision Logic.
+
+\subsection{Domain Verification}
+\label{subsec:domain}
+
+The Domain Verification module provides deterministic, AI-independent
+verdicts for URL-bearing messages (Fig.~\ref{fig:domain}). The brand context
+$B$ and all URLs are extracted; \textbf{tldextract} isolates the registered
+domain $D$ to prevent subdomain spoofing (e.g. distinguishing
+\textit{vietcombank.ngrok.io} as belonging to \textit{ngrok.io}).
+If $D \in W_\text{static}$ (a pre-compiled whitelist of major Vietnamese
+banks, telcos, and global platforms), the domain is flagged Legitimate
+($\text{Risk}{=}{-1.0}$). Otherwise, two-level dynamic verification triggers:
+Level~1 checks whether $D$ appears in the top-5 search results for the brand
+name; Level~2 scans the site's source for internal links pointing to verified
+domains. An unreachable, redirect-heavy, or unverifiable site yields
+$\text{Risk}{=}1.0$.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\columnwidth]{fig2_domain.jpg}
+    \caption{Architecture of the Domain Verification Phase.}
+    \label{fig:domain}
+\end{figure}
+
+\subsection{Hybrid Decision Logic}
+\label{subsec:hybrid}
+
+The Hybrid Decision Logic applies a three-tier waterfall
+(Algorithm~\ref{alg:hybrid}; system architecture in Fig.~\ref{fig:arch}).
+
+\noindent\textbf{Tier~1 - Domain-Driven Verdict:} If $\text{Risk} \geq 0.8$,
+the message is immediately classified as Smishing. For trusted domains
+($\text{Risk}{=}{-1.0}$), user-generated-content platforms undergo a secondary
+AI check ($P_{AI}{>}0.65$).
+
+\noindent\textbf{Tier~2 - Context-Aware AI Verdict:} When no URL is present
+or domain status is inconclusive, $P_{AI}$ is evaluated alongside context
+flags. Conversational messages override high AI risk; messages with danger
+keywords from unknown senders force a Smishing verdict.
+
+\noindent\textbf{Tier~3 - Explainable Output:} Every decision yields a
+tuple $(\text{Label},\,\text{Score},\,\text{Decision Phase},\,\text{Reasoning})$
+for user and analyst transparency.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\columnwidth]{fig3_architecture.jpg}
+    \caption{Architecture of the proposed Hybrid Smishing Detection System.}
+    \label{fig:arch}
+\end{figure}
+
+\begin{algorithm}[t]
+\caption{Hybrid Smishing Detection Algorithm}
+\label{alg:hybrid}
+\begin{algorithmic}[1]
+\REQUIRE Incoming SMS $T$, Sender Type $S$, Thresholds $T_{AI}$, $T_\text{high}$
+\ENSURE Label (\textit{Smishing} / \textit{Legitimate})
+\STATE $F_\text{vec} \leftarrow \text{ExtractFeatures}(T)$ \COMMENT{Layers 1--4}
+\STATE $V \leftarrow \text{Combine}(F_\text{vec}, S)$
+\STATE $P_{AI} \leftarrow M_{AI}.\text{predict\_proba}(V)$
+\STATE $\text{Risk} \leftarrow 0$
+\IF{$T$ contains URL}
+    \STATE $\text{Risk} \leftarrow \text{VerifyDomain}(T)$
+\ENDIF
+\IF{$\text{Risk} \geq T_\text{high}$}
+    \RETURN \textit{Smishing} \COMMENT{Tier 1: High-Risk Domain}
+\ELSIF{$\text{Risk} = -1.0$}
+    \IF{$P_{AI} > 0.65$}
+        \RETURN \textit{Smishing (Warning)} \COMMENT{UGC Exception}
+    \ELSE
+        \RETURN \textit{Legitimate}
+    \ENDIF
+\ELSE
+    \IF{$P_{AI} \geq T_{AI}$}
+        \RETURN \textit{Smishing}
+    \ELSE
+        \RETURN \textit{Legitimate}
+    \ENDIF
+\ENDIF
+\end{algorithmic}
+\end{algorithm}
+
+% ── 6. EXPERIMENTS ────────────────────────────────────────────────────────────
+\section{Experiments}
+\label{sec:eval}
+ 
+\subsection{Methods and Experimental Setup}
+ 
+The 2,600-message dataset (90\% Legitimate, 10\% Smishing) was split 80/20
+using stratified sampling (\texttt{random\_state=42, stratify=y}), yielding a test set
+of 520 messages (465 Legitimate, 55 Smishing). We adopt a two-level evaluation
+strategy: (i)~three standalone classifiers evaluated on the full 520-sample
+test set using 28-dimensional features, and (ii)~the complete Hybrid System
+evaluated on 100 stratified messages with per-error categorization.
+ 
+\subsection{Evaluation Metrics}
+ 
+All Precision, Recall, and F1 values refer to the \textit{Smishing} minority
+class, the operationally relevant class in cyber-security deployment. Metrics
+are reported on $[0,1]$. Rather than a fixed threshold of 0.5, each
+classifier's optimal threshold $\tau^{*}$ is selected as the maximum-F1
+operating point on the Precision-Recall curve:
+\[
+  \tau^{*} = \arg\max_{\tau}
+    \frac{2 \cdot P(\tau)\cdot R(\tau)}{P(\tau)+R(\tau)}.
+\]
+The Smishing F1-Score is the primary comparison metric, as overall Accuracy
+can be misleading under a 90/10 class imbalance~\cite{he2009imbalanced}.
+ 
+\subsection{Experimental Results}
+\label{subsec:comparison}
+ 
+We compare the 4-Layer Pipeline against a TF-IDF Baseline (5,000
+unigrams/bigrams augmented with \textit{has\_url}, \textit{has\_phone},
+\textit{sender\_type}; fixed threshold 0.5). The results are presented in Table~\ref{tab:compare_baseline}.
+ 
+\begin{table}[htbp]
+  \caption{TF-IDF Baseline vs.\ Proposed 4-Layer Linguistic Pipeline}
+  \label{tab:compare_baseline}
+  \centering
+  \resizebox{\columnwidth}{!}{%
+  \begin{tabular}{llccccc}
+    \toprule
+    \textbf{Feature Set} & \textbf{Model}
+      & \textbf{Acc.} & \textbf{Prec.} & \textbf{Recall}
+      & \textbf{F1} & \textbf{ROC-AUC} \\
+    \midrule
+    \multirow{3}{*}{TF-IDF Baseline ($\tau{=}0.5$)}
+      & Decision Tree  & 0.9231 & 0.6000 & 0.8182 & 0.6923 & 0.8831 \\
+      & Random Forest  & 0.9673 & 0.9750 & 0.7091 & 0.8211 & 0.9844 \\
+      & XGBoost        & 0.9673 & 0.8800 & 0.8000 & 0.8381 & 0.9696 \\
+    \midrule
+    \multirow{3}{*}{4-Layer Linguistic ($\tau{=}\tau^{*}$)}
+      & Decision Tree  & 0.9519 & 0.7679 & 0.7818 & 0.7748 & 0.9050 \\
+      & Random Forest  & 0.9654 & 0.9744 & 0.6909 & 0.8085 & 0.9730 \\
+      & \textbf{XGBoost}
+        & \textbf{0.9750} & \textbf{0.9773} & \textbf{0.7818}
+        & \textbf{0.8687} & \textbf{0.9659} \\
+    \bottomrule
+  \end{tabular}%
+  }
+  \\[4pt]
+  {\small Prec., Recall, F1 are for the Smishing class.}
+\end{table}
+ 
+The linguistic pipeline yields the most pronounced gains for XGBoost:
+Smishing F1 rises from 0.838 to \textbf{0.869} ($+$3.1~pp), and-crucially
+for operational deployment-Precision rises from 0.88 to \textbf{0.977}
+($+$9.7~pp), meaning fewer than 2.3\% of flagged messages are false alarms.
+Decision Tree benefits most in F1 ($+$8.3~pp), confirming that hand-crafted
+obfuscation indicators carry discriminative signal that sparse TF-IDF cannot
+capture for leet-encoded Vietnamese text.
+ 
+\subsection{Standalone Model Results}
+\label{subsec:analysis}
+ 
+Table~\ref{tab:ml_results} reports full results at optimal thresholds.
+ 
+\begin{table}[htbp]
+  \caption{Smishing-Class Metrics at Optimal Threshold
+           (4-Layer Linguistic Features; test set $n{=}520$)}
+  \label{tab:ml_results}
+  \centering
+  \resizebox{\columnwidth}{!}{%
+  \begin{tabular}{lccccccc}
+    \toprule
+    \textbf{Model} & $\tau^{*}$
+      & \textbf{Acc.} & \textbf{Prec.} & \textbf{Recall} & \textbf{F1}
+      & \textbf{TP} & \textbf{FP} \\
+    \midrule
+    Decision Tree        & 0.8942 & 0.9519 & 0.7679 & 0.7818 & 0.7748 & 43 & 13 \\
+    Random Forest        & 0.6842 & 0.9654 & 0.9744 & 0.6909 & 0.8085 & 38 &  1 \\
+    \textbf{XGBoost}     & \textbf{0.8336}
+      & \textbf{0.9750} & \textbf{0.9773} & \textbf{0.7818}
+      & \textbf{0.8687} & \textbf{43} & \textbf{1} \\
+    \bottomrule
+  \end{tabular}
+  }
+  \\[4pt]
+  {\small FN $= 55 - \text{TP}$; TN $= 465 - \text{FP}$.}
+\end{table}
+
+Across all three models, there is a trade-off between Precision and Recall
+that reflects a common challenge in imbalanced classification. Decision Tree
+achieves the highest Recall (0.782) but incurs 13 false positives, while
+Random Forest holds Precision at 0.974 at the cost of missing 17 smishing
+messages (Recall $= 0.691$). XGBoost balances both criteria, matching
+Decision Tree's Recall while reducing false positives to 1 - yielding the
+highest Smishing F1 (0.869) and overall Accuracy (0.975) among the
+three classifiers.
+ 
+% ── 7. RESULT ANALYSIS ────────────────────────────────────────────────────────
+\section{Result Analysis}
+\label{sec:result_analysis}
+ 
+\subsection{Standalone Model Analysis}
+ 
+\subsubsection*{Decision Tree}
+The Decision Tree detects 43 of 55 smishing messages
+(Recall~$= 0.78$), but at the cost of 13 false positives - roughly
+1 in 4 flagged messages is actually benign (Precision~$= 0.768$), a
+high false-alarm rate for production use. Overall accuracy is 95.2\%.
+ 
+\subsubsection*{Random Forest}
+Random Forest produces only 1 false positive across 465 legitimate
+messages (Precision~$= 0.974$), but misses 17 smishing messages
+(Recall~$= 0.69$; 31\% miss rate). In a security context, missing nearly
+one in three attacks is a notable drawback. Random Forest may be better
+suited to scenarios where false alarms carry higher cost than missed attacks.
+ 
+\subsubsection*{XGBoost}
+XGBoost achieves a balanced trade-off for cyber-security deployment. It
+detects the same 43 of 55 smishing messages as Decision Tree
+while producing only 1 false positive - catching 5 more
+attacks than Random Forest ($+$8.3~pp Recall) at equal false-alarm cost.
+Its Smishing F1 of 0.8687 is the highest among the three, and its
+overall Accuracy of 0.9750 reflects consistent performance on both
+classes. XGBoost is therefore selected as the core classifier of the
+Hybrid Detection Framework.
+ 
+\subsection{Error Analysis of the Full Hybrid System}
+\label{subsec:error}
+ 
+The complete Hybrid System ($\tau \approx 0.46$) was applied to
+100 stratified messages. Of these, 87 were correctly
+classified, yielding 3 False Negatives (FN) and
+10 False Positives (FP), summarized in Table~\ref{tab:error}.
+ 
+\begin{table}[htbp]
+  \caption{Error Analysis on 100 Sampled Messages (Hybrid System)}
+  \label{tab:error}
+  \centering
+  \begin{tabular}{llc}
+    \toprule
+    \textbf{Type} & \textbf{Category} & \textbf{Count} \\
+    \midrule
+    FN & No-URL / low-obfuscation smishing below AI threshold & 3 \\
+    \midrule
+    FP & AI model over-triggered on transactional messages   & 5 \\
+    FP & Legitimate domain absent from Domain Risk whitelist & 5 \\
+    \midrule
+    \multicolumn{2}{l}{\textbf{Total errors}} & \textbf{13} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+ 
+\subsubsection*{False Negatives}
+All three FNs are smishing messages where neither the AI model nor the Domain
+Risk module exceeded their respective thresholds. Three distinct failure
+patterns were identified:
+\begin{enumerate}
+  \item \textbf{Authority impersonation without a URL.} A message
+        impersonating \textit{C\'{a}nh s\'{a}t Giao th\^{o}ng}-containing
+        only a hotline number-received $P_{AI}{=}0.20$ because it is
+        written in clean, formal Vietnamese that lacks the obfuscation cues
+        the model relies on. The Domain Risk module had no URL to evaluate.
+  \item \textbf{Telegram social-engineering link with minimal obfuscation.}
+        A message linking to \texttt{t.me/hn\_silent} was scored
+        $\text{Risk}{=}0.0$ because \texttt{t.me} is whitelisted as a known
+        messaging platform, and the AI gave $P_{AI}{=}0.09$ as the text
+        resembles a social invitation rather than a financial scam.
+  \item \textbf{Leet-speak phishing URL just below the decision boundary.}
+        A VNeID impersonation with leet-encoded text obtained
+        $P_{AI}{=}0.45$ - one point below $\tau^{*}{\approx}0.46$-while
+        the Domain Risk module returned $r{=}0.0$ for
+        \texttt{vne1d-update.t0p}, finding no conclusive blacklist evidence.
+\end{enumerate}
+
+These cases motivate: (a)~a recall-biased rule for URL-free
+government/law-enforcement impersonation, and (b)~a pattern-based leet-URL
+detector for domains whose structure matches known brand names.
+ 
+\subsubsection*{False Positives}
+Both FP clusters arise from the system's inability to distinguish
+surface-level similarity from genuine fraud intent. Two distinct failure
+patterns were identified:
+\begin{enumerate}
+  \item \textbf{AI over-triggered on transactional messages.} Five legitimate
+        confirmation messages (restaurant reservations, taxi bookings,
+        e-commerce notifications) were flagged because they share structural
+        features with smishing: brevity, a specific time reference, and an
+        entity name (e.g. a reservation confirmation scored
+        $P_{AI}{=}0.94$). The classifier has learned co-occurrence of
+        \{short text, temporal marker, named entity\} as a fraud indicator
+        without encoding the semantic distinction between transactional
+        confirmations and fraudulent solicitations. Remedy: augment training
+        data with hard-negative transactional messages and introduce a
+        dedicated \textit{transactional intent} feature.
+  \item \textbf{Legitimate domain absent from the whitelist.} Five messages
+        were escalated by the Domain Risk module because their domains were
+        absent from the static whitelist and the live-search verifier returned
+        inconclusive results ($\text{Risk}{=}1.0$). Affected domains include
+        \texttt{thuedientu.gdt.gov.vn} (official tax portal),
+        \texttt{ghn.vn} (GHN Express), and \texttt{shopeepay.vn}.
+        Remedy: extend the whitelist to cover all \texttt{*.gov.vn} and
+        \texttt{*.edu.vn} subdomains, and apply a low-risk prior for
+        government and academic TLDs in the live-search verifier.
+\end{enumerate}
+These cases motivate: (a)~richer semantic features to separate transactional
+from fraudulent intent in the AI tier, and (b)~a broader, programmatically
+maintained domain whitelist that covers official government and
+logistics namespaces.
+ 
+% ── 8. CONCLUSION ─────────────────────────────────────────────────────────────
+\section{Conclusion and Future Work}
+\label{sec:conclusion}
+
+This paper presented a Hybrid Smishing Detection Framework purpose-built for
+the Vietnamese linguistic environment and made three primary contributions.
+\textbf{First}, we constructed a Vietnamese smishing dataset of 2,600 labeled
+SMS messages via a dual-channel acquisition strategy - manual transcription
+from community anti-scam sources and real-device extraction via mobile backup
+utilities - with a five-annotator majority-vote labeling protocol, providing a
+reproducible benchmark with a realistic 90/10 class imbalance.
+\textbf{Second}, we proposed a four-layer linguistic preprocessing pipeline
+(\textit{Entity Masking} $\to$ \textit{Leet Normalization} $\to$
+\textit{Whitelist Filtering} $\to$ \textit{Anomaly Detection}) converting raw,
+obfuscated Vietnamese SMS into a dense 28-dimensional feature vector. Compared
+to a TF-IDF baseline, the pipeline raised Smishing F1 from 0.838 to
+0.869 ($+$3.1~pp) and Precision from 0.88 to 0.977
+($+$9.7~pp), reducing false alarms to below 2.3\%.
+\textbf{Third}, we integrated the classifier into a three-tier Hybrid Decision
+Logic (Domain-Driven Verdict, Context-Aware AI Verdict, Explainable Output)
+that allows high-confidence domain signals to override AI scores in both
+directions. On a 100-message real-world evaluation the system correctly
+classified 87\% of samples. In aggregate, the framework achieves
+97.5\% overall accuracy, 78.2\% Smishing Recall, and
+97.7\% Smishing Precision on the held-out test set, demonstrating that
+language-specific obfuscation features provide strong discriminative signal for
+tree-based classifiers while maintaining real-time mobile inference speed.
+
+Four limitations constrain the current system. \textbf{Dataset scale:} 2,600
+samples with only 247 positives limits coverage of rare attack sub-types such
+as crypto fraud and OTP relay attacks. \textbf{Static rules:} hand-crafted
+pipeline features require manual maintenance as attackers adapt, with whitelist
+blind spots confirmed by the error analysis. \textbf{URL dependence:} all three
+false negatives were URL-free messages where the 28-dimensional vector cannot
+capture semantic intent for clean-text authority-impersonation. \textbf{SMS
+scope:} the pipeline does not model Zalo or Telegram channels where image-based
+content and group-chat dynamics introduce unseen evasion patterns.
+
+Three future directions address these gaps. \textbf{LLM-Driven Dataset
+Expansion} will grow the corpus to 10,000$+$ samples using GPT-4, Claude, and
+Gemini as controlled generators of hard negatives and adversarial smishing
+examples, each annotated with a \textit{Rationale} explaining the
+classification. \textbf{Neural Text Normalization} will replace brittle regex
+rules with a BARTpho-based~\cite{nguyen2022bartpho} Seq2Seq normalizer trained
+on ViLexNorm~\cite{nhi2024vilexnorm} to map all obfuscation variants of a token
+to a single canonical form. \textbf{Rationale-Aware Knowledge Distillation}
+will train a compact ViSoBERT~\cite{nguyen2023visobert} Student via
+$\mathcal{L}_\text{total} = \alpha\,\mathcal{L}_\text{Hard}
++ \beta\,\mathcal{L}_\text{Soft} + \gamma\,\mathcal{L}_\text{Rationale}$,
+where $\mathcal{L}_\text{Hard}$ provides ground-truth supervision,
+$\mathcal{L}_\text{Soft}$ transfers Teacher uncertainty on borderline cases, and
+$\mathcal{L}_\text{Rationale}$ (Cosine Similarity) aligns the Student's hidden
+state with the Teacher's semantic reasoning - targeting $>$ 90\% Smishing F1 and
+robustness against both identified failure modes.
+
+% \section*{Acknowledgment}
+% This research was supported by The VNUHCM-University of Information Technology's Scientific Research Support Fund.
+
+% ── REFERENCES ────────────────────────────────────────────────────────────────
+\balance
+\begin{thebibliography}{00}
+
+\bibitem{mishra2023dsmishsms}
+S. Mishra and D. Soni,
+``DSmishSMS-A System to Detect Smishing SMS,''
+\textit{Neural Computing and Applications},
+vol.~35, pp.~4975--4992, 2023.
+
+\bibitem{li2021leet}
+W. Li and J. Zeng,
+``Leet Usage and Its Effect on Password Security,''
+\textit{IEEE Transactions on Information Forensics and Security},
+vol.~16, pp.~2130--2143, 2021.
+
+\bibitem{chen2016xgboost}
+T. Chen and C. Guestrin,
+``XGBoost: A Scalable Tree Boosting System,''
+in \textit{Proc. 22nd ACM SIGKDD Int. Conf. Knowledge Discovery and
+Data Mining (KDD)}, San Francisco, CA, Aug.\ 2016, pp.\ 785--794.
+DOI: 10.1145/2939672.2939785.
+
+\bibitem{almeida2011sms}
+T.~A. Almeida, J.~M.~G. Hidalgo, and A. Yamakami,
+``Contributions to the Study of SMS Spam Filtering: New Collection and
+Results,''
+in \textit{Proc. 11th ACM Symp. Document Engineering (DOCENG)},
+Mountain View, CA, Sep.\ 2011, pp.\ 259--263.
+DOI: 10.1145/2034691.2034742.
+
+\bibitem{goel2024smishing}
+D.~Goel, H. Ahmad, A.~K. Jain, and N.~K. Goel,
+``Machine Learning Driven Smishing Detection Framework for Mobile Security,''
+\textit{arXiv preprint arXiv:2412.09641}, Dec.\ 2024.
+
+\bibitem{mahmood2023review}
+A.~R. Mahmood and S.~M. Hameed,
+``Review of Smishing Detection via Machine Learning,''
+\textit{Iraqi Journal of Science},
+pp.~4244--4259, 2023.
+DOI: 10.24996/ijs.2023.64.8.42.
+
+\bibitem{mahmud2024hybrid}
+T. Mahmud, M.~A.~H. Prince, M.~H. Ali, M.~S. Hossain, and K. Andersson,
+``Enhancing Cybersecurity: Hybrid Deep Learning Approaches to Smishing
+Attack Detection,''
+\textit{Systems}, vol.~12, p.~490, 2024.
+DOI: 10.3390/systems12110490.
+
+\bibitem{mehmood2024smishing}
+M.~K. Mehmood, H. Arshad, M. Alawida, and A. Mehmood,
+``Enhancing Smishing Detection: A Deep Learning Approach for Improved
+Accuracy and Reduced False Positives,''
+\textit{IEEE Access}, vol.~12, pp.~137176--137193, 2024.
+DOI: 10.1109/access.2024.3463871.
+
+\bibitem{shinde2024ocr}
+A. Shinde, E.~Q. Shahra, S. Basurra, F. Saeed, A.~A. AlSewari,
+and W.~A. Jabbar,
+``SMS Scam Detection Application Based on Optical Character Recognition
+for Image Data Using Unsupervised and Deep Semi-Supervised Learning,''
+\textit{Sensors}, vol.~24, p.~6084, 2024.
+DOI: 10.3390/s24186084.
+
+\bibitem{timko2024smishtank}
+D. Timko and M.~L. Rahman,
+``Smishing Dataset I: Phishing SMS Dataset from Smishtank.com,''
+in \textit{Proc. ACM CODASPY}, 2024.
+DOI: 10.1145/3626232.3653282.
+
+\bibitem{tuan2023vietnamese}
+V.~M. Tuan, D.~T. Duong, and T.~Q. Anh,
+``Proposing Appropriate SMS Spam Detection Approaches for Variations of
+the Vietnamese Language,''
+in \textit{Proc. 2023 RIVF Int. Conf. Computing and Communication
+Technologies (RIVF)}, pp.~1--5, 2023.
+DOI: 10.1109/rivf60135.2023.10471859.
+
+\bibitem{he2009imbalanced}
+H. He and E.~A. Garcia,
+``Learning from Imbalanced Data,''
+\textit{IEEE Transactions on Knowledge and Data Engineering},
+vol.~21, no.~9, pp.~1263--1284, Sep.\ 2009.
+DOI: 10.1109/TKDE.2008.239.
+
+\bibitem{nguyen2022bartpho}
+N.~L. Nguyen, V.-L. Tran, D.~Q. Nguyen, T.~H. Nguyen, T.~T. Nguyen,
+T.~M. Le, and T.~H. Nguyen,
+``BARTpho: Pre-trained Sequence-to-Sequence Models for Vietnamese,''
+in \textit{Proc. Language Resources and Evaluation Conf. (LREC)},
+Marseille, France, Jun.\ 2022, pp.~4673--4682.
+
+\bibitem{nhi2024vilexnorm}
+T.-N. Nguyen, T.-P. Le, and K.~V. Nguyen,
+``ViLexNorm: A Lexical Normalization Corpus for Vietnamese Social Media
+Text,''
+\textit{arXiv preprint arXiv:2401.16403}, 2024.
+DOI: 10.48550/arxiv.2401.16403.
+
+\bibitem{nguyen2023visobert}
+N.~L. Nguyen, T.~N. Nguyen, K.~V. Nguyen, and N.~L.-T. Nguyen,
+``ViSoBERT: A Pre-Trained Language Model for Vietnamese Social Media
+Text Processing,''
+in \textit{Proc. 2023 Conf. Empirical Methods in Natural Language
+Processing (EMNLP)}, Singapore, Dec.\ 2023, pp.~12655--12669.
+DOI: 10.18653/v1/2023.emnlp-main.778.
+
+
+\end{thebibliography}
+
+\end{document}
