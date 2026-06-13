@@ -27,8 +27,9 @@ import os
 # ==========================================
 # 1. CẤU HÌNH HỆ THỐNG
 # ==========================================
-API_KEY = ""
-#API_KEY = "AIzaSyDCIKmwtqoZ6psCEUvSPMh0f1gYD-EMt3U"  # Thay API Key của bạn vào đây
+API_KEY = os.getenv("GEMINI_API_KEY", "")
+if not API_KEY:
+    raise ValueError("GEMINI_API_KEY chưa được thiết lập. Copy data/.env.example → data/.env")
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-3-flash-preview')
 
@@ -135,7 +136,9 @@ import os
 # ==========================================
 # 1. CẤU HÌNH API
 # ==========================================
-API_KEY = ""
+API_KEY = os.getenv("GEMINI_API_KEY", "")
+if not API_KEY:
+    raise ValueError("GEMINI_API_KEY chưa được thiết lập. Copy data/.env.example → data/.env")
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-3-flash-preview')
 

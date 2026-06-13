@@ -5,6 +5,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+API_KEYS = {
+    "gemini":   os.getenv("GOOGLE_API_KEY", ""),
+    "grok":     os.getenv("XAI_API_KEY", ""),
+    "qwen":     os.getenv("DASHSCOPE_API_KEY", ""),
+    "deepseek": os.getenv("DEEPSEEK_API_KEY", ""),
+}
+
 # ── Model endpoints & names (free tier) ──────────────────────────────────────
 MODEL_CONFIG = {
     "gemini": {
